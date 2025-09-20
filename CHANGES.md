@@ -7,7 +7,14 @@ Please see the release notes in ``doc/devsim.pdf`` or at [https://devsim.net](ht
 
 ## Version 2.9.2
 
-Drop `x86_64` support on `macOS`.
+Dropped ``x86_64`` support on ``macOS``.
+
+Fix issue [#158](https://github.com/devsim/devsim/issues/158), Missing Contact Surface Normal
+``ContactNSurfaceNormal_x``
+``ContactNSurfaceNormal_y``
+``ContactNSurfaceNormal_z``
+
+Thanks to [@marc-flex](https://github.com/marc-flex) for providing a pull request for these missing models.
 
 ## Version 2.9.1
 
