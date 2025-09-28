@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 export PATH=/mingw64/bin:/usr/bin:${PATH}
 # msys Specific
 #pacman -Su --noconfirm rsync zip
@@ -25,18 +26,20 @@ cd "${BASEDIR}/external/symdiff"
 bash ../symdiff_appveyor.sh "${GENERATOR}" "${AOPTION}" "${TOOLSET}" "${BUILDDIR}" "${CONDA_PREFIX}"
 
 cd "${BUILDDIR}"
-cmake --build . --config Release -- //m //nologo //verbosity:minimal
+cmake --build . --config Release --parallel 4 -- //m //nologo //verbosity:minimal
 
 cd "${BASEDIR}"
 bash scripts/setup_appveyor.sh "${GENERATOR}" "${AOPTION}" "${TOOLSET}" "${BUILDDIR}" "${CONDA_PREFIX}"
 
 cd "${BUILDDIR}"
-cmake --build . --config Release -- //m //nologo //verbosity:minimal
+cmake --build . --config Release --parallel 4 -- //m //nologo //verbosity:minimal
 
 cd "${BASEDIR}/dist"
 bash package_appveyor.sh ${PACKAGE_NAME}
 
 cd "${BASEDIR}/dist/${PACKAGE_NAME}"
+#TODO: debug
+echo "$PWD"
 cp -f ../bdist_wheel/setup.* .
 ${PIP_BIN} wheel .
 cp *.whl ..

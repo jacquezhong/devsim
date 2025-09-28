@@ -1,11 +1,13 @@
 
-@echo off
+::turn back off later
+@echo on
 :: The following line is important for proper variable expansion
 @SETLOCAL EnableDelayedExpansion
 SET BASEDIR=%cd%
 SET CONDA_BIN=%2
 SET TAG=%3
 
+:: TODO: suggested by github copilot
 c:\msys64\usr\bin\pacman -Su --noconfirm rsync zip bison flex git
 
 :: now opt for explicit dll load of mkl
