@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/devsim/devsim.svg?branch=master)](https://travis-ci.org/devsim/m)
-[![Build status](https://ci.appveyor.com/api/projects/status/github/devsim/devsim?branch=master&svg=ue)](https://ci.appveyor.com/project/devsim/devsim)
+
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.03898/status.svg)](https://doi.org/10.21105/joss.03898)
 
 # DEVSIM
@@ -37,7 +36,7 @@ Please see [INSTALL.md](INSTALL.md) for installation instructions.  Please see [
 
 ## Citing This Work:
 
-Please see [CITATION.md](CITATION.md).  *Please do not cite this Github Repository as it will be moving in the future.*
+Please see [CITATION.md](CITATION.md).  *Please do not cite this GitHub Repository as it will be moving in the future.*
 
 ## License:
 
@@ -54,9 +53,13 @@ The repository for the documentation is at [https://github.com/devsim/devsim_doc
 
 | OS | Version | Architecture |
 | --- | --- | --- |
-| macOS | Monterey 12.5 | `arm64` |
+| macOS | Sonoma 14.7.6 | `arm64` |
 | Microsoft Windows | Windows 10 | `x64` |
 | Linux | AlmaLinux 8 (Red Hat Enterprise Linux 8 Compatible) | `aarch64`, `x86_64` |
+
+## Supported Python Versions
+
+DEVSIM is designed to work with Python versions 3.9 or higher.
 
 ## Code of Conduct:
 

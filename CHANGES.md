@@ -7,7 +7,15 @@ Please see the release notes in ``doc/devsim.pdf`` or at [https://devsim.net](ht
 
 ## Version 2.9.2
 
-Dropped ``x86_64`` support on ``macOS``.
+### macOS
+
+Intel ``x86_64`` is no longer longer a supported on ``macOS``.  The minimum supported version is now 14.7.6 Sonoma.
+
+### Python Version
+
+Python 3.9 is now the minimum supported version.
+
+### Contact Normal Model
 
 Fix issue [#158](https://github.com/devsim/devsim/issues/158), Missing Contact Surface Normal
 ``ContactNSurfaceNormal_x``
@@ -16,14 +24,9 @@ Fix issue [#158](https://github.com/devsim/devsim/issues/158), Missing Contact S
 
 Thanks to [@marc-flex](https://github.com/marc-flex) for providing a pull request for these missing models.
 
-Update to Python 3.9,
-for 3.9 EOL
+### Build Automation Scripts
 
-update macOS version
-
-macOS x86_64 build files no longer distributed
-
-builds now done using Github actions
+Build automation is now being done using GitHub Actions.
 
 ## Version 2.9.1
 
