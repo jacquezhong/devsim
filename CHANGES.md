@@ -16,12 +16,14 @@ Fix issue [#158](https://github.com/devsim/devsim/issues/158), Missing Contact S
 
 Thanks to [@marc-flex](https://github.com/marc-flex) for providing a pull request for these missing models.
 
-Update to Python 3.9
+Update to Python 3.9,
+for 3.9 EOL
 
 update macOS version
 
-macOS x86_64 build files no longer present
+macOS x86_64 build files no longer distributed
 
+builds now done using Github actions
 
 ## Version 2.9.1
 
