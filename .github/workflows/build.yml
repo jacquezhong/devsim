@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-      - "*"
+      - "v*"
     # should we prevent main branch build?
     # warning about tag variable when not a tag push,
     # devsim_win64_refs/heads/r2.9.2

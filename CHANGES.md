@@ -5,7 +5,7 @@
 
 Please see the release notes in ``doc/devsim.pdf`` or at [https://devsim.net](https://devsim.net) for more detailed information about changes.
 
-## Version 2.9.2
+## Version 2.10.0
 
 ### macOS
 
