@@ -9,7 +9,8 @@ Please see the release notes in ``doc/devsim.pdf`` or at [https://devsim.net](ht
 
 ### macOS
 
-Intel ``x86_64`` is no longer longer a supported on ``macOS``.  The minimum supported version is now 14.7.6 Sonoma.
+Intel ``x86_64`` is no longer longer a supported on ``macOS``.  The minimum supported version is now 14.7.6 Sonoma.  Regression results are updated:
+* [devsim_tests_macos_arm64](https://github.com/devsim/devsim_tests_macos_arm64)
 
 ### Python Version
 
@@ -27,6 +28,10 @@ Thanks to [@marc-flex](https://github.com/marc-flex) for providing a pull reques
 ### Build Automation Scripts
 
 Build automation is now being done using GitHub Actions.
+
+### Documentation
+
+A tasks note is added in ``doc/HOWTO.md``.
 
 ## Version 2.9.1
 
