@@ -511,12 +511,10 @@ LoaderMessages_t LoadMathLibraries(std::string &errors)
   {
     ret = LoadFromEnvironment(env, errors);
   }
-#if defined(__APPLE__)
   else
   {
     ret = LoadIntelMKL(errors);
   }
-#endif
 
   if ((ret == LoaderMessages_t::MKL_LOADED) || (ret == LoaderMessages_t::MATH_LOADED))
   {
