@@ -15,7 +15,7 @@ For `x86_64` or `x64` systems, the Intel MKL is recommended, but it is not neede
 
 ## Setting Version Number
 
-Set the version number by changing `DEVSIM_VERSION_STRING` in `CMakeLists.txt`.  The `version` also needs to be changed in `dist/bdist_wheel/setup.cfg`.
+Please see [HOWTO.md](HOWTO.md) for notes on changing the version numbers of `devsim` and Python.
 
 ## Platform Instructions
 

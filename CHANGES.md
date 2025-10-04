@@ -7,10 +7,22 @@ Please see the release notes in ``doc/devsim.pdf`` or at [https://devsim.net](ht
 
 ## Version 2.10.0
 
-### macOS
+### Available platform builds.
+
+Build automation is now being done using GitHub Actions.  This has lead to the following changes to the build:
+
+#### macOS
 
 Intel ``x86_64`` is no longer longer a supported on ``macOS``.  The minimum supported version is now 14.7.6 Sonoma.  Regression results are updated:
 * [devsim_tests_macos_arm64](https://github.com/devsim/devsim_tests_macos_arm64)
+
+#### Windows
+
+Now built on Windows 2025 server running the latest supported version of Visual Studio 2022 Enterprise.
+
+#### Linux
+
+  Linux continues to be built on the ``manylinux_2_28`` docker image.  This is compatible with AlmaLinux 8 and is expected to be binary compatible with most current linux distributions for both ``x86_64`` and ``aarch64``.
 
 ### Python Version
 
@@ -25,13 +37,9 @@ Fix issue [#158](https://github.com/devsim/devsim/issues/158), Missing Contact S
 
 Thanks to [@marc-flex](https://github.com/marc-flex) for providing a pull request for these missing models.
 
-### Build Automation Scripts
-
-Build automation is now being done using GitHub Actions.
-
 ### Documentation
 
-A tasks note is added in ``doc/HOWTO.md``.
+A tasks note is added in ``HOWTO.md``.
 
 ## Version 2.9.1
 
