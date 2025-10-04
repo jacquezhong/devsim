@@ -14,7 +14,7 @@ Intel ``x86_64`` is no longer longer a supported on ``macOS``.  The minimum supp
 
 ### Python Version
 
-Python 3.9 is now the minimum supported version.
+Python 3.9 is now the minimum supported version.  Please make sure you are using a newer version of Python when attempting to download from PyPi.  Python 3.9 is end of life on October 31, 2025, and we may switch to Python 3.10 as the minimum supported version after that.
 
 ### Contact Normal Model
 
