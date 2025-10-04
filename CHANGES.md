@@ -39,7 +39,7 @@ Thanks to [@marc-flex](https://github.com/marc-flex) for providing a pull reques
 
 ### Documentation
 
-A tasks note is added in ``HOWTO.md``.
+A tasks note is added in [HOWTO.md](HOWTO.md).
 
 ## Version 2.9.1
 
