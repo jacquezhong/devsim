@@ -7,6 +7,10 @@ Please see the release notes in ``doc/devsim.pdf`` or at [https://devsim.net](ht
 
 ## Version 2.10.0
 
+### Regression results
+
+Due to the changes in this release, there are changes to the expected numerical results.
+
 ### Available platform builds.
 
 Build automation is now being done using GitHub Actions.  This has lead to the following changes to the build:
@@ -22,7 +26,7 @@ Now built on Windows 2025 server running the latest supported version of Visual 
 
 #### Linux
 
-  Linux continues to be built on the ``manylinux_2_28`` docker image.  This is compatible with AlmaLinux 8 and is expected to be binary compatible with most current linux distributions for both ``x86_64`` and ``aarch64``.
+Linux continues to be built on the ``manylinux_2_28`` docker image.  This is compatible with AlmaLinux 8 and is expected to be binary compatible with most current linux distributions for both ``x86_64`` and ``aarch64``.
 
 ### Python Version
 
@@ -39,19 +43,19 @@ Thanks to [@marc-flex](https://github.com/marc-flex) for providing a pull reques
 
 ### Documentation
 
-A tasks note is added in [HOWTO.md](HOWTO.md).
+A tasks note is added in ``HOWTO.md``.
 
 ## Version 2.9.1
 
 ### C++ Code Cleanup
 
-Internal code was refactored.  While it has been tested, please report any issues you hay encounter.
+Internal code was refactored.  While it has been tested, please report any issues you may encounter.
 
 ## Version 2.9.0
 
 ### Windows Python support
 
-The official ``python.org`` distribution is beter supported.  This is since the ``python.org`` distribution does not appear to ship the ``zlib.dll``.
+The official ``python.org`` distribution is better supported.  This is since the ``python.org`` distribution does not appear to ship the ``zlib.dll``.
 
 ### VTK writer
 
