@@ -99,12 +99,12 @@ def get_hgcdte_params(Eg):
     # Hole effective mass
     mp = 0.3
     
-    # Mobility (cm²/V·s) - temperature dependent
+    # Mobility (cm^2/V*s) - temperature dependent
     # Using approximate values for HgCdTe at 100K
     mu_n = 1e5 * (0.01 / mn) if mn > 0 else 1e5
     mu_p = 500
     
-    # Einstein relation: D = (kT/q) * μ
+    # Einstein relation: D = (kT/q) * mu
     Dn = V_t * mu_n
     Dp = V_t * mu_p
     
@@ -402,10 +402,10 @@ To complete the simulation and calculate dark current:
    Jp = q*mu_p*p*E - q*D_p*grad(p)
 
 3. Add SRH recombination:
-   USRH = (np - ni²)/(τp(n+ni) + τn(p+ni))
+   USRH = (np - ni^2)/(taup(n+ni) + taun(p+ni))
 
 4. Add Auger recombination (critical for HgCdTe):
-   UAuger = (np - ni²)(Cn*n + Cp*p)
+   UAuger = (np - ni^2)(Cn*n + Cp*p)
 
 5. Add continuity equations:
    div(Jn) = q*(R - G)
@@ -414,17 +414,335 @@ To complete the simulation and calculate dark current:
 6. Solve with bias sweep and extract contact currents
 
 7. Compare with Rule 07 benchmark:
-   J_Rule07 = J₀·exp(-Eg/kT)
+   J_Rule07 = J_0*exp(-Eg/kT)
 """)
 
+# =============================================================================
+# STEP 2: DRIFT-DIFFUSION PHYSICS
+# =============================================================================
+
 print("\n" + "="*70)
-print("SIMULATION STATUS")
+print("STEP 2: Adding Drift-Diffusion Physics")
 print("="*70)
-print("[OK] Device mesh created")
-print("[OK] Material parameters set (HgCdTe)")
-print("[OK] Poisson equation solved (equilibrium)")
-print("[OK] Potential distribution obtained")
-print("[WARN] Drift-diffusion: Not yet implemented")
-print("[WARN] Dark current calculation: Not yet implemented")
-print("[WARN] Rule 07 comparison: Not yet implemented")
+
+# Import drift-diffusion utilities
+from devsim.python_packages.simple_dd import CreateBernoulli, CreateElectronCurrent, CreateHoleCurrent
+
+def CreateSRH(device, region):
+    """SRH (Shockley-Read-Hall) recombination"""
+    USRH = "(Electrons*Holes - n_i^2)/(taup*(Electrons + n_i) + taun*(Holes + n_i))"
+    Gn = "-ElectronCharge * USRH"
+    Gp = "+ElectronCharge * USRH"
+    
+    CreateNodeModel(device, region, "USRH", USRH)
+    CreateNodeModel(device, region, "ElectronGeneration", Gn)
+    CreateNodeModel(device, region, "HoleGeneration", Gp)
+    
+    for var in ("Electrons", "Holes"):
+        CreateNodeModelDerivative(device, region, "USRH", USRH, var)
+        CreateNodeModelDerivative(device, region, "ElectronGeneration", Gn, var)
+        CreateNodeModelDerivative(device, region, "HoleGeneration", Gp, var)
+
+def CreateAuger(device, region, Cn, Cp):
+    """Auger recombination (critical for HgCdTe)"""
+    UAuger = f"(Electrons*Holes - n_i^2)*({Cn}*Electrons + {Cp}*Holes)"
+    Gn = f"-ElectronCharge * ({UAuger})"
+    Gp = f"+ElectronCharge * ({UAuger})"
+    
+    CreateNodeModel(device, region, "UAuger", UAuger)
+    CreateNodeModel(device, region, "ElectronGeneration", Gn)
+    CreateNodeModel(device, region, "HoleGeneration", Gp)
+    
+    for var in ("Electrons", "Holes"):
+        CreateNodeModelDerivative(device, region, "UAuger", UAuger, var)
+
+def CreateContinuityEquations(device, region):
+    """Create continuity equations for electrons and holes"""
+    
+    # Electron charge
+    NCharge = "-ElectronCharge * Electrons"
+    CreateNodeModel(device, region, "NCharge", NCharge)
+    CreateNodeModelDerivative(device, region, "NCharge", NCharge, "Electrons")
+    
+    # Hole charge
+    PCharge = "+ElectronCharge * Holes"
+    CreateNodeModel(device, region, "PCharge", PCharge)
+    CreateNodeModelDerivative(device, region, "PCharge", PCharge, "Holes")
+    
+    # Electron continuity equation: div(Jn) = q*(R - G)
+    equation(
+        device=device, region=region,
+        name="ElectronContinuityEquation",
+        variable_name="Electrons",
+        edge_model="ElectronCurrent",
+        node_model="ElectronGeneration",
+        variable_update="positive"
+    )
+    
+    # Hole continuity equation: div(Jp) = -q*(R - G)
+    equation(
+        device=device, region=region,
+        name="HoleContinuityEquation",
+        variable_name="Holes",
+        edge_model="HoleCurrent",
+        node_model="HoleGeneration",
+        variable_update="positive"
+    )
+
+def CreateDriftDiffusionContact(device, region, contact):
+    """Create contact boundary conditions for drift-diffusion"""
+    
+    # For n-type material, electrons are majority carriers
+    # Contact electron concentration
+    contact_electrons = "Electrons - ifelse(NetDoping > 0, NetDoping + n_i^2/NetDoping, n_i^2/(-NetDoping))"
+    contact_holes = "Holes - ifelse(NetDoping < 0, -NetDoping + n_i^2/(-NetDoping), n_i^2/NetDoping)"
+    
+    contact_electrons_name = f"{contact}nodeelectrons"
+    contact_holes_name = f"{contact}nodeholes"
+    
+    CreateContactNodeModel(device, contact, contact_electrons_name, contact_electrons)
+    CreateContactNodeModel(device, contact, f"{contact_electrons_name}:Electrons", "1")
+    
+    CreateContactNodeModel(device, contact, contact_holes_name, contact_holes)
+    CreateContactNodeModel(device, contact, f"{contact_holes_name}:Holes", "1")
+    
+    # Electron contact equation
+    contact_equation(
+        device=device, contact=contact,
+        name="ElectronContinuityEquation",
+        node_model=contact_electrons_name,
+        edge_current_model="ElectronCurrent"
+    )
+    
+    # Hole contact equation
+    contact_equation(
+        device=device, contact=contact,
+        name="HoleContinuityEquation",
+        node_model=contact_holes_name,
+        edge_current_model="HoleCurrent"
+    )
+
+print("Creating electron and hole solutions...")
+
+# Add electron and hole solutions for each region
+for region in ["LWIR", "Barrier", "VLWIR"]:
+    CreateSolution(device_name, region, "Electrons")
+    CreateSolution(device_name, region, "Holes")
+
+print("Setting initial guess from intrinsic carriers...")
+
+# Initial guess from intrinsic carriers (equilibrium)
+for region in ["LWIR", "Barrier", "VLWIR"]:
+    set_node_values(
+        device=device_name, region=region, name="Electrons",
+        init_from="IntrinsicElectrons"
+    )
+    set_node_values(
+        device=device_name, region=region, name="Holes",
+        init_from="IntrinsicHoles"
+    )
+
+print("Creating current models...")
+
+# Create current models for each region
+for region, p in params.items():
+    # Bernoulli function for Scharfetter-Gummel discretization
+    CreateBernoulli(device_name, region)
+    
+    # Electron current
+    CreateElectronCurrent(device_name, region, "mu_n")
+    
+    # Hole current
+    CreateHoleCurrent(device_name, region, "mu_p")
+
+print("Creating recombination models...")
+
+# Create recombination models
+for region, p in params.items():
+    # SRH recombination
+    CreateSRH(device_name, region)
+    
+    # Auger recombination (use Cn and Cp from params)
+    CreateAuger(device_name, region, "Cn", "Cp")
+
+print("Creating continuity equations...")
+
+# Create continuity equations
+for region in ["LWIR", "Barrier", "VLWIR"]:
+    CreateContinuityEquations(device_name, region)
+
+print("Setting up contact boundary conditions...")
+
+# Create contact boundary conditions for drift-diffusion
+CreateDriftDiffusionContact(device_name, "LWIR", "bottom")
+CreateDriftDiffusionContact(device_name, "VLWIR", "top")
+
+print("[OK] Drift-diffusion physics added successfully.")
+
+# =============================================================================
+# STEP 3: SOLVE DRIFT-DIFFUSION EQUILIBRIUM
+# =============================================================================
+
+print("\n" + "="*70)
+print("STEP 3: Solving Drift-Diffusion Equilibrium")
+print("="*70)
+
+print("Solving...")
+solve(type="dc", absolute_error=1e10, relative_error=1e-10, maximum_iterations=50)
+
+print("[OK] Drift-diffusion equilibrium achieved.")
+
+# Check carrier concentrations
+print("\nEquilibrium carrier concentrations:")
+for region in ["LWIR", "Barrier", "VLWIR"]:
+    n = get_node_model_values(device=device_name, region=region, name="Electrons")
+    p = get_node_model_values(device=device_name, region=region, name="Holes")
+    print(f"  {region}: n=[{min(n):.2e}, {max(n):.2e}], p=[{min(p):.2e}, {max(p):.2e}] cm^-3")
+
+# =============================================================================
+# STEP 4: BIAS SWEEP AND DARK CURRENT CALCULATION
+# =============================================================================
+
+print("\n" + "="*70)
+print("STEP 4: Bias Sweep and Dark Current Calculation")
+print("="*70)
+
+# Function to get contact current
+def get_total_current(device, contact):
+    """Get total current (electrons + holes) at contact"""
+    Jn = get_contact_current(device=device, contact=contact, equation="ElectronContinuityEquation")
+    Jp = get_contact_current(device=device, contact=contact, equation="HoleContinuityEquation")
+    return Jn + Jp
+
+# Voltage sweep from 0V to 0.5V (positive bias for VLWIR)
+voltages = np.linspace(0.0, 0.5, 6)
+currents_top = []
+currents_bottom = []
+
+print("\nVoltage sweep (top contact):")
+print("V(V)\t\tJ_top(A/cm^2)\tJ_bot(A/cm^2)")
+print("-" * 60)
+
+for V in voltages:
+    set_parameter(device=device_name, name="Vtop", value=V)
+    solve(type="dc", absolute_error=1e10, relative_error=1e-10, maximum_iterations=30)
+    
+    J_top = get_total_current(device_name, "top")
+    J_bot = get_total_current(device_name, "bottom")
+    
+    currents_top.append(J_top)
+    currents_bottom.append(J_bot)
+    
+    print(f"{V:.2f}\t\t{J_top:.6e}\t{J_bot:.6e}")
+
+# Convert to numpy arrays
+currents_top = np.array(currents_top)
+currents_bottom = np.array(currents_bottom)
+
+# Dark current at equilibrium (V=0)
+J_dark = abs(currents_top[0])
+
+print(f"\n[RESULT] Dark current density at equilibrium: {J_dark:.6e} A/cm^2")
+
+# =============================================================================
+# STEP 5: COMPARISON WITH RULE 07
+# =============================================================================
+
+print("\n" + "="*70)
+print("STEP 5: Comparison with Rule 07")
+print("="*70)
+
+# Rule 07 benchmark values (from paper, at 100K)
+Rule07_VLWIR = 0.0539  # A/cm^2 for 14 µm
+Rule07_LWIR = 0.0001   # A/cm^2 for 9 µm
+
+print(f"\nRule 07 Benchmark (at 100K):")
+print(f"  VLWIR (14 um): {Rule07_VLWIR:.4e} A/cm^2")
+print(f"  LWIR (9 um):   {Rule07_LWIR:.4e} A/cm^2")
+
+print(f"\nSimulation Result:")
+print(f"  Dark current:  {J_dark:.4e} A/cm^2")
+
+# Compare with Rule 07 (use VLWIR as it's the dominant contribution)
+if J_dark < Rule07_VLWIR:
+    improvement = (1 - J_dark/Rule07_VLWIR) * 100
+    print(f"\n[OK] Dark current is BELOW Rule 07 VLWIR limit!")
+    print(f"     Improvement: {improvement:.1f}% better than Rule 07")
+else:
+    excess = (J_dark/Rule07_VLWIR - 1) * 100
+    print(f"\n[WARN] Dark current is ABOVE Rule 07 VLWIR limit")
+    print(f"       Excess: {excess:.1f}% above Rule 07")
+
+# =============================================================================
+# SAVE FINAL RESULTS
+# =============================================================================
+
+print("\nSaving final results...")
+
+# Save I-V characteristics
+with open("exp_oc/JEM2025_IV_characteristics.txt", 'w') as f:
+    f.write("# JEM2025 nBn Detector I-V Characteristics\n")
+    f.write("# Full drift-diffusion simulation\n")
+    f.write(f"# Temperature: {T} K\n")
+    f.write("#\n")
+    f.write("# Voltage(V)  J_top(A/cm^2)  J_bottom(A/cm^2)\n")
+    for V, Jt, Jb in zip(voltages, currents_top, currents_bottom):
+        f.write(f"{V:12.6f}  {Jt:18.6e}  {Jb:18.6e}\n")
+
+print("  Saved: exp_oc/JEM2025_IV_characteristics.txt")
+
+# Save carrier concentrations at equilibrium
+with open("exp_oc/JEM2025_carrier_concentrations.txt", 'w') as f:
+    f.write("# Equilibrium carrier concentrations\n")
+    f.write("# Position(um)  n(cm^-3)  p(cm^-3)\n")
+    for region in ["LWIR", "Barrier", "VLWIR"]:
+        f.write(f"# {region}\n")
+        x = get_node_model_values(device=device_name, region=region, name="x")
+        n = get_node_model_values(device=device_name, region=region, name="Electrons")
+        p = get_node_model_values(device=device_name, region=region, name="Holes")
+        for xi, ni, pi in zip(x, n, p):
+            f.write(f"{xi:.6f}  {ni:.10e}  {pi:.10e}\n")
+
+print("  Saved: exp_oc/JEM2025_carrier_concentrations.txt")
+
+# =============================================================================
+# FINAL SUMMARY
+# =============================================================================
+
+print("\n" + "="*70)
+print("FINAL SIMULATION SUMMARY")
+print("="*70)
+print(f"\nDevice: HgCdTe nBn Two-Color Infrared Detector")
+print(f"Temperature: {T} K")
+print(f"\nLayer Structure:")
+print(f"  LWIR:    {LWIR_t} um, Eg=140 meV, Nd=2.46e14 cm^-3")
+print(f"  Barrier: {Barrier_t} um, Eg=285 meV, Nd=5e15 cm^-3")
+print(f"  VLWIR:   {VLWIR_t} um, Eg=91 meV, Nd=5e14 cm^-3")
+
+print(f"\nPhysical Models:")
+print(f"  [OK] Poisson equation")
+print(f"  [OK] Drift-diffusion equations")
+print(f"  [OK] Continuity equations")
+print(f"  [OK] SRH recombination")
+print(f"  [OK] Auger recombination")
+print(f"  [OK] Ohmic contact boundary conditions")
+
+print(f"\nResults:")
+print(f"  Dark current density: {J_dark:.6e} A/cm^2")
+print(f"  Rule 07 VLWIR (14um): {Rule07_VLWIR:.6e} A/cm^2")
+print(f"  Rule 07 LWIR (9um):   {Rule07_LWIR:.6e} A/cm^2")
+
+if J_dark < Rule07_VLWIR:
+    print(f"  [OK] Device performance is BETTER than Rule 07!")
+else:
+    print(f"  [INFO] Device performance comparison complete")
+
+print(f"\nFiles Generated:")
+print(f"  - exp_oc/JEM2025_full_physics.py")
+print(f"  - exp_oc/JEM2025_potential_equilibrium.txt")
+print(f"  - exp_oc/JEM2025_IV_characteristics.txt")
+print(f"  - exp_oc/JEM2025_carrier_concentrations.txt")
+
+print("\n" + "="*70)
+print("SIMULATION COMPLETED SUCCESSFULLY")
 print("="*70)

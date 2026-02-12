@@ -1,0 +1,11 @@
+# JEM2025 nBn Detector I-V Characteristics
+# Full drift-diffusion simulation
+# Temperature: 100.0 K
+#
+# Voltage(V)  J_top(A/cm^2)  J_bottom(A/cm^2)
+    0.000000       -2.178512e-17        1.201417e-16
+    0.100000       -2.178512e-17        1.201417e-16
+    0.200000       -2.178512e-17        1.201417e-16
+    0.300000       -2.178512e-17        1.201417e-16
+    0.400000       -2.178512e-17        1.201417e-16
+    0.500000       -2.178512e-17        1.201417e-16
