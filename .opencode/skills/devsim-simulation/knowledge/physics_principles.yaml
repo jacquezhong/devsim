@@ -1,0 +1,175 @@
+# 物理模型原则库
+# 基于物理特性自动选择模型的规则
+
+physics_models:
+  # 基础方程 (所有仿真都需要)
+  basic_equations:
+    Poisson:
+      equation: "epsilon * div(grad(Potential)) + q*(p - n + Nd - Na) = 0"
+      variables: ["Potential"]
+      required: true
+      auto_setup: true
+      
+    DriftDiffusion_Electron:
+      equation: "dn/dt = div(Jn) - R + G"
+      flux: "Jn = -q*n*mu_n*grad(Potential) + q*Dn*grad(n)"
+      variables: ["Electrons"]
+      discretization: "Scharfetter_Gummel"
+      required: true
+      
+    DriftDiffusion_Hole:
+      equation: "dp/dt = -div(Jp) - R + G"
+      flux: "Jp = -q*p*mu_p*grad(Potential) - q*Dp*grad(p)"
+      variables: ["Holes"]
+      discretization: "Scharfetter_Gummel"
+      required: true
+
+  # 复合模型选择规则
+  recombination:
+    selection_rules:
+      narrow_bandgap:  # Eg < 0.5 eV
+        required:
+          - Auger_Recombination
+          - SRH_Recombination
+        reason: "窄禁带材料Auger复合占主导，必须包含"
+        
+      wide_bandgap:  # Eg > 2.0 eV
+        required:
+          - SRH_Recombination
+        optional:
+          - Radiative_Recombination
+        reason: "宽禁带材料以缺陷复合为主"
+        
+      moderate_bandgap:  # 0.5 <= Eg <= 2.0 eV
+        required:
+          - SRH_Recombination
+        reason: "中等带隙材料SRH复合为主"
+    
+    models:
+      SRH_Recombination:
+        equation: "R_SRH = (n*p - ni^2) / (tau_p*(n+n1) + tau_n*(p+p1))"
+        parameters:
+          tau_n: "电子寿命"
+          tau_p: "空穴寿命"
+        typical_values:
+          Silicon: {tau_n: 1e-6, tau_p: 1e-6}  # s
+          GaAs: {tau_n: 1e-8, tau_p: 1e-8}
+          HgCdTe: {tau_n: 1e-8, tau_p: 1e-8}
+          
+      Auger_Recombination:
+        equation: "R_Auger = (Cn*n + Cp*p) * (n*p - ni^2)"
+        parameters:
+          Cn: "电子Auger系数"
+          Cp: "空穴Auger系数"
+        temperature_dependent: true
+        applicable: "narrow_bandgap_only"
+        
+      Radiative_Recombination:
+        equation: "R_rad = B * (n*p - ni^2)"
+        parameters:
+          B: "辐射复合系数"
+        applicable: "direct_bandgap"
+
+  # 载流子统计
+  statistics:
+    Boltzmann:
+      condition: "n < 1e18 and p < 1e18"
+      approximation: "exp((Ef-Ei)/kT)"
+      
+    Fermi_Dirac:
+      condition: "n > 1e18 or p > 1e18 or T < 100K"
+      required_for: ["HgCdTe", "InSb", "narrow_bandgap"]
+      implementation: "使用Fermi-Dirac积分或近似公式"
+
+  # 生成模型
+  generation:
+    Thermal_Equilibrium:
+      applicable: "dark_analysis"
+      
+    Optical_Generation:
+      equation: "G_opt = alpha * Phi * exp(-alpha * x)"
+      parameters:
+        alpha: "吸收系数"
+        Phi: "光子通量"
+        spectrum: "光谱分布 (AM1.5G, 单色光等)"
+      required_for: ["photodetector", "solar_cell", "LED"]
+      
+    Impact_Ionization:
+      applicable: "high_field_breakdown"
+      threshold: "E > 1e5 V/cm"
+
+  # 迁移率模型
+  mobility:
+    Constant:
+      condition: "uniform_low_field"
+      parameters:
+        mu_n: "电子迁移率"
+        mu_p: "空穴迁移率"
+        
+    Field_Dependent:
+      condition: "high_field or MOS_channel"
+      models:
+        - Canali
+        - Lombardi
+        
+    Doping_Dependent:
+      condition: "variable_doping"
+      models:
+        - Klaassen
+        - Arora
+
+  # 仿真类型特定模型
+  simulation_specific:
+    DC:
+      required: [Poisson, DriftDiffusion]
+      optional: [Recombination]
+      
+    Transient:
+      required: [Poisson, DriftDiffusion, Carrier_Dynamics]
+      time_discretization: ["BDF1", "TR"]
+      
+    AC_Small_Signal:
+      required: [Poisson, DriftDiffusion, Displacement_Current]
+      frequency_range: "由用户指定"
+      
+    Optical:
+      required: [Poisson, DriftDiffusion, Optical_Generation]
+      additional: [Quantum_Efficiency, Responsivity]
+
+  # 器件特定调整
+  device_specific:
+    Diode:
+      mesh_focus: "junction_region"
+      initial_guess: "Poisson_first"
+      
+    MOSFET:
+      mesh_focus: "channel_oxide_interface"
+      mobility: "field_dependent"
+      
+    nBn_Detector:
+      mesh_focus: "barrier_interface"
+      required_physics: [Auger, Fermi_Dirac, Optical_Generation]
+      temperature: 77  # K default
+      
+    Solar_Cell:
+      mesh_focus: "junction_and_surface"
+      generation: "broadband_optical"
+      analysis: ["IV_light", "Quantum_Efficiency"]
+
+  # 收敛辅助
+  convergence_aids:
+    Initial_Guess:
+      methods:
+        - "平衡态求解"
+        - "Gummel迭代"
+        - "对数阻尼"
+        
+    Bias_Ramping:
+      strategy: "逐步增加偏置"
+      step_control: "自适应步长"
+      
+    Mesh_Refinement:
+      criteria:
+        - "高电场区"
+        - "载流子浓度梯度大"
+        - "势能快速变化"

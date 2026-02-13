@@ -1,0 +1,259 @@
+# 材料参数数据库
+# 包含带隙、迁移率、介电常数等参数
+
+materials:
+  # 硅 - 最常见半导体
+  Silicon:
+    name: "Silicon"
+    symbol: "Si"
+    bandgap:
+      Eg_0: 1.170  # eV @ 0K
+      Eg_300K: 1.12  # eV @ 300K
+      formula: "varshini"
+      alpha: 4.73e-4
+      beta: 636
+    permittivity: 11.7
+    affinity: 4.05  # eV
+    ni_300K: 1.0e10  # cm^-3
+    
+    mobility:
+      electrons:
+        model: "Klaassen"
+        mu_min: 52.2
+        mu_max: 1360
+        alpha: 2.3
+        reference: "Klaassen unified mobility model"
+      holes:
+        model: "Klaassen"
+        mu_min: 44.9
+        mu_max: 462
+        alpha: 2.2
+    
+    recombination:
+      SRH:
+        tau_n: 1.0e-6  # s (典型值)
+        tau_p: 1.0e-6  # s
+      Auger:
+        Cn: 2.8e-31  # cm^6/s
+        Cp: 1.0e-31  # cm^6/s
+      Radiative:
+        B: 1.1e-14  # cm^3/s
+    
+    default_temperature: 300  # K
+    category: "elemental"
+
+  # 砷化镓 - III-V族
+  GaAs:
+    name: "Gallium Arsenide"
+    symbol: "GaAs"
+    bandgap:
+      Eg_0: 1.519  # eV
+      Eg_300K: 1.424
+      formula: "varshini"
+      alpha: 5.41e-4
+      beta: 204
+    permittivity: 12.9
+    affinity: 4.07
+    ni_300K: 1.8e6
+    
+    mobility:
+      electrons:
+        mu_max: 8000  # cm^2/Vs
+        model: "constant_high"
+      holes:
+        mu_max: 400
+        model: "constant"
+    
+    recombination:
+      SRH:
+        tau_n: 1.0e-8
+        tau_p: 1.0e-8
+      
+    default_temperature: 300
+    category: "III-V"
+    direct_bandgap: true
+
+  # 碲镉汞 - 窄禁带红外探测器材料
+  HgCdTe:
+    name: "Mercury Cadmium Telluride"
+    symbol: "HgCdTe"
+    bandgap:
+      formula: "-0.302 + 1.93*x - 0.81*x^2 + 0.832*x^3 + 5.35e-4*(1-2*x)*T"
+      description: "x为Cd组分，T为温度(K)"
+      x_default: 0.3
+      temperature_dependent: true
+      x_dependent: true
+    
+    permittivity: 16.0  # 与x弱相关
+    affinity: "0.5 + 0.5*x"  # eV (近似)
+    
+    mobility:
+      electrons:
+        mu_max: "1.0e4 * (0.2/x)^0.6"  # cm^2/Vs (经验公式)
+        temperature_dependent: true
+      holes:
+        mu_max: 500  # cm^2/Vs (对x不敏感)
+    
+    auger_coefficients:
+      description: "窄禁带材料Auger复合占主导"
+      Cn_formula: "9.0e-30 * exp(-0.46*q/(k*T))"  # cm^6/s
+      Cp_formula: "6.0e-30 * exp(-0.23*q/(k*T))"  # cm^6/s
+      temperature_dependent: true
+      required: true
+    
+    statistics:
+      required: "Fermi_Dirac"
+      reason: "低温高掺杂下简并"
+    
+    default_temperature: 77  # K (红外探测器工作温度)
+    default_x: 0.3
+    category: "narrow_bandgap"
+    applications: ["infrared_detector", "thermal_imaging"]
+
+  # 锑化铟 - 窄禁带
+  InSb:
+    name: "Indium Antimonide"
+    symbol: "InSb"
+    bandgap:
+      Eg_0: 0.235
+      Eg_300K: 0.17
+      formula: "varshini"
+      alpha: 6.0e-4
+      beta: 500
+    permittivity: 16.8
+    affinity: 4.59
+    
+    mobility:
+      electrons:
+        mu_max: 77000  # 极高电子迁移率
+      holes:
+        mu_max: 850
+    
+    auger_coefficients:
+      Cn: 1.0e-26
+      Cp: 1.0e-26
+    
+    default_temperature: 77
+    category: "narrow_bandgap"
+
+  # 氮化镓 - 宽禁带
+  GaN:
+    name: "Gallium Nitride"
+    symbol: "GaN"
+    bandgap:
+      Eg_300K: 3.4
+    permittivity: 9.0
+    affinity: 4.2
+    
+    mobility:
+      electrons:
+        mu_max: 1000
+      holes:
+        mu_max: 30  # 空穴迁移率低
+    
+    default_temperature: 300
+    category: "wide_bandgap"
+    applications: ["power_electronics", "LED", "RF"]
+
+  # 碳化硅 - 宽禁带
+  SiC:
+    name: "Silicon Carbide"
+    symbol: "SiC"
+    bandgap:
+      Eg_300K: 3.26  # 4H-SiC
+    permittivity: 9.7
+    affinity: 3.8
+    
+    mobility:
+      electrons:
+        mu_max: 900
+      holes:
+        mu_max: 120
+    
+    default_temperature: 300
+    category: "wide_bandgap"
+    polytypes: ["3C", "4H", "6H"]
+    applications: ["power_electronics"]
+
+  # 铟镓砷 - 光通信探测器
+  InGaAs:
+    name: "Indium Gallium Arsenide"
+    symbol: "InGaAs"
+    bandgap:
+      formula: "0.324 + 0.7*x + 0.4*x^2"  # x为In组分
+      Eg_InP_lattice: 0.75  # eV @ x=0.53
+      lattice_matched: "x=0.53"
+    permittivity: 13.9
+    
+    mobility:
+      electrons:
+        mu_max: 12000  # @ InP lattice matched
+      holes:
+        mu_max: 300
+    
+    default_temperature: 300
+    category: "III-V"
+    applications: ["photodetector", "fiber_optic"]
+
+  # 磷化铟 - 衬底材料
+  InP:
+    name: "Indium Phosphide"
+    symbol: "InP"
+    bandgap:
+      Eg_300K: 1.344
+    permittivity: 12.5
+    affinity: 4.38
+    
+    mobility:
+      electrons:
+        mu_max: 5400
+      holes:
+        mu_max: 200
+    
+    default_temperature: 300
+    category: "III-V"
+    applications: ["substrate", "optoelectronics"]
+
+  # 氧化硅 - 绝缘层
+  SiO2:
+    name: "Silicon Dioxide"
+    symbol: "SiO2"
+    bandgap: 8.9  # eV
+    permittivity: 3.9
+    affinity: 0.95
+    
+    is_insulator: true
+    category: "oxide"
+    applications: ["gate_oxide", "isolation"]
+
+  # 氧化铝 - 高k栅介质
+  Al2O3:
+    name: "Aluminum Oxide"
+    symbol: "Al2O3"
+    bandgap: 8.8
+    permittivity: 9.0
+    affinity: 1.25
+    
+    is_insulator: true
+    category: "oxide"
+    applications: ["high_k_dielectric", "passivation"]
+
+# 材料选择建议
+material_selection:
+  infrared_detection:
+    wavelength_3_5um: "HgCdTe (x=0.3)"
+    wavelength_8_12um: "HgCdTe (x=0.2)"
+    alternative: "InSb (3-5um)"
+    
+  high_power:
+    best: "GaN, SiC"
+    reason: "宽禁带，高击穿场强"
+    
+  high_frequency:
+    best: "GaAs, InP"
+    reason: "高电子迁移率"
+    
+  optoelectronics:
+    LED_blue: "GaN"
+    LED_red: "GaAsP"
+    detector_fiber: "InGaAs"
