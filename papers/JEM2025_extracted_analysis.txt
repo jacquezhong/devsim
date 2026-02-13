@@ -1,0 +1,46 @@
+======================================================================
+PAPER ANALYSIS SUMMARY
+======================================================================
+
+[METADATA]
+  Title: Vol:.(1234567890)Journal of Electronic Materials (2025) 54:9174–9183
+  Authors: , Keywords Superlattices
+
+[ABSTRACT] ABSTRACT:
+  In this study, we have undertaken the design and simulation of an nBn, sequential-readout, two-color detector with two 
+absorbers and a barrier: a very-long-wavelength infrared (VLWIR) type III superlattice (T3SL) HgTe/CdTe with a cutoff  
+of 14 µm, a long-wavelength infrared bulk alloy HgCdTe with a cutoff of 9 µm, and an extended short-wavelength infrared 
+barrier T3SL HgTe/CdTe with a cutoff of 4.35 µm. We employed a 14-band k·p method band structure calculation of the 
+alloy and superlattice...
+
+[DEVICE STRUCTURE] DEVICE STRUCTURE:
+  • ('infrared', '4.35')
+  • ('LWIR', '5')
+  • ('type', 'III')
+  • ('infrared', 'bulk')
+  • ('of', 'the')
+  • ('The', 'VLWIR')
+  • ('engineering', 'the')
+  • ('HgTe', 'CdTe')
+  • ('issue', 'of')
+  • ('of', 'HgCdTe')
+
+[EQUATIONS] EQUATIONS/MODELS:
+  • continuitys+equation
+  • SRHs+recombination
+  • Augers+(?:1|7)
+
+[SIMULATION PARAMETERS]  SIMULATION PARAMETERS:
+  • temperatures: ['120', '80', '100']
+  • cutoff_wavelengths: ['14', '9', '4.35', '25', '14']
+  • bandgaps: ['30', '30', '0', '140', '91']
+
+======================================================================
+
+[RELEVANT DEVSIM EXAMPLES]:
+  • Diode examples: testing/diode*.py
+  • Mosfet examples: testing/mosfet*.py
+  • Circuit examples: testing/circuit*.py
+  • Quantum examples: testing/quantum*.py
+
+[DONE] Analysis complete!
