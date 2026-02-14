@@ -191,7 +191,8 @@ def run_capacitance_1d_simulation(
         maximum_iterations=max_iterations
     )
     
-    if not solve_info.get("converged", True):
+    converged = True if solve_info is None else solve_info.get("converged", True)
+    if not converged:
         result["converged"] = False
         result["error"] = "Solver did not converge"
         return result

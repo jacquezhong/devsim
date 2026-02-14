@@ -169,7 +169,8 @@ def run_ssac_diode_simulation(
         solve_info = solve(type="dc", absolute_error=1e10, relative_error=1e-10, 
                           maximum_iterations=30)
         
-        if not solve_info.get("converged", True):
+        converged = True if solve_info is None else solve_info.get("converged", True)
+        if not converged:
             result["converged"] = False
             result["error"] = f"DC solver did not converge at V={v}V"
             break

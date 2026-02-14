@@ -215,7 +215,8 @@ def run_diode_2d_simulation(
                           relative_error=relative_error,
                           maximum_iterations=max_iterations)
         
-        if not solve_info.get("converged", True):
+        converged = True if solve_info is None else solve_info.get("converged", True)
+        if not converged:
             result["converged"] = False
             result["error"] = f"Solver did not converge at V={v}V"
             break

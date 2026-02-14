@@ -183,7 +183,8 @@ def run_transient_diode_simulation(
             charge_error=1,
         )
         
-        if not solve_info.get("converged", True):
+        converged = True if solve_info is None else solve_info.get("converged", True)
+        if not converged:
             result["converged"] = False
             result["error"] = f"Solver did not converge at t={current_time}s"
             break
