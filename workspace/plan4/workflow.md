@@ -4,6 +4,31 @@
 **评估来源**: workspace/方案评估.md  
 **可行性评级**: ✅ **完全可行 (100%)**
 
+**执行原则**: 
+- ✅ 使用 `devsim` conda环境（优先）或 `base` 环境
+- ✅ 通过 `devsim-examples` skill 调用现有能力
+- ❌ 禁止自主开发物理模型或求解器代码
+
+---
+
+## 0. 环境准备
+
+### 0.1 激活Conda环境
+
+```bash
+# 优先尝试激活名为"devsim"的conda环境，如果不存在则使用base
+conda activate devsim 2>/dev/null || conda activate base
+
+# 验证环境
+python3 -c "import devsim; print(f'DEVSIM {devsim.__version__} is ready')"
+```
+
+### 0.2 安装依赖（首次）
+
+```bash
+pip install numpy matplotlib
+```
+
 ---
 
 ## 1. 学术背景与研究目的
