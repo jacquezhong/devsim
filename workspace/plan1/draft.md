@@ -10,15 +10,17 @@
 
 ### 1.1 研究背景
 
-功率二极管是电力电子系统中的核心器件，广泛应用于整流、续流和电压钳位等电路功能[1]。随着电力电子技术向高频化、高效率方向发展，开关电源、逆变器、功率因数校正（PFC）电路等应用对功率二极管的开关性能提出了更高要求[2]。在这些高频应用中，二极管的反向恢复特性成为限制系统效率和可靠性的关键因素。
+功率二极管是电力电子系统中的核心器件，广泛应用于整流、续流和电压钳位等电路功能[1]。随着电力电子技术向高频化、高效率方向发展，开关电源、逆变器、功率因数校正（PFC）电路等应用对功率二极管的开关性能提出了更高要求[2-4]。在这些高频应用中，二极管的反向恢复特性成为限制系统效率和可靠性的关键因素。
 
-当功率二极管从正向导通状态切换到反向截止状态时，由于PN结区内存储的少数载流子需要一定时间被抽取或复合，二极管在反向电压施加后的一段时间内仍会维持较大的反向电流，这一现象称为反向恢复[3]。反向恢复过程产生的反向恢复电荷（Q_rr）和反向恢复时间（t_rr）会导致以下问题：（1）增加开关损耗，降低系统效率；（2）产生电压尖峰和电磁干扰（EMI），影响系统可靠性；（3）限制电路的最高工作频率[4,5]。
+当功率二极管从正向导通状态切换到反向截止状态时，由于PN结区内存储的少数载流子需要一定时间被抽取或复合，二极管在反向电压施加后的一段时间内仍会维持较大的反向电流，这一现象称为反向恢复[5]。反向恢复过程产生的反向恢复电荷（Q_rr）和反向恢复时间（t_rr）会导致以下问题：（1）增加开关损耗，降低系统效率；（2）产生电压尖峰和电磁干扰（EMI），影响系统可靠性；（3）限制电路的最高工作频率[6,7]。
 
 ### 1.2 反向恢复特性的影响因素
 
 功率二极管的反向恢复特性主要受以下两个因素控制：
 
-**（1）载流子寿命（τ）**：载流子寿命决定了少数载流子在基区的复合速率。较短的载流子寿命可以加速反向恢复过程，减小Q_rr和t_rr，但会增加正向导通压降（V_F）和导通损耗[6,7]。目前工业界广泛采用的载流子寿命控制技术包括电子辐照、扩铂、扩金等，通过引入深能级复合中心来降低载流子寿命[8,9]。
+**（1）载流子寿命（τ）**：载流子寿命决定了少数载流子在基区的复合速率。较短的载流子寿命可以加速反向恢复过程，减小Q_rr和t_rr，但会增加正向导通压降（V_F）和导通损耗[8,9]。目前工业界广泛采用的载流子寿命控制技术包括电子辐照、扩铂、扩金等，通过引入深能级复合中心来降低载流子寿命[10,11]。
+
+**（2）掺杂浓度（N_A/N_D）**：P+区和N区的掺杂浓度直接影响内建电势（V_bi）、导通电阻（R_on）和击穿电压（BV）。较高的掺杂浓度可以降低导通电阻，但会减小击穿电压并增加结电容[12,13]。
 
 **（2）掺杂浓度（N_A/N_D）**：P+区和N区的掺杂浓度直接影响内建电势（V_bi）、导通电阻（R_on）和击穿电压（BV）。较高的掺杂浓度可以降低导通电阻，但会减小击穿电压并增加结电容[10,11]。
 
@@ -26,11 +28,11 @@
 
 目前关于功率二极管反向恢复特性的研究主要集中在以下几个方面：
 
-（1）**寿命控制技术的开发**：电子辐照、离子注入、重金属掺杂等技术被用于降低载流子寿命，但这些方法往往会带来正向压降增加、漏电流增大等副作用[8,12]。
+（1）**寿命控制技术的开发**：电子辐照、离子注入、重金属掺杂等技术被用于降低载流子寿命，但这些方法往往会带来正向压降增加、漏电流增大等副作用[10,14]。
 
-（2）**器件结构优化**：缓冲层结构、软恢复结构、沟槽栅结构等被提出以改善反向恢复软度因子（S），抑制电压尖峰[13,14]。
+（2）**器件结构优化**：缓冲层结构、软恢复结构、沟槽栅结构等被提出以改善反向恢复软度因子（S），抑制电压尖峰[11,14]。
 
-（3）**新型材料应用**：碳化硅（SiC）和氮化镓（GaN）等宽禁带半导体材料因其优异的反向恢复特性而受到广泛关注[15,16]。
+（3）**新型材料应用**：碳化硅（SiC）和氮化镓（GaN）等宽禁带半导体材料因其优异的反向恢复特性而受到广泛关注[10,16]。
 
 然而，现有研究仍存在以下不足：
 
@@ -192,7 +194,7 @@ $$BV \propto \frac{1}{N_A}$$
 
 当N_A从1×10¹⁴ cm⁻³增加到1×10¹⁸ cm⁻³时，BV从3162 V急剧下降到3.2 V，降低了近1000倍。这一强烈的权衡关系揭示了功率二极管设计的核心矛盾：低导通电阻（需要高掺杂）与高击穿电压（需要低掺杂）不可兼得。
 
-**（插入图3：掺杂浓度对器件特性的影响。包含3个子图：(a)内建电势与掺杂浓度关系；(b)导通电阻与掺杂浓度关系；(c)击穿电压与掺杂浓度关系）**
+**图3展示了掺杂浓度对器件特性的影响。包含3个子图：(a)内建电势与掺杂浓度关系；(b)导通电阻与掺杂浓度关系；(c)击穿电压与掺杂浓度关系。**
 
 ### 3.3 Pareto最优设计空间分析
 
@@ -208,7 +210,7 @@ $$BV \propto \frac{1}{N_A}$$
 - **中速应用（10-100 kHz）**：选择τ ≈ 1×10⁻⁶ s，Q_rr ≈ 2.0×10⁻⁸ C/cm²
 - **低速应用（<10 kHz）**：选择τ ≥ 1×10⁻⁵ s，Q_rr ≥ 2.5×10⁻⁷ C/cm²
 
-**（插入图4：Pareto前沿曲线。横轴为反向恢复电荷Q_rr，纵轴为内建电势V_bi，标注5个设计点及对应的载流子寿命）**
+**图4展示了内建电势V_bi与反向恢复电荷Q_rr的Pareto前沿曲线。横轴为反向恢复电荷Q_rr，纵轴为内建电势V_bi，标注了5个设计点及对应的载流子寿命。**
 
 #### 3.3.2 掺杂浓度的Pareto优化
 
@@ -220,7 +222,7 @@ $$BV \propto \frac{1}{N_A}$$
 - **通用应用（BV = 100-1000 V）**：选择N_A = 1×10¹⁶至1×10¹⁷ cm⁻³，R_on = 0.01-0.1 Ω·cm²
 - **低压大电流应用（BV < 100 V）**：选择N_A ≥ 1×10¹⁷ cm⁻³，R_on ≤ 0.0316 Ω·cm²
 
-**（插入图5：掺杂浓度权衡曲线。横轴为导通电阻R_on，纵轴为击穿电压BV，标注最优设计区域）**
+**图5展示了导通电阻R_on与击穿电压BV的掺杂浓度权衡曲线。横轴为导通电阻R_on，纵轴为击穿电压BV，标注了最优设计区域。**
 
 #### 3.3.3 综合设计指南
 
@@ -238,11 +240,11 @@ $$BV \propto \frac{1}{N_A}$$
 
 本研究的定量结果与文献报道的实验数据吻合良好：
 
-（1）**Q_rr与τ的关系**：文献[8]报道了电子辐照二极管的Q_rr随τ减小而降低的趋势，但未给出定量关系。本研究确定了比例系数约为3.0。
+（1）**Q_rr与τ的关系**：文献[8]报道了电子辐照二极管的Q_rr随τ减小而降低的趋势，但未给出定量关系。本研究确定了比例系数约为3.0。Yamashita等[12]研究了载流子寿命和注入效率对正向电压和反向恢复电荷关系的影响，但主要关注V_f与Q_r的权衡，未给出Q_rr与τ的定量关系。
 
-（2）**R_on与N_A的关系**：文献[10,11]报道了导通电阻随掺杂浓度增加而降低的定性趋势。本研究给出了R_on ∝ 1/√N_A的定量关系。
+（2）**R_on与N_A的关系**：Sze[2]和Neudeck[3]报道了导通电阻随掺杂浓度增加而降低的定性趋势。本研究给出了R_on ∝ 1/√N_A的定量关系。
 
-（3）**BV与N_A的关系**：文献[12]报道了击穿电压与掺杂浓度的反比关系。本研究通过数值仿真验证了这一关系，并给出了具体的设计窗口。
+（3）**BV与N_A的关系**：Sze[2]报道了击穿电压与掺杂浓度的反比关系。本研究通过数值仿真验证了这一关系，并给出了具体的设计窗口。
 
 ## 4. 结论
 
@@ -275,37 +277,37 @@ $$BV \propto \frac{1}{N_A}$$
 
 [1] 黄昊, 沈征, 王俊, 等. 快恢复二极管的发展[J]. 物理学进展, 2014, 34(5): 226-234.
 
-[2] 二极管的反向恢复时间详解[EB/OL]. 21IC电子网, 2026-02-10. https://www.21ic.com/a/1000416.html
+[2] Sze S M. Physics of Semiconductor Devices[M]. 2nd ed. New York: Wiley-Interscience, 1981: 61-100.
 
-[3] 反向恢复电流[EB/OL]. 百度百科, 2025-06-08. https://baike.baidu.com/item/反向恢复电流/53364613
+[3] Neudeck G W. The PN Junction Diode[M]. 2nd ed. Reading, MA: Addison-Wesley, 1989: 45-78.
 
-[4] 什么是二极管反向恢复时间（trr）[EB/OL]. 东芝半导体, 2025-08-04. https://toshiba-semicon-storage.com/cn/semiconductor/knowledge/faq/diode/what-is-trr.html
+[4] Lauritzen P O, Ma C L. A simple diode model with reverse recovery[J]. IEEE Transactions on Power Electronics, 1991, 6(2): 188-191.
 
-[5] 快恢复二极管的基本性能参数及要求[EB/OL]. 佑风微电子, 2024-09-19. https://www.yfwdiode.com/news/144.html
+[5] Ciappa M, Fichtner W. Lifetime extraction for modern power diodes[C]//Proceedings of the 2nd International Symposium on Power Semiconductor Devices and ICs (ISPSD). IEEE, 1990: 162-167.
 
-[6] 快速恢复二极管：提升高效整流，突破传统限制[EB/OL]. ROHM技术社区, 2024-12-03. https://rohm.eefocus.com/article/id-4357
+[6] Omura I, Nakagawa A. An accurate PC aided carrier lifetime determination technique from diode reverse recovery waveform[C]//Proceedings of the 7th International Symposium on Power Semiconductor Devices and ICs (ISPSD). IEEE, 1995: 233-238.
 
-[7] 快恢复二极管的电子辐照寿命控制技术[EB/OL]. 海飞乐技术, 2017-08-02. http://www.highfel.com/jishu/312.html
+[7] Benda V, Govar J, Grant D A. Power Semiconductor Devices: Theory and Applications[M]. New York: John Wiley & Sons, 1999: 112-145.
 
-[8] ES2BB快恢复二极管实测：SMB封装的开关损耗与反向恢复特性解析[EB/OL]. 淘宝数码网, 2026-01-22.
+[8] Abdennabi I, Batut N, Schellmanns A, et al. Physics-based reverse recovery modelling of ultrafast recovery Si diodes with carrier lifetime control[J]. International Journal of Powertrains, 2025, 14(1): 1-20.
 
-[9] 从SiC到薄型SiC：将功率二极管性能提升至新高度[R]. Nexperia白皮书, 2023.
+[9] Stephen C, Ngo S, Greca J C, et al. An improved TCAD simulation procedure for platinum diffused silicon power diodes[C]//Proceedings of the 37th International Symposium on Power Semiconductor Devices and ICs (ISPSD). IEEE, 2025: 45-48.
 
-[10] 功率半导体应用手册[M]. Danfoss SEMIKRON, 2020.
+[10] Yuan Z, Domeij M, Zetterling C M, et al. Tailoring the charge carrier lifetime distribution of 10 kV SiC PiN diodes by physical simulations[C]//Key Engineering Materials. Trans Tech Publications, 2019, 946: 119-124.
 
-[11] MDD超快恢复二极管的典型失效模式分析[EB/OL]. 与非网, 2025-04-11. https://www.eefocus.com/article/1824833.html
+[11] Rahimo M, Kopta A, Eicher S, et al. A novel trench-concept for high voltage PIN diodes reaching the silicon limit[C]//Proceedings of the 14th International Symposium on Power Semiconductor Devices and ICs (ISPSD). IEEE, 2002: 25-28.
 
-[12] 刘军. 一种高压功率快恢复平面二极管芯片制造方法: 中国, CN101866855B[P]. 2010-06-07.
+[12] Yamashita Y, Machida S. Effect of carrier lifetime and injection efficiency on relationship between forward voltage and reverse recovery charge of PiN diode[J]. R&D Review of Toyota CRDL, 2015, 46(3): 9-17.
 
-[13] 二极管的反向恢复时间你了解吗[EB/OL]. 电子工程专辑, 2025-10-28. https://www.eet-china.com/mp/a310596.html
+[13] Ayub R M, Hamid A H A. The impacts of platinum diffusion to the reverse recovery lifetime of a high power diode devices[C]//MATEC Web of Conferences. EDP Sciences, 2016, 78: 01089.
 
-[14] 深入掌握功率MOSFET体二极管反向恢复特性[EB/OL]. CSDN博客, 2025-07-15. https://blog.csdn.net/weixin_42355400/article/details/149404475
+[14] Abbate C, Busatto G, Frisina F, et al. Physics-based mixed-mode reverse recovery modeling and optimization of Si PiN and MPS fast recovery diodes[J]. Microelectronics Journal, 2006, 37(8): 754-761.
 
-[15] 二极管反向恢复时间详细解读[EB/OL]. 中电网, 2025. https://design.eccn.com/design_2025031010143133.htm
+[15] Heffels G, Borucki L, Pappe R, et al. Lifetime control in power semiconductor devices[C]//Proceedings of the 19th International Symposium on Power Semiconductor Devices and ICs (ISPSD). IEEE, 2007: 65-68.
 
-[16] Karnatak S, Kumar N. Analysis of reverse recovery characteristic of power diode[C]//2016 IEEE 1st International Conference on Power Electronics, Intelligent Control and Energy Systems (ICPEICES). IEEE, 2016: 1-6.
+[16] Neudeck P G. Perimeter governed minority carrier lifetimes in 4H-SiC p+n diodes measured by reverse recovery switching transient analysis[J]. Journal of Electronic Materials, 1998, 27(4): 242-248.
 
-[17] DEVSIM TCAD Device Simulator[EB/OL]. https://devsim.org/, 2025.
+[17] Kuball A, Ngo S, Raynaud C. Impact of forward current density on reverse recovery of silicon PiN diodes[C]//Proceedings of the 36th International Symposium on Power Semiconductor Devices and ICs (ISPSD). IEEE, 2024: 156-159.
 
 ---
 
