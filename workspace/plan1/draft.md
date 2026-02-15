@@ -22,8 +22,6 @@
 
 **（2）掺杂浓度（N_A/N_D）**：P+区和N区的掺杂浓度直接影响内建电势（V_bi）、导通电阻（R_on）和击穿电压（BV）。较高的掺杂浓度可以降低导通电阻，但会减小击穿电压并增加结电容[12,13]。
 
-**（2）掺杂浓度（N_A/N_D）**：P+区和N区的掺杂浓度直接影响内建电势（V_bi）、导通电阻（R_on）和击穿电压（BV）。较高的掺杂浓度可以降低导通电阻，但会减小击穿电压并增加结电容[10,11]。
-
 ### 1.3 研究现状与存在问题
 
 目前关于功率二极管反向恢复特性的研究主要集中在以下几个方面：
@@ -70,6 +68,8 @@ N_D & x \geq x_j
 \end{cases}$$
 
 其中，N_A为P区受主掺杂浓度，N_D为N区施主掺杂浓度（固定为1×10¹⁹ cm⁻³），x_j为结位置。
+
+![图1 一维PN结二极管结构示意图](figures/final/fig1_structure.png)
 
 **（2）物理模型**
 
@@ -142,6 +142,8 @@ $$BV \approx \frac{\epsilon_s E_{crit}^2}{2qN_A}$$
 
 ### 3.1 载流子寿命对反向恢复特性的影响
 
+![图2 载流子寿命对器件特性的影响](figures/final/fig2_lifetime_effects.png)
+
 #### 3.1.1 内建电势与载流子寿命的关系
 
 图2(a)展示了内建电势V_bi随载流子寿命τ的变化关系。结果表明，在载流子寿命变化4个数量级（1×10⁻⁸ s至1×10⁻⁴ s）的范围内，内建电势基本保持恒定，约为0.872 V。这是因为V_bi主要由掺杂浓度决定，而与载流子寿命无关，符合理论预期。
@@ -169,6 +171,8 @@ $$Q_s = \tau \cdot I_F$$
 图2(d)展示了导通电阻R_on随载流子寿命的变化。结果表明，导通电阻随载流子寿命增加而缓慢增加，从1×10⁻² Ω·cm²增加到约3×10⁻² Ω·cm²。这是因为较长的载流子寿命虽然降低了基区复合损耗，但会增加反向恢复电荷，在高频应用中会导致更大的开关损耗。
 
 ### 3.2 掺杂浓度对器件特性的影响
+
+![图3 掺杂浓度对器件特性的影响](figures/final/fig3_doping_effects.png)
 
 #### 3.2.1 内建电势与掺杂浓度的关系
 
@@ -202,6 +206,8 @@ $$BV \propto \frac{1}{N_A}$$
 
 #### 3.3.1 载流子寿命的Pareto优化
 
+![图4 功率二极管载流子寿命Pareto前沿曲线](figures/final/fig4_pareto_front.png)
+
 图4展示了内建电势V_bi与反向恢复电荷Q_rr的Pareto前沿曲线。由于V_bi基本不随载流子寿命变化，而Q_rr与τ成正比，因此Pareto前沿近似为一条水平线。这意味着在V_bi固定的前提下，只能通过降低载流子寿命来减小Q_rr。
 
 **设计建议**：
@@ -213,6 +219,8 @@ $$BV \propto \frac{1}{N_A}$$
 **图4展示了内建电势V_bi与反向恢复电荷Q_rr的Pareto前沿曲线。横轴为反向恢复电荷Q_rr，纵轴为内建电势V_bi，标注了5个设计点及对应的载流子寿命。**
 
 #### 3.3.2 掺杂浓度的Pareto优化
+
+![图5 功率二极管掺杂浓度权衡曲线](figures/final/fig5_doping_tradeoff.png)
 
 图5展示了导通电阻R_on与击穿电压BV的Pareto权衡曲线。这是一条典型的反比例曲线，显示了二者之间的强烈权衡关系。最优设计区域位于曲线的"膝部"，即1×10¹⁶ cm⁻³至1×10¹⁷ cm⁻³范围内，此时R_on和BV都能获得较好的折中。
 
@@ -309,14 +317,4 @@ $$BV \propto \frac{1}{N_A}$$
 
 [17] Kuball A, Ngo S, Raynaud C. Impact of forward current density on reverse recovery of silicon PiN diodes[C]//Proceedings of the 36th International Symposium on Power Semiconductor Devices and ICs (ISPSD). IEEE, 2024: 156-159.
 
----
 
-**图表说明**：
-
-- 图1：一维PN结二极管结构示意图（需绘制）
-- 图2：载流子寿命对器件特性的影响（已生成：complete_analysis.png中的前4个子图）
-- 图3：掺杂浓度对器件特性的影响（已生成：complete_analysis.png中的后2个子图及doping_tradeoff_optimized.png）
-- 图4：Pareto前沿曲线（已生成：pareto_front.png）
-- 图5：掺杂浓度权衡曲线（已生成：doping_tradeoff_optimized.png）
-
-**注**：实际论文中应将上述图表插入到相应位置。
