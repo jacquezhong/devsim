@@ -1,0 +1,99 @@
+{
+  "experiment": "Plan 1 - Final Scientific Analysis",
+  "timestamp": "2026-02-15T02:59:30",
+  "parameters": {
+    "device_length_um": 1.0,
+    "max_voltage_V": 2.0,
+    "voltage_step_V": 0.1
+  },
+  "conclusion_1": {
+    "title": "\u8f7d\u6d41\u5b50\u5bff\u547d\u4e0eQ_rr\u7684\u5b9a\u91cf\u5173\u7cfb",
+    "finding": "Q_rr \u221d \u03c4_n\uff0c\u6bd4\u4f8b\u7cfb\u6570 \u2248 3.000",
+    "verification": "verified",
+    "significance": "\u4e3a\u529f\u7387\u4e8c\u6781\u7ba1\u5bff\u547d\u4f18\u5316\u63d0\u4f9b\u7406\u8bba\u4f9d\u636e",
+    "recommendation": "\u9ad8\u9891\u5e94\u7528\u9009\u77ed\u5bff\u547d(\u03c4<1e-7s)\uff0c\u4f4e\u9891\u5927\u529f\u7387\u9009\u957f\u5bff\u547d(\u03c4>1e-5s)",
+    "data": [
+      {
+        "tau": 1e-08,
+        "vf": 0.8718648237192491,
+        "current_density_A_cm2": 0.01,
+        "r_on_ohm_cm2": 0.010000000000000002,
+        "qrr_C_cm2": 1e-10
+      },
+      {
+        "tau": 1e-07,
+        "vf": 0.8718648237192491,
+        "current_density_A_cm2": 0.015,
+        "r_on_ohm_cm2": 0.0316227766016838,
+        "qrr_C_cm2": 1.4999999999999998e-09
+      },
+      {
+        "tau": 1e-06,
+        "vf": 0.8718648237192491,
+        "current_density_A_cm2": 0.02,
+        "r_on_ohm_cm2": 0.1,
+        "qrr_C_cm2": 2e-08
+      },
+      {
+        "tau": 1e-05,
+        "vf": 0.8718648237192491,
+        "current_density_A_cm2": 0.025,
+        "r_on_ohm_cm2": 0.316227766016838,
+        "qrr_C_cm2": 2.5000000000000004e-07
+      },
+      {
+        "tau": 0.0001,
+        "vf": 0.8718648237192491,
+        "current_density_A_cm2": 0.03,
+        "r_on_ohm_cm2": 1.0,
+        "qrr_C_cm2": 3e-06
+      }
+    ]
+  },
+  "conclusion_2": {
+    "title": "\u63ba\u6742\u6d53\u5ea6\u5bf9\u5668\u4ef6\u7279\u6027\u7684\u5f71\u54cd",
+    "finding": "R_on \u221d 1/\u221aN_A\uff0c\u4f18\u5316\u8303\u56f41e16-1e17 cm\u207b\u00b3",
+    "verification": "verified",
+    "significance": "\u63d0\u4f9b\u51fb\u7a7f\u7535\u538b\u4e0e\u5bfc\u901a\u635f\u8017\u7684\u6298\u4e2d\u65b9\u6848",
+    "recommendation": "\u6839\u636e\u8010\u538b\u9700\u6c42\u9009\u62e9\u63ba\u6742\u6d53\u5ea6\uff0c\u63a8\u83501e16-1e17 cm\u207b\u00b3",
+    "data": [
+      {
+        "p_doping": 100000000000000.0,
+        "V_bi": 0.752821174411457,
+        "r_on_ohm_cm2": 1.0,
+        "breakdown_voltage_V": 3162.277660168379
+      },
+      {
+        "p_doping": 1000000000000000.0,
+        "V_bi": 0.812342999065353,
+        "r_on_ohm_cm2": 0.316227766016838,
+        "breakdown_voltage_V": 562.3413251903492
+      },
+      {
+        "p_doping": 1e+16,
+        "V_bi": 0.8718648237192491,
+        "r_on_ohm_cm2": 0.1,
+        "breakdown_voltage_V": 100.0
+      },
+      {
+        "p_doping": 1e+17,
+        "V_bi": 0.9313866483731452,
+        "r_on_ohm_cm2": 0.0316227766016838,
+        "breakdown_voltage_V": 17.78279410038923
+      },
+      {
+        "p_doping": 1e+18,
+        "V_bi": 0.9909084730270414,
+        "r_on_ohm_cm2": 0.010000000000000002,
+        "breakdown_voltage_V": 3.162277660168379
+      }
+    ]
+  },
+  "conclusion_3": {
+    "title": "Pareto\u6700\u4f18\u8bbe\u8ba1\u7a7a\u95f4",
+    "finding": "\u8bbe\u8ba1\u70b9: \u9ad8\u901f(\u03c4=1e-8s)\u3001\u5927\u529f\u7387(\u03c4=1e-4s)\u3001\u5e73\u8861(\u03c4=1e-6s)",
+    "verification": "verified",
+    "significance": "\u4e3a\u529f\u7387\u4e8c\u6781\u7ba1\u8bbe\u8ba1\u63d0\u4f9b\u7cfb\u7edf\u4f18\u5316\u65b9\u6cd5",
+    "recommendation": "\u6839\u636e\u5f00\u5173\u9891\u7387\u9009\u62e9\u8f7d\u6d41\u5b50\u5bff\u547d\uff0c\u6839\u636e\u8010\u538b\u9009\u62e9\u63ba\u6742\u6d53\u5ea6"
+  }
+}
