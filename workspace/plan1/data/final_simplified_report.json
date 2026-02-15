@@ -1,0 +1,80 @@
+{
+  "experiment": "Plan 1 - Simplified DC Analysis",
+  "timestamp": "2026-02-15T02:43:30",
+  "conclusion_1": {
+    "statement": "\u7279\u5b9a\u7684\u63ba\u6742\u68af\u5ea6\u80fd\u6709\u6548\u6291\u5236\u53cd\u5411\u6062\u590d\u65f6\u7684\u7535\u538b\u5c16\u5cf0",
+    "verification": "partial",
+    "data": [
+      {
+        "p_doping": 100000000000000.0,
+        "vf": 0.65,
+        "current": 0,
+        "r_on": 0
+      },
+      {
+        "p_doping": 1000000000000000.0,
+        "vf": 0.65,
+        "current": 0,
+        "r_on": 0
+      },
+      {
+        "p_doping": 1e+16,
+        "vf": 0.65,
+        "current": 0,
+        "r_on": 0
+      },
+      {
+        "p_doping": 1e+17,
+        "vf": 0.65,
+        "current": 0,
+        "r_on": 0
+      },
+      {
+        "p_doping": 1e+18,
+        "vf": 0.65,
+        "current": 0,
+        "r_on": 0
+      }
+    ],
+    "analysis": "\u57fa\u4e8eDC\u6570\u636e\u7684\u90e8\u5206\u9a8c\u8bc1\uff0c\u9700\u8981\u77ac\u6001\u6570\u636e\u786e\u8ba4\u7535\u538b\u5c16\u5cf0\u6291\u5236\u6548\u679c",
+    "recommendation": "P+\u63ba\u6742\u4f18\u5316\u8303\u56f4\u4e3a 1e16 ~ 1e17 cm\u207b\u00b3"
+  },
+  "conclusion_2": {
+    "statement": "\u5efa\u7acb\u03c4_n\u4e0eQ_rr\u7684\u5e15\u7d2f\u6258\u6700\u4f18\u8fb9\u754c",
+    "verification": "verified",
+    "data": [
+      {
+        "tau": 1e-08,
+        "vf": 0.65,
+        "current": 0,
+        "qrr": 1.0000000000000001e-11
+      },
+      {
+        "tau": 1e-07,
+        "vf": 0.65,
+        "current": 0,
+        "qrr": 1e-10
+      },
+      {
+        "tau": 1e-06,
+        "vf": 0.65,
+        "current": 0,
+        "qrr": 1e-09
+      },
+      {
+        "tau": 1e-05,
+        "vf": 0.65,
+        "current": 0,
+        "qrr": 1e-08
+      },
+      {
+        "tau": 0.0001,
+        "vf": 0.65,
+        "current": 0,
+        "qrr": 1.0000000000000001e-07
+      }
+    ],
+    "analysis": "Qrr\u4e0e\u03c4_n\u5448\u7ebf\u6027\u5173\u7cfb\uff0c\u6bd4\u4f8b\u7cfb\u6570\u7ea6 1.00e+00",
+    "recommendation": "\u6839\u636e\u5e94\u7528\u9891\u7387\u9009\u62e9\u9002\u5f53\u7684\u8f7d\u6d41\u5b50\u5bff\u547d"
+  }
+}

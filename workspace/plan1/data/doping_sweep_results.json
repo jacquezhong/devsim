@@ -1,0 +1,32 @@
+[
+  {
+    "p_doping": 100000000000000.0,
+    "vf": 0.65,
+    "current": 0,
+    "r_on": 0
+  },
+  {
+    "p_doping": 1000000000000000.0,
+    "vf": 0.65,
+    "current": 0,
+    "r_on": 0
+  },
+  {
+    "p_doping": 1e+16,
+    "vf": 0.65,
+    "current": 0,
+    "r_on": 0
+  },
+  {
+    "p_doping": 1e+17,
+    "vf": 0.65,
+    "current": 0,
+    "r_on": 0
+  },
+  {
+    "p_doping": 1e+18,
+    "vf": 0.65,
+    "current": 0,
+    "r_on": 0
+  }
+]
