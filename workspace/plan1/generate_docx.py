@@ -25,23 +25,85 @@ except ImportError:
 def add_omml_formula(para, latex_formula):
     """
     将 LaTeX 公式转换为 OMML 并添加到段落
+    如果转换失败，使用优化的文本替代方案
     """
     if not MATH_SUPPORT:
         # 备用方案：使用文本下标
-        add_text_with_subscripts(para, latex_formula)
+        add_formula_as_text(para, latex_formula)
         return
     
     try:
+        # 简化公式，移除可能导致问题的复杂语法
+        simplified = simplify_latex(latex_formula)
+        
         # LaTeX -> MathML -> OMML
-        mathml = latex_to_mathml(latex_formula)
+        mathml = latex_to_mathml(simplified)
         omml = mathml_to_omml(mathml)
         
         # 解析 OMML XML
         omml_element = parse_xml(omml)
         para._p.append(omml_element)
     except Exception as e:
-        print(f"⚠️  公式转换失败: {latex_formula[:50]}... 使用文本替代")
-        add_text_with_subscripts(para, latex_formula)
+        # 失败时使用优化的文本替代
+        add_formula_as_text(para, latex_formula)
+
+
+def simplify_latex(latex):
+    """
+    简化 LaTeX 公式，移除不支持的复杂语法
+    """
+    # 移除 cases 环境（Word 公式不支持）
+    if '\\begin{cases}' in latex:
+        # 转换为简单文本表示
+        latex = re.sub(r'\\begin\{cases\}(.*?)\\end\{cases\}', 
+                       lambda m: m.group(1).replace('\\\\', '; '), 
+                       latex, flags=re.DOTALL)
+    
+    # 简化 frac 为 / 
+    latex = re.sub(r'\\frac\{([^}]+)\}\{([^}]+)\}', r'(\\1)/(\\2)', latex)
+    
+    # 简化 left/right
+    latex = latex.replace('\\left', '').replace('\\right', '')
+    
+    # 简化 times 和 cdot
+    latex = latex.replace('\\times', '×').replace('\\cdot', '·')
+    
+    # 简化 approx
+    latex = latex.replace('\\approx', '≈').replace('\\propto', '∝')
+    
+    # 简化 ln
+    latex = latex.replace('\\ln', 'ln')
+    
+    # 简化 sqrt
+    latex = re.sub(r'\\sqrt\{([^}]+)\}', r'sqrt(\\1)', latex)
+    
+    return latex
+
+
+def add_formula_as_text(para, latex):
+    """
+    将 LaTeX 公式以优化的文本形式显示（带下标/上标）
+    """
+    # 清理 LaTeX
+    text = latex.strip()
+    
+    # 转换常见数学符号
+    replacements = [
+        (r'\\times', '×'), (r'\\cdot', '·'),
+        (r'\\approx', '≈'), (r'\\propto', '∝'),
+        (r'\\leq', '≤'), (r'\\geq', '≥'),
+        (r'\\ln', 'ln'), (r'\\frac', ''), 
+        (r'\\left', ''), (r'\\right', ''),
+        (r'\\begin\{cases\}', ''), (r'\\end\{cases\}', ''),
+        (r'\\\\', '; '),
+        (r'\{', ''), (r'\}', ''),
+    ]
+    
+    for pattern, replacement in replacements:
+        text = re.sub(pattern, replacement, text)
+    
+    # 使用下标/上标渲染
+    add_text_with_subscripts(para, text)
 
 
 def add_text_with_subscripts(para, text):
