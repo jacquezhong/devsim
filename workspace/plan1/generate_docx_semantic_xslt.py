@@ -57,8 +57,9 @@ def clean_latex(latex_str):
     latex = re.sub(r'\\frac\s*([^\{][^\s]*(?:\s+[^\s]+)?)', fix_frac, latex)
     
     # 4. 处理下标和上标，确保有 {}
-    # x_j -> x_{j}, 10^-8 -> 10^{-8}
-    latex = re.sub(r'([a-zA-Z0-9])_([a-zA-Z0-9])(?![\{])', r'\1_{\2}', latex)
+    # x_j -> x_{j}, Q_rr -> Q_{rr}, 10^-8 -> 10^{-8}
+    # 匹配模式：字母_字母序列（不在{}中）
+    latex = re.sub(r'([a-zA-Z])_([a-zA-Z0-9]+)(?![\{])', r'\1_{\2}', latex)
     latex = re.sub(r'([a-zA-Z0-9])\^([a-zA-Z0-9\-]+)(?![\{])', r'\1^{\2}', latex)
     
     # 5. 确保 \text{...} 中的内容不被修改
@@ -153,19 +154,30 @@ def add_text_with_subscripts(para, text):
 
 
 def process_inline_text(para, text):
-    """处理行内文本，识别公式和格式"""
-    # 分割行内公式
-    parts = re.split(r'(\$[^$]+\$)', text)
+    """处理行内文本，识别公式、粗体和格式"""
+    # 先分割粗体 **...**
+    bold_parts = re.split(r'(\*\*[^*]+\*\*)', text)
     
-    for part in parts:
-        if part.startswith('$') and part.endswith('$') and len(part) > 2:
-            # 行内公式
-            latex = part[1:-1]
-            add_formula_with_xslt(para, latex, display_mode=False)
+    for bold_part in bold_parts:
+        if bold_part.startswith('**') and bold_part.endswith('**') and len(bold_part) > 4:
+            # 粗体文本
+            bold_text = bold_part[2:-2]
+            run = para.add_run(bold_text)
+            run.font.bold = True
+            run.font.name = 'Times New Roman'
         else:
-            # 普通文本
-            if part.strip():
-                add_text_with_subscripts(para, part)
+            # 分割行内公式 $...$
+            formula_parts = re.split(r'(\$[^$]+\$)', bold_part)
+            
+            for part in formula_parts:
+                if part.startswith('$') and part.endswith('$') and len(part) > 2:
+                    # 行内公式
+                    latex = part[1:-1]
+                    add_formula_with_xslt(para, latex, display_mode=False)
+                else:
+                    # 普通文本
+                    if part.strip():
+                        add_text_with_subscripts(para, part)
 
 
 def create_docx_with_xslt():
