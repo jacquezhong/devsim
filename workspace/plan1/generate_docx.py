@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-从 draft.md 生成 功率二极管反向恢复特性研究.docx
+从 draft_modified.md 生成 功率二极管反向恢复特性研究.docx
 使用 Word 原生 OMML 公式格式（可编辑）
 """
 
@@ -15,138 +15,237 @@ import os
 def add_formula_with_omml(para, latex_str):
     """
     添加 Word 原生公式（OMML格式，可编辑）
-    使用简化方法：直接构建 OMML XML
     """
     latex = latex_str.strip()
     if latex.startswith('$') and latex.endswith('$'):
         latex = latex[1:-1]
     
-    # 检查是否有复杂的 cases 环境，有则直接使用文本
+    # 检查复杂环境
     if '\\begin{cases}' in latex or '\\end{cases}' in latex:
-        add_text_with_subscripts(para, latex)
+        add_formula_as_text(para, latex)
         return False
     
-    # 简化 LaTeX
-    latex = latex.replace('\\times', '×').replace('\\cdot', '·')
-    latex = latex.replace('\\approx', '≈').replace('\\propto', '∝')
-    latex = latex.replace('\\leq', '≤').replace('\\geq', '≥')
-    latex = latex.replace('\\left', '').replace('\\right', '')
-    latex = latex.replace('\\ln', 'ln')
-    latex = latex.replace('\\text{', '').replace('}', '')
-    latex = latex.replace('\\\\', '; ')
-    
     try:
-        # 构建简单的 OMML XML
-        omml_xml = build_simple_omml(latex)
+        # 构建 OMML
+        omml_xml = latex_to_omml(latex)
         if omml_xml:
             from docx.oxml import parse_xml
             element = parse_xml(omml_xml)
             para._p.append(element)
             return True
     except Exception as e:
-        pass
+        print(f"  公式转换失败: {e}")
     
-    # 失败时使用文本下标
-    add_text_with_subscripts(para, latex)
+    # 失败时回退到文本
+    add_formula_as_text(para, latex)
     return False
 
 
-def build_simple_omml(latex):
+def latex_to_omml(latex):
     """
-    构建简单的 OMML XML
+    将 LaTeX 转换为 OMML XML
     """
-    # 转义 XML 特殊字符
+    # 保留希腊字母，不要转换为英文
+    greek_map = {
+        '\\tau': 'τ', '\\alpha': 'α', '\\beta': 'β', '\\gamma': 'γ',
+        '\\delta': 'δ', '\\epsilon': 'ε', '\\theta': 'θ', '\\lambda': 'λ',
+        '\\mu': 'μ', '\\pi': 'π', '\\sigma': 'σ', '\\phi': 'φ',
+        '\\omega': 'ω', '\\rho': 'ρ', '\\eta': 'η', '\\kappa': 'κ',
+    }
+    
+    for eng, grk in greek_map.items():
+        latex = latex.replace(eng, grk)
+    
+    # 预定义替换
+    latex = latex.replace('\\times', '×').replace('\\cdot', '·')
+    latex = latex.replace('\\approx', '≈').replace('\\propto', '∝')
+    latex = latex.replace('\\leq', '≤').replace('\\geq', '≥')
+    latex = latex.replace('\\left', '').replace('\\right', '')
+    latex = latex.replace('\\ln', 'ln')
+    latex = latex.replace('\\', '')  # 移除剩余反斜杠
+    latex = latex.replace('{', '').replace('}', '')
+    latex = latex.replace('text', '')
+    
+    # 转义 XML
     latex = latex.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
     
+    # 分词处理
+    tokens = tokenize_formula(latex)
+    
+    # 构建 OMML
     parts = []
     i = 0
-    while i < len(latex):
-        # 分数
-        frac_match = re.match(r'\\frac\{([^}]+)\}\{([^}]+)\}', latex[i:])
-        if frac_match:
-            num = frac_match.group(1)
-            den = frac_match.group(2)
-            parts.append(f'<m:f><m:num><m:r><m:t>{num}</m:t></m:r></m:num><m:den><m:r><m:t>{den}</m:t></m:r></m:den></m:f>')
-            i += frac_match.end()
-            continue
+    while i < len(tokens):
+        token = tokens[i]
         
-        # 根号
-        sqrt_match = re.match(r'\\sqrt\{([^}]+)\}', latex[i:])
-        if sqrt_match:
-            arg = sqrt_match.group(1)
-            parts.append(f'<m:rad><m:radPr><m:hideDeg m:val="1"/></m:radPr><m:deg/><m:e><m:r><m:t>{arg}</m:t></m:r></m:e></m:rad>')
-            i += sqrt_match.end()
-            continue
-        
-        # 下标
-        sub_match = re.match(r'([a-zA-Zτ])_\{?([a-zA-Z0-9]+)\}?', latex[i:])
-        if sub_match:
-            base = sub_match.group(1)
-            sub = sub_match.group(2)
-            parts.append(f'<m:sSub><m:e><m:r><m:rPr><m:sty m:val="i"/></m:rPr><m:t>{base}</m:t></m:r></m:e><m:sub><m:r><m:t>{sub}</m:t></m:r></m:sub></m:sSub>')
-            i += sub_match.end()
-            continue
-        
-        # 上标
-        sup_match = re.match(r'([0-9.]+)?×?10\^\{?([0-9\-]+)\}?', latex[i:])
-        if sup_match:
-            base = sup_match.group(1) or ''
-            sup = sup_match.group(2)
-            if base:
-                parts.append(f'<m:r><m:t>{base}×10</m:t></m:r><m:sSup><m:e/><m:sup><m:r><m:t>{sup}</m:t></m:r></m:sup></m:sSup>')
+        # 分数: a/b
+        if token == '/' and i > 0 and i < len(tokens) - 1:
+            if parts:
+                num = parts.pop()
             else:
-                parts.append(f'<m:r><m:t>10</m:t></m:r><m:sSup><m:e/><m:sup><m:r><m:t>{sup}</m:t></m:r></m:sup></m:sSup>')
-            i += sup_match.end()
+                num = '<m:r><m:t>1</m:t></m:r>'
+            den = build_run(tokens[i+1])
+            parts.append(f'<m:f><m:num>{num}</m:num><m:den>{den}</m:den></m:f>')
+            i += 2
             continue
         
-        # 普通字符
-        if latex[i] in '+-=×·≈∝≤≥()[]/':
-            parts.append(f'<m:r><m:t>{latex[i]}</m:t></m:r>')
-        elif latex[i].isalnum() or latex[i] in ' ;,.':
-            if latex[i].isalpha():
-                parts.append(f'<m:r><m:rPr><m:sty m:val="i"/></m:rPr><m:t>{latex[i]}</m:t></m:r>')
-            else:
-                parts.append(f'<m:r><m:t>{latex[i]}</m:t></m:r>')
+        # 下标模式: X _ Y (N _ A)
+        if token == '_' and i > 0 and i + 1 < len(tokens):
+            # 获取前一个标记作为 base（需要弹出）
+            if parts and i > 0:
+                prev_token = tokens[i-1]
+                # 移除之前添加的 base
+                parts.pop()
+                sub = tokens[i + 1]
+                parts.append(build_subscript(prev_token, sub))
+                i += 2
+                continue
+        
+        # 上标模式: X ^ Y
+        if token == '^' and i > 0 and i + 1 < len(tokens):
+            if parts:
+                parts.pop()  # 移除 base
+                base = tokens[i-1]
+                sup = tokens[i + 1]
+                parts.append(build_superscript(base, sup))
+                i += 2
+                continue
+        
+        # 普通标记
+        if token in '+-=×·≈∝≤≥(),;':
+            parts.append(f'<m:r><m:t>{token}</m:t></m:r>')
+        elif token.strip() and token != '_' and token != '^':
+            parts.append(build_run(token))
         
         i += 1
     
     if parts:
-        # 使用正确的命名空间
-        omml = f'<m:oMath xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math">{"".join(parts)}</m:oMath>'
-        return omml
+        return f'<m:oMath xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math">{ "".join(parts) }</m:oMath>'
     return None
 
 
-def escape_xml(text):
-    """转义 XML 特殊字符"""
-    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+def tokenize_formula(formula):
+    """
+    将公式字符串分词，正确处理科学计数法
+    """
+    tokens = []
+    i = 0
+    formula = formula.strip()
+    
+    while i < len(formula):
+        # 跳过空格
+        if formula[i].isspace():
+            i += 1
+            continue
+        
+        # 运算符和标点
+        if formula[i] in '+-=×·≈∝≤≥(),;/_^':
+            tokens.append(formula[i])
+            i += 1
+            continue
+        
+        # 科学计数法: 1×10^-8 或 1×10^8
+        sci_match = re.match(r'(\d+(?:\.\d+)?)×10\^(-?\d+)', formula[i:])
+        if sci_match:
+            tokens.append(sci_match.group(1))  # 系数
+            tokens.append('×')
+            tokens.append('10')
+            tokens.append('^')
+            tokens.append(sci_match.group(2))  # 指数
+            i += sci_match.end()
+            continue
+        
+        # 纯数字
+        if formula[i].isdigit() or formula[i] == '.':
+            j = i
+            while j < len(formula) and (formula[j].isdigit() or formula[j] == '.'):
+                j += 1
+            tokens.append(formula[i:j])
+            i = j
+            continue
+        
+        # 变量名（希腊字母、英文）
+        if formula[i].isalpha():
+            j = i
+            while j < len(formula) and formula[j].isalpha():
+                j += 1
+            tokens.append(formula[i:j])
+            i = j
+            continue
+        
+        i += 1
+    
+    return tokens
 
 
-def add_text_with_subscripts(para, text):
-    """添加带下标的文本"""
-    subscript_patterns = [
-        ('Q_{rr}', 'Q', 'rr'), ('Q_rr', 'Q', 'rr'),
-        ('t_{rr}', 't', 'rr'), ('t_rr', 't', 'rr'),
-        ('V_{bi}', 'V', 'bi'), ('V_bi', 'V', 'bi'),
-        ('V_F', 'V', 'F'), ('V_A', 'V', 'A'),
-        ('R_{on}', 'R', 'on'), ('R_on', 'R', 'on'),
-        ('N_A', 'N', 'A'), ('N_D', 'N', 'D'),
-        ('J_F', 'J', 'F'), ('I_F', 'I', 'F'),
-        ('I_{rr}', 'I', 'rr'), ('I_rr', 'I', 'rr'),
-        ('τ_n', 'τ', 'n'), ('τ_p', 'τ', 'p'),
-        ('n_i', 'n', 'i'), ('x_j', 'x', 'j'),
-        ('E_c', 'E', 'c'), ('E_{crit}', 'E', 'crit'),
-        ('kT', 'k', 'T'), ('dI', 'd', 'I'), ('dV', 'd', 'V'),
+def build_run(text):
+    """构建普通运行文本"""
+    # 判断是否为变量（斜体）
+    is_var = any(c.isalpha() for c in text)
+    if is_var:
+        return f'<m:r><m:rPr><m:sty m:val="i"/></m:rPr><m:t>{text}</m:t></m:r>'
+    else:
+        return f'<m:r><m:t>{text}</m:t></m:r>'
+
+
+def build_subscript(base, sub):
+    """构建下标"""
+    base_run = build_run(base)
+    sub_run = build_run(sub)
+    return f'<m:sSub><m:e>{base_run}</m:e><m:sub>{sub_run}</m:sub></m:sSub>'
+
+
+def build_superscript(base, sup):
+    """构建上标"""
+    if base:
+        base_run = build_run(base)
+        # 对于 10^n 这种，base 是空的
+        sup_run = build_run(sup)
+        return f'<m:sSup><m:e>{base_run}</m:e><m:sup>{sup_run}</m:sup></m:sSup>'
+    else:
+        sup_run = build_run(sup)
+        return f'<m:sSup><m:e/><m:sup>{sup_run}</m:sup></m:sSup>'
+
+
+def add_formula_as_text(para, latex):
+    """
+    将公式以文本形式显示（带下标/上标）
+    """
+    # 清理
+    latex = latex.replace('\\', '').replace('{', '').replace('}', '')
+    latex = latex.replace('text', '')
+    latex = latex.replace('times', '×').replace('cdot', '·')
+    latex = latex.replace('approx', '≈').replace('propto', '∝')
+    latex = latex.replace('leq', '≤').replace('geq', '≥')
+    latex = latex.replace('ln', 'ln')
+    latex = latex.replace('begin', '').replace('end', '').replace('cases', '')
+    latex = latex.replace('&', '&amp;')
+    
+    # 下标/上标模式
+    patterns = [
+        (r'Q_{rr}', 'Q', 'rr'), (r'Q_rr', 'Q', 'rr'),
+        (r't_{rr}', 't', 'rr'), (r't_rr', 't', 'rr'),
+        (r'V_{bi}', 'V', 'bi'), (r'V_bi', 'V', 'bi'),
+        (r'V_F', 'V', 'F'), (r'V_A', 'V', 'A'),
+        (r'R_{on}', 'R', 'on'), (r'R_on', 'R', 'on'),
+        (r'N_A', 'N', 'A'), (r'N_D', 'N', 'D'),
+        (r'J_F', 'J', 'F'), (r'I_F', 'I', 'F'),
+        (r'I_{rr}', 'I', 'rr'), (r'I_rr', 'I', 'rr'),
+        (r'τ_n', 'τ', 'n'), (r'τ_p', 'τ', 'p'),
+        (r'n_i', 'n', 'i'), (r'x_j', 'x', 'j'),
+        (r'E_c', 'E', 'c'), (r'E_crit', 'E', 'crit'),
+        (r'kT', 'k', 'T'), (r'dI', 'd', 'I'), (r'dV', 'd', 'V'),
     ]
     
     i = 0
+    text = latex
     while i < len(text):
         matched = False
-        for pattern, base, sub in sorted(subscript_patterns, key=lambda x: -len(x[0])):
-            clean = pattern.replace('\\', '').replace('{', '').replace('}', '')
-            simple = pattern.replace('_{', '').replace('}', '')
-            
-            if i + len(clean) <= len(text) and (text[i:i+len(clean)] == clean or text[i:i+len(simple)] == simple):
+        
+        # 检查下标模式
+        for pattern, base, sub in sorted(patterns, key=lambda x: -len(x[0])):
+            p = pattern.replace('\\', '').replace('{', '').replace('}', '')
+            if i + len(p) <= len(text) and text[i:i+len(p)] == p:
                 run = para.add_run(base)
                 run.font.italic = True
                 run.font.name = 'Times New Roman'
@@ -154,21 +253,21 @@ def add_text_with_subscripts(para, text):
                 run.font.subscript = True
                 run.font.size = Pt(9)
                 run.font.name = 'Times New Roman'
-                i += len(clean)
+                i += len(p)
                 matched = True
                 break
         
         if not matched:
-            if i < len(text) - 1 and text[i] == '^' and (text[i+1].isdigit() or text[i+1] in '+-'):
-                j = i + 2 if text[i+1] in '+-' else i + 1
-                while j < len(text) and text[j].isdigit():
-                    j += 1
-                if j > i + 1:
-                    run = para.add_run(text[i+1:j])
-                    run.font.superscript = True
-                    run.font.size = Pt(9)
-                    i = j
-                    matched = True
+            # 检查上标
+            sup_match = re.match(r'10\^(-?\d+)', text[i:])
+            if sup_match:
+                run = para.add_run('10')
+                run.font.name = 'Times New Roman'
+                run = para.add_run(sup_match.group(1))
+                run.font.superscript = True
+                run.font.size = Pt(9)
+                i += sup_match.end()
+                matched = True
             
             if not matched:
                 run = para.add_run(text[i])
@@ -199,6 +298,59 @@ def process_inline_formatting(para, text):
                 add_text_with_subscripts(para, part)
 
 
+def add_text_with_subscripts(para, text):
+    """处理文本中的下标"""
+    patterns = [
+        ('Q_{rr}', 'Q', 'rr'), ('Q_rr', 'Q', 'rr'),
+        ('t_{rr}', 't', 'rr'), ('t_rr', 't', 'rr'),
+        ('V_{bi}', 'V', 'bi'), ('V_bi', 'V', 'bi'),
+        ('V_F', 'V', 'F'), ('V_A', 'V', 'A'),
+        ('R_{on}', 'R', 'on'), ('R_on', 'R', 'on'),
+        ('N_A', 'N', 'A'), ('N_D', 'N', 'D'),
+        ('J_F', 'J', 'F'), ('I_F', 'I', 'F'),
+        ('I_{rr}', 'I', 'rr'), ('I_rr', 'I', 'rr'),
+        ('τ_n', 'τ', 'n'), ('τ_p', 'τ', 'p'),
+        ('n_i', 'n', 'i'), ('x_j', 'x', 'j'),
+        ('E_c', 'E', 'c'), ('E_crit', 'E', 'crit'),
+        ('kT', 'k', 'T'), ('dI', 'd', 'I'), ('dV', 'd', 'V'),
+    ]
+    
+    i = 0
+    while i < len(text):
+        matched = False
+        
+        for pattern, base, sub in sorted(patterns, key=lambda x: -len(x[0])):
+            p = pattern.replace('\\', '').replace('{', '').replace('}', '')
+            if i + len(p) <= len(text) and text[i:i+len(p)] == p:
+                run = para.add_run(base)
+                run.font.italic = True
+                run.font.name = 'Times New Roman'
+                run = para.add_run(sub)
+                run.font.subscript = True
+                run.font.size = Pt(9)
+                run.font.name = 'Times New Roman'
+                i += len(p)
+                matched = True
+                break
+        
+        if not matched:
+            if i < len(text) - 1 and text[i] == '^' and (text[i+1].isdigit() or text[i+1] in '+-'):
+                j = i + 2 if text[i+1] in '+-' else i + 1
+                while j < len(text) and text[j].isdigit():
+                    j += 1
+                if j > i + 1:
+                    run = para.add_run(text[i+1:j])
+                    run.font.superscript = True
+                    run.font.size = Pt(9)
+                    i = j
+                    matched = True
+            
+            if not matched:
+                run = para.add_run(text[i])
+                run.font.name = 'Times New Roman'
+                i += 1
+
+
 def create_docx():
     """主函数"""
     workspace_dir = '/Users/lihengzhong/Documents/repo/devsim/workspace/plan1'
@@ -210,7 +362,8 @@ def create_docx():
     style._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
     style.font.size = Pt(10.5)
     
-    with open('draft.md', 'r', encoding='utf-8') as f:
+    # 使用 draft_modified.md
+    with open('draft_modified.md', 'r', encoding='utf-8') as f:
         lines = f.readlines()
     
     i = 0
@@ -296,7 +449,7 @@ def create_docx():
             add_formula_with_omml(para, '\n'.join(formula_lines))
             doc.add_paragraph()
         
-        # 表格
+        # 表格标题
         elif line.startswith('**表') and line.endswith('**'):
             para = doc.add_paragraph()
             para.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -305,6 +458,7 @@ def create_docx():
             run.font.name = 'SimSun'
             run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
         
+        # 表格
         elif '|' in line and i + 1 < len(lines) and '---' in lines[i + 1]:
             table_lines = [line]
             i += 1
@@ -372,7 +526,6 @@ def create_docx():
     doc.save(output_path)
     print(f"✅ Word文档已生成: {output_path}")
     print(f"📄 文件大小: {os.path.getsize(output_path) / 1024:.1f} KB")
-    print(f"📍 保存位置: {os.path.abspath(output_path)}")
     
     return output_path
 
@@ -380,5 +533,5 @@ def create_docx():
 if __name__ == '__main__':
     create_docx()
     print("\n" + "="*70)
-    print("生成完成！公式现在应该可以在Word中编辑了。")
+    print("生成完成！使用 draft_modified.md 作为输入。")
     print("="*70)
