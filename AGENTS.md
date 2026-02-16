@@ -11,6 +11,61 @@ DEVSIM is a TCAD Device Simulator using finite volume methods. It's primarily wr
 - **License**: Apache 2.0
 - **Website**: https://devsim.org
 
+## ⚠️ CRITICAL: Environment Setup
+
+**ALWAYS check if there is already a Conda environment (possibly named "devsim") to run DEVSIM:**
+
+```bash
+# First, try to activate a "devsim" environment if it exists
+conda activate devsim 2>/dev/null || conda activate base
+
+# Verify devsim is available
+python3 -c "import devsim; print(devsim.__version__)"
+```
+
+**Before ANY Python operation involving DEVSIM, you MUST:**
+1. **First try**: `conda activate devsim` (if a specific devsim environment exists)
+2. **Fallback**: `conda activate base` (devsim is often installed in base)
+3. Verify devsim is importable: `python3 -c "import devsim"`
+4. If still not found, install it: `pip install devsim numpy matplotlib`
+5. Then proceed with the task
+
+**Quick Check Command:**
+```bash
+# This will automatically try devsim env first, then base
+conda activate devsim 2>/dev/null || conda activate base
+python3 -c "import devsim; print(f'DEVSIM {devsim.__version__} is ready')"
+```
+
+**Environment Details:**
+- Python: `/opt/miniconda3/bin/python3`
+- DEVSIM: Installed via pip in conda base environment
+- Required packages: numpy, matplotlib (also in conda env)
+
+### Common Environment Issues
+
+**Issue 1**: `ModuleNotFoundError: No module named 'devsim'`
+```bash
+# Solution
+conda activate base
+```
+
+**Issue 2**: `ModuleNotFoundError: No module named 'numpy'`
+```bash
+# Solution  
+conda activate base
+pip install numpy matplotlib
+```
+
+**Issue 3**: Wrong Python interpreter
+```bash
+# Solution - always use the full path or activate conda first
+/opt/miniconda3/bin/python3 script.py
+# OR
+conda activate base
+python3 script.py
+```
+
 ## Build Commands
 
 ### Setup (First Time)
