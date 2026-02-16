@@ -21,6 +21,11 @@ def add_formula_with_omml(para, latex_str):
     if latex.startswith('$') and latex.endswith('$'):
         latex = latex[1:-1]
     
+    # 检查是否有复杂的 cases 环境，有则直接使用文本
+    if '\\begin{cases}' in latex or '\\end{cases}' in latex:
+        add_text_with_subscripts(para, latex)
+        return False
+    
     # 简化 LaTeX
     latex = latex.replace('\\times', '×').replace('\\cdot', '·')
     latex = latex.replace('\\approx', '≈').replace('\\propto', '∝')
@@ -28,7 +33,6 @@ def add_formula_with_omml(para, latex_str):
     latex = latex.replace('\\left', '').replace('\\right', '')
     latex = latex.replace('\\ln', 'ln')
     latex = latex.replace('\\text{', '').replace('}', '')
-    latex = latex.replace('\\begin{cases}', '').replace('\\end{cases}', '')
     latex = latex.replace('\\\\', '; ')
     
     try:
@@ -60,8 +64,8 @@ def build_simple_omml(latex):
         # 分数
         frac_match = re.match(r'\\frac\{([^}]+)\}\{([^}]+)\}', latex[i:])
         if frac_match:
-            num = escape_xml(frac_match.group(1))
-            den = escape_xml(frac_match.group(2))
+            num = frac_match.group(1)
+            den = frac_match.group(2)
             parts.append(f'<m:f><m:num><m:r><m:t>{num}</m:t></m:r></m:num><m:den><m:r><m:t>{den}</m:t></m:r></m:den></m:f>')
             i += frac_match.end()
             continue
@@ -69,7 +73,7 @@ def build_simple_omml(latex):
         # 根号
         sqrt_match = re.match(r'\\sqrt\{([^}]+)\}', latex[i:])
         if sqrt_match:
-            arg = escape_xml(sqrt_match.group(1))
+            arg = sqrt_match.group(1)
             parts.append(f'<m:rad><m:radPr><m:hideDeg m:val="1"/></m:radPr><m:deg/><m:e><m:r><m:t>{arg}</m:t></m:r></m:e></m:rad>')
             i += sqrt_match.end()
             continue
@@ -107,7 +111,9 @@ def build_simple_omml(latex):
         i += 1
     
     if parts:
-        return f'<m:oMath xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math">{"".join(parts)}</m:oMath>'
+        # 使用正确的命名空间
+        omml = f'<m:oMath xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math">{"".join(parts)}</m:oMath>'
+        return omml
     return None
 
 
