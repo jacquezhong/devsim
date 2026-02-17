@@ -200,8 +200,13 @@ for L_fp in L_fp_values:
                         current = 0
                     
                     try:
+                        # 调试：检查电势范围
+                        V_vals = devsim.get_node_model_values(device="diode", region="ndrift", name="Potential")
+                        print(f"        [DEBUG] V range: {min(V_vals):.2f} to {max(V_vals):.2f} V")
+                        
                         E_field = devsim.get_edge_model_values(device="diode", region="ndrift", name="ElectricField")
                         max_E = max(abs(x) for x in E_field) if E_field else 0
+                        print(f"        [DEBUG] E field sample: {E_field[:5] if E_field else 'N/A'}")
                     except Exception as e:
                         print(f"[WARN] 获取电场失败: {e}")
                         max_E = 0
