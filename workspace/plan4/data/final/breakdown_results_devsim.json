@@ -1,0 +1,62 @@
+[
+  {
+    "L_fp": 2.0,
+    "mesh_file": "diode_fp_L2.0.msh",
+    "start_time": "2026-02-17T09:47:51.016888",
+    "voltages": [],
+    "currents": [],
+    "max_electric_fields": [],
+    "breakdown_voltage": null,
+    "status": "running",
+    "completed_voltages": [],
+    "end_time": "2026-02-17T09:53:07.539115"
+  },
+  {
+    "L_fp": 4.0,
+    "mesh_file": "diode_fp_L4.0.msh",
+    "start_time": "2026-02-17T09:53:07.563226",
+    "voltages": [],
+    "currents": [],
+    "max_electric_fields": [],
+    "breakdown_voltage": null,
+    "status": "running",
+    "completed_voltages": [],
+    "end_time": "2026-02-17T09:53:09.510613"
+  },
+  {
+    "L_fp": 6.0,
+    "mesh_file": "diode_fp_L6.0.msh",
+    "start_time": "2026-02-17T09:53:09.531416",
+    "voltages": [],
+    "currents": [],
+    "max_electric_fields": [],
+    "breakdown_voltage": null,
+    "status": "running",
+    "completed_voltages": [],
+    "end_time": "2026-02-17T09:53:11.519359"
+  },
+  {
+    "L_fp": 8.0,
+    "mesh_file": "diode_fp_L8.0.msh",
+    "start_time": "2026-02-17T09:53:11.539925",
+    "voltages": [],
+    "currents": [],
+    "max_electric_fields": [],
+    "breakdown_voltage": null,
+    "status": "running",
+    "completed_voltages": [],
+    "end_time": "2026-02-17T09:53:13.434037"
+  },
+  {
+    "L_fp": 10.0,
+    "mesh_file": "diode_fp_L10.0.msh",
+    "start_time": "2026-02-17T09:53:13.453660",
+    "voltages": [],
+    "currents": [],
+    "max_electric_fields": [],
+    "breakdown_voltage": null,
+    "status": "running",
+    "completed_voltages": [],
+    "end_time": "2026-02-17T09:53:15.346586"
+  }
+]
