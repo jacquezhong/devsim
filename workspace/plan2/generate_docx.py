@@ -43,6 +43,74 @@ def add_greek_symbol(para, symbol_name):
     return run
 
 
+def add_epsilon_r(para):
+    """添加 εᵣ（带下标的相对介电常数）"""
+    run = para.add_run('ε')
+    run.font.name = 'Times New Roman'
+    run.font.italic = True
+    run_sub = para.add_run('r')
+    run_sub.font.name = 'Times New Roman'
+    run_sub.font.subscript = True
+    run_sub.font.size = Pt(9)
+    return run
+
+
+def add_subscript_text(doc, text, subscript_map=None):
+    """添加带下标的文本，自动处理C_ij、C_fringe等格式
+    
+    subscript_map: dict, 如 {'C_ij': ('C', 'ij'), 'C_fringe': ('C', 'fringe')}
+    """
+    if subscript_map is None:
+        subscript_map = {
+            'C_ij': ('C', 'ij'),
+            'C_fringe': ('C', 'fringe'),
+            'C_12': ('C', '12'),
+            'C_21': ('C', '21'),
+            'C_22': ('C', '22'),
+            'C_23': ('C', '23'),
+            'C_32': ('C', '32'),
+            'C_33': ('C', '33'),
+            'C_11': ('C', '11'),
+            'C_13': ('C', '13'),
+            'C_31': ('C', '31'),
+        }
+    
+    para = doc.add_paragraph()
+    para.paragraph_format.first_line_indent = Cm(0.74)
+    
+    # 解析文本，查找下标标记
+    import re
+    parts = re.split(r'(C_\w+|\$[^$]+\$)', text)
+    
+    for part in parts:
+        if not part:
+            continue
+        elif part in subscript_map:
+            # 添加带下标的变量
+            base, sub = subscript_map[part]
+            run = para.add_run(base)
+            run.font.name = 'Times New Roman'
+            run.font.italic = True
+            run_sub = para.add_run(sub)
+            run_sub.font.name = 'Times New Roman'
+            run_sub.font.subscript = True
+            run_sub.font.size = Pt(9)
+        elif part.startswith('$') and part.endswith('$'):
+            # LaTeX格式，这里简化处理
+            content = part[1:-1]
+            run = para.add_run(content)
+            run.font.name = 'Times New Roman'
+            run.font.italic = True
+        else:
+            # 普通文本
+            run = para.add_run(part)
+            run.font.name = 'Times New Roman'
+            run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+            run.font.size = Pt(10.5)
+    
+    return para
+
+
 def add_variable_with_subscript(para, var, subscript=None):
     """添加带下标的变量，如 C_coupling"""
     run = para.add_run(var)
@@ -137,11 +205,39 @@ def add_title(doc):
     run.font.size = Pt(14)
     run.font.bold = True
     
-    abstract_text = """随着集成电路工艺节点进入亚微米时代，金属互连线间的寄生电容已成为制约芯片性能的关键瓶颈。本研究基于DEVSIM有限体积法TCAD仿真平台，系统研究了三线互连结构在不同线间距（200-500nm）和不同介电常数（SiO₂、Low-k介质、空气隙）条件下的寄生电容特性。通过电容矩阵提取方法，定量分析了几何参数对耦合电容、对地电容及耦合系数的影响规律。仿真结果表明：线间距从200nm增加至500nm时，耦合电容降低约35.9%，与理论预测基本吻合；采用低k介质（εr=2.5）可降低耦合电容35.9%，而空气隙（εr=1.0）可降低74.4%。本研究为先进制程下互连线设计与信号完整性优化提供了理论依据和设计指导。"""
-    
+    # 中文摘要（分段添加以处理特殊格式）
     para = doc.add_paragraph()
     para.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-    run = para.add_run(abstract_text)
+    para.paragraph_format.first_line_indent = Cm(0.74)
+    
+    text1 = "随着集成电路工艺节点进入亚微米时代，金属互连线间的寄生电容已成为制约芯片性能的关键瓶颈。本研究基于DEVSIM有限体积法TCAD仿真平台，系统研究了三线互连结构在不同线间距（200-500nm）和不同介电常数（SiO₂、Low-k介质、空气隙）条件下的寄生电容特性。通过电容矩阵提取方法，定量分析了几何参数对耦合电容、对地电容及耦合系数的影响规律。仿真结果表明：线间距从200nm增加至500nm时，耦合电容降低约47.4%，与理论预测基本吻合；采用低k介质（"
+    run = para.add_run(text1)
+    run.font.name = 'SimSun'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
+    
+    # εᵣ=2.5
+    run = para.add_run('ε')
+    run.font.name = 'Times New Roman'
+    run.font.italic = True
+    run_sub = para.add_run('r')
+    run_sub.font.name = 'Times New Roman'
+    run_sub.font.subscript = True
+    run_sub.font.size = Pt(9)
+    run = para.add_run('=2.5）可降低耦合电容35.9%，而空气隙（')
+    run.font.name = 'SimSun'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
+    
+    # εᵣ=1.0
+    run = para.add_run('ε')
+    run.font.name = 'Times New Roman'
+    run.font.italic = True
+    run_sub = para.add_run('r')
+    run_sub.font.name = 'Times New Roman'
+    run_sub.font.subscript = True
+    run_sub.font.size = Pt(9)
+    run = para.add_run('=1.0）可降低74.4%。本研究为先进制程下互连线设计与信号完整性优化提供了理论依据和设计指导。')
     run.font.name = 'SimSun'
     run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
     run.font.size = Pt(10.5)
@@ -168,11 +264,37 @@ def add_title(doc):
     run.font.size = Pt(14)
     run.font.bold = True
     
-    abstract_en_text = """As integrated circuit technology nodes enter the submicron regime, parasitic capacitance between metal interconnects has become a critical bottleneck limiting chip performance. This study systematically investigates the parasitic capacitance characteristics of three-wire interconnect structures under varying line spacings (200-500nm) and dielectric constants (SiO₂, Low-k dielectric, air gap) using the DEVSIM finite volume method TCAD simulation platform. Through capacitance matrix extraction, the influence of geometric parameters on coupling capacitance, ground capacitance, and coupling coefficient was quantitatively analyzed. Simulation results demonstrate that coupling capacitance decreases by approximately 35.9% when line spacing increases from 200nm to 500nm, consistent with theoretical predictions. Low-k dielectric (εr=2.5) reduces coupling capacitance by 35.9%, while air gap (εr=1.0) achieves a 74.4% reduction. This research provides theoretical foundation and design guidelines for interconnect design and signal integrity optimization in advanced process nodes."""
-    
+    # 英文摘要
     para = doc.add_paragraph()
     para.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-    run = para.add_run(abstract_en_text)
+    para.paragraph_format.first_line_indent = Cm(0.74)
+    
+    text_en = "As integrated circuit technology nodes enter the submicron regime, parasitic capacitance between metal interconnects has become a critical bottleneck limiting chip performance. This study systematically investigates the parasitic capacitance characteristics of three-wire interconnect structures under varying line spacings (200-500nm) and dielectric constants (SiO₂, Low-k dielectric, air gap) using the DEVSIM finite volume method TCAD simulation platform. Through capacitance matrix extraction, the influence of geometric parameters on coupling capacitance, ground capacitance, and coupling coefficient was quantitatively analyzed. Simulation results demonstrate that coupling capacitance decreases by approximately 47.4% when line spacing increases from 200nm to 500nm, consistent with theoretical predictions. Low-k dielectric ("
+    run = para.add_run(text_en)
+    run.font.name = 'Times New Roman'
+    run.font.size = Pt(10.5)
+    
+    # εᵣ=2.5
+    run = para.add_run('ε')
+    run.font.name = 'Times New Roman'
+    run.font.italic = True
+    run_sub = para.add_run('r')
+    run_sub.font.name = 'Times New Roman'
+    run_sub.font.subscript = True
+    run_sub.font.size = Pt(9)
+    run = para.add_run('=2.5) reduces coupling capacitance by 35.9%, while air gap (')
+    run.font.name = 'Times New Roman'
+    run.font.size = Pt(10.5)
+    
+    # εᵣ=1.0
+    run = para.add_run('ε')
+    run.font.name = 'Times New Roman'
+    run.font.italic = True
+    run_sub = para.add_run('r')
+    run_sub.font.name = 'Times New Roman'
+    run_sub.font.subscript = True
+    run_sub.font.size = Pt(9)
+    run = para.add_run('=1.0) achieves a 74.4% reduction. This research provides theoretical foundation and design guidelines for interconnect design and signal integrity optimization in advanced process nodes.')
     run.font.name = 'Times New Roman'
     run.font.size = Pt(10.5)
     
@@ -298,8 +420,25 @@ Sakurai和Tamaru在1983年提出了经典的互连线电容解析公式，为后
     
     add_section_heading(doc, '2.3 电容矩阵提取方法', level=2)
     
-    cap_matrix_text = """对于多导体系统，电容矩阵 $C_{ij}$ 描述第j个导体单位电压变化引起第i个导体的电荷变化，定义为："""
-    add_paragraph_text(doc, cap_matrix_text)
+    # 修复$C_{ij}$格式
+    para = doc.add_paragraph()
+    para.paragraph_format.first_line_indent = Cm(0.74)
+    run = para.add_run("对于多导体系统，电容矩阵 ")
+    run.font.name = 'Times New Roman'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
+    # C_ij
+    run = para.add_run('C')
+    run.font.name = 'Times New Roman'
+    run.font.italic = True
+    run_sub = para.add_run('ij')
+    run_sub.font.name = 'Times New Roman'
+    run_sub.font.subscript = True
+    run_sub.font.size = Pt(9)
+    run = para.add_run(" 描述第j个导体单位电压变化引起第i个导体的电荷变化，定义为：")
+    run.font.name = 'Times New Roman'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
     
     para = doc.add_paragraph()
     add_formula(para, r'C_{ij} = \frac{\partial Q_i}{\partial V_j}', display_mode=True)
@@ -357,11 +496,44 @@ Sakurai和Tamaru在1983年提出了经典的互连线电容解析公式，为后
 
     add_section_heading(doc, '3.4 低k介质性能评估', level=2)
     
-    result_text4 = """图3展示了低k介质和空气隙对降低耦合电容的贡献。相对于传统SiO₂介质（εr=3.9）："""
-    add_paragraph_text(doc, result_text4)
+    # 图3描述（使用εᵣ格式）
+    para = doc.add_paragraph()
+    para.paragraph_format.first_line_indent = Cm(0.74)
+    run = para.add_run("图3展示了低k介质和空气隙对降低耦合电容的贡献。相对于传统SiO₂介质（")
+    run.font.name = 'SimSun'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
+    add_epsilon_r(para)
+    run = para.add_run("=3.9）：")
+    run.font.name = 'SimSun'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
     
-    add_paragraph_text(doc, "(1) 低k介质（εr=2.5）可降低耦合电容约35.9%，这一改进在各种线间距条件下保持一致。")
-    add_paragraph_text(doc, "(2) 空气隙（εr=1.0）可降低耦合电容约74.4%，效果更为显著。")
+    # (1) 低k介质
+    para = doc.add_paragraph()
+    para.paragraph_format.first_line_indent = Cm(0.74)
+    run = para.add_run("(1) 低k介质（")
+    run.font.name = 'SimSun'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
+    add_epsilon_r(para)
+    run = para.add_run("=2.5）可降低耦合电容约35.9%，这一改进在各种线间距条件下保持一致。")
+    run.font.name = 'SimSun'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
+    
+    # (2) 空气隙
+    para = doc.add_paragraph()
+    para.paragraph_format.first_line_indent = Cm(0.74)
+    run = para.add_run("(2) 空气隙（")
+    run.font.name = 'SimSun'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
+    add_epsilon_r(para)
+    run = para.add_run("=1.0）可降低耦合电容约74.4%，效果更为显著。")
+    run.font.name = 'SimSun'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
     add_paragraph_text(doc, "(3) 从电容-介电常数关系来看，电容降低比例与介电常数降低比例近似成正比，符合线性介质理论预期。""")
     
     # 插入图片3
@@ -377,25 +549,55 @@ Sakurai和Tamaru在1983年提出了经典的互连线电容解析公式，为后
     add_formula(para, r'C \propto \frac{\varepsilon \cdot W}{S} + C_{fringe}', display_mode=True)
     doc.add_paragraph()
     
-    add_paragraph_text(doc, """其中，$C_{fringe}$为边缘电容。本研究的数值仿真结果与上述解析关系基本吻合，电容随间距增大而减小，且边缘电容效应在亚微米尺度下不可忽视。""")
+    # 修复$C_{fringe}$格式
+    para = doc.add_paragraph()
+    para.paragraph_format.first_line_indent = Cm(0.74)
+    run = para.add_run("其中，")
+    run.font.name = 'Times New Roman'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
+    # C_fringe
+    run = para.add_run('C')
+    run.font.name = 'Times New Roman'
+    run.font.italic = True
+    run_sub = para.add_run('fringe')
+    run_sub.font.name = 'Times New Roman'
+    run_sub.font.subscript = True
+    run_sub.font.size = Pt(9)
+    run = para.add_run("为边缘电容。本研究的数值仿真结果与上述解析关系基本吻合，电容随间距增大而减小，且边缘电容效应在亚微米尺度下不可忽视。")
+    run.font.name = 'Times New Roman'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
     
     # 4. 结论
     add_section_heading(doc, '4 结论')
     
-    conclusion_text = """本研究基于DEVSIM TCAD仿真平台，系统研究了亚微米级互连线寄生电容的几何敏感度和低k介质效应。主要结论如下：
-
-(1) 成功建立了三线互连结构的二维静电场仿真模型，采用有限体积法和电容矩阵提取方法，精确计算了寄生电容参数。
-
-(2) 线间距对寄生电容有显著影响，间距从200nm增至500nm时，耦合电容降低约4.6%，与理论预测基本一致。
-
-(3) 低k介质可有效降低寄生电容，εr=2.5的低k介质可降低耦合电容35.9%，空气隙可降低74.4%。
-
-(4) 电容倒数与线间距呈线性关系，验证了经典电磁理论预测的C ∝ 1/S关系，说明仿真结果具有理论一致性。
-
-本研究为先进制程下互连线设计提供了理论依据，未来可进一步研究三维互连结构和多物理场耦合效应。"""
+    # 结论（更新后的正确数据）
+    conclusions = [
+        "本研究基于DEVSIM TCAD仿真平台，系统研究了亚微米级互连线寄生电容的几何敏感度和低k介质效应。主要结论如下：",
+        "(1) 成功建立了三线互连结构的二维静电场仿真模型，采用有限体积法和电容矩阵提取方法，精确计算了寄生电容参数。",
+        "(2) 线间距对寄生电容有显著影响，间距从200nm增至500nm时，耦合电容降低约47.4%，与理论预测基本一致。",
+    ]
     
-    for para_text in conclusion_text.split('\n\n'):
-        add_paragraph_text(doc, para_text.strip())
+    for text in conclusions:
+        add_paragraph_text(doc, text)
+    
+    # (3) 低k介质结论（使用εᵣ格式）
+    para = doc.add_paragraph()
+    para.paragraph_format.first_line_indent = Cm(0.74)
+    run = para.add_run("(3) 低k介质可有效降低寄生电容，")
+    run.font.name = 'SimSun'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
+    add_epsilon_r(para)
+    run = para.add_run("=2.5的低k介质可降低耦合电容35.9%，空气隙可降低74.4%。")
+    run.font.name = 'SimSun'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
+    
+    # (4) 和结尾
+    add_paragraph_text(doc, "(4) 电容倒数与线间距呈线性关系，验证了经典电磁理论预测的C ∝ 1/S关系，说明仿真结果具有理论一致性。")
+    add_paragraph_text(doc, "本研究为先进制程下互连线设计提供了理论依据，未来可进一步研究三维互连结构和多物理场耦合效应。")
     
     # 5. 参考文献
     add_section_heading(doc, '参考文献')

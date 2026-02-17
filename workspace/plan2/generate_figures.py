@@ -111,7 +111,7 @@ def plot_inverse_capacitance(data):
     
     ax.set_xlabel('Spacing (nm)', fontsize=12)
     ax.set_ylabel('1/C_coupling (1/pF·cm)', fontsize=12)
-    ax.set_title('(a)', fontsize=14, loc='left')
+    # 移除子图标签，因为图2只有一张图
     ax.legend(fontsize=10, loc='upper left')
     ax.grid(True, alpha=0.3)
     ax.set_xlim(180, 520)

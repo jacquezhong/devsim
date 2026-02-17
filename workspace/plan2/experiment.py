@@ -26,13 +26,19 @@ def create_three_wire_mesh(device_name, spacing, wire_width=0.2, wire_height=0.5
     """创建三线结构网格"""
     scale = 1e-4  # um to cm
     
-    # 计算导线位置
-    w1_x1 = domain_width/2 - spacing - wire_width - spacing/2
-    w1_x2 = w1_x1 + wire_width
+    # 计算导线位置（对称布局）
+    # 中间导线居中
     w2_x1 = domain_width/2 - wire_width/2
     w2_x2 = w2_x1 + wire_width
-    w3_x1 = domain_width/2 + spacing/2
+    
+    # 左边导线：与中间导线间距为spacing
+    w1_x2 = w2_x1 - spacing
+    w1_x1 = w1_x2 - wire_width
+    
+    # 右边导线：与中间导线间距为spacing
+    w3_x1 = w2_x2 + spacing
     w3_x2 = w3_x1 + wire_width
+    
     w_y1 = domain_height/2 - wire_height/2
     w_y2 = w_y1 + wire_height
     
