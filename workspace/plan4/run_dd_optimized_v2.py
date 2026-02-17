@@ -90,25 +90,25 @@ for L_fp in L_fp_values:
         devsim.node_model(device="diode", region="ndrift", name="NetDoping", equation="1e14")
     print("   ✓ 渐变掺杂设置完成")
     
-    # 求解势（所有区域，包括金属场板）
+    # 求解势（硅区域）
     print("3. 求解势分布...")
-    for region in ["pplus", "ndrift", "fieldplate_metal"]:
-        CreateSolution("diode", region, "Potential")
-    
-    # 硅区域的泊松方程
     for region in ["pplus", "ndrift"]:
+        CreateSolution("diode", region, "Potential")
         CreateSiliconPotentialOnly("diode", region)
     
-    # 设置所有接触偏置（场板连接到阳极）
+    # 金属场板区域：使用参数化电势模型（参考cap2d.py）
+    devsim.set_parameter(device="diode", name="field_plate_bias", value=0.0)
+    devsim.node_model(device="diode", region="fieldplate_metal", name="Potential", equation="field_plate_bias;")
+    
+    # 设置接触偏置
     devsim.set_parameter(device="diode", name=GetContactBiasName("anode"), value=0.0)
     devsim.set_parameter(device="diode", name=GetContactBiasName("cathode"), value=0.0)
-    devsim.set_parameter(device="diode", name=GetContactBiasName("field_plate"), value=0.0)
     
-    # 为所有接触创建边界条件（标准做法：遍历所有接触）
+    # 为硅区域接触创建边界条件
     for region in ["pplus", "ndrift"]:
         CreateSiliconPotentialOnlyContact("diode", region, "anode")
         CreateSiliconPotentialOnlyContact("diode", region, "cathode")
-    CreateSiliconPotentialOnlyContact("diode", "fieldplate_metal", "field_plate")
+    # field_plate接触在金属区域，通过node_model设置电势
     
     devsim.solve(type="dc", absolute_error=1.0, relative_error=1e-10, maximum_iterations=100)
     print("   ✓ 势求解收敛")
@@ -180,7 +180,7 @@ for L_fp in L_fp_values:
                 print(f"      尝试 V={next_v}V (步长{step}V)...", end=' ')
                 # 同时设置阳极和场板偏置（场板连接到阳极）
                 devsim.set_parameter(device="diode", name=GetContactBiasName("anode"), value=next_v)
-                devsim.set_parameter(device="diode", name=GetContactBiasName("field_plate"), value=next_v)
+                devsim.set_parameter(device="diode", name="field_plate_bias", value=next_v)
                 
                 # 使用中等容差快速求解
                 devsim.solve(type="dc", absolute_error=1e13, relative_error=1e-5, maximum_iterations=100)
