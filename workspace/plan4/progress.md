@@ -164,7 +164,7 @@ Contact field_plate references non-existent region name fieldplate_metal.
    - 我们的脚本: 只设置了anode和cathode，漏掉field_plate
    - **后果**: 场板电位未定义，无法产生场板效应
 
-2. **金属区域不应有硅参数**
+2. **金属区域不应设置硅参数**
    - fieldplate_metal是金属区域，不应调用SetSiliconParameters
    - 金属区域不应该有漂移扩散方程
 
@@ -197,6 +197,205 @@ devsim.set_parameter(device="diode", name=GetContactBiasName("field_plate"), val
   - 修改势求解部分（行89-109）
   - 修改载流子添加部分（行115-126）
   - 修改电压扫描部分（行179-182）
+
+---
+
+### 问题 #5: get_contact_current 缺少 equation 参数
+
+**发现时间**: 2026-02-17  
+**严重程度**: 🔴 严重  
+**状态**: ✅ 已修复
+
+**问题描述**:
+电流提取代码报错：
+```
+missing required STRING parameter - equation
+```
+
+**根本原因**:
+`devsim.get_contact_current()` 函数需要指定方程名参数，原代码：
+```python
+current = devsim.get_contact_current(device="diode", contact="anode")
+```
+
+**修复方案**:
+参考 DEVSIM 文档，需要分别获取电子电流和空穴电流：
+```python
+e_current = devsim.get_contact_current(device="diode", contact="anode", equation="ElectronContinuityEquation")
+h_current = devsim.get_contact_current(device="diode", contact="anode", equation="HoleContinuityEquation")
+current = e_current + h_current
+```
+
+**修复文件**:
+- `/workspace/plan4/run_dd_optimized_v2.py`（行194-196, 222-224）
+
+---
+
+### 问题 #6: 电场数据不随电压变化
+
+**发现时间**: 2026-02-17  
+**严重程度**: 🔴 严重  
+**状态**: 🔍 排查中
+
+**问题现象**:
+- 所有电压点（-5V 到 -150V）电场都是 1.29e+03 V/cm
+- 电流始终为 0
+- 电场应该随反向偏压增加而显著增加
+
+**可能原因**:
+1. ElectricField 模型未正确更新（基于 Potential 的导数）
+2. Potential 分布可能没有正确更新
+3. 电场模型公式可能有误
+
+**调试措施**:
+添加了调试输出检查：
+- 电势范围 (V range)
+- 电场样本值 (E field sample)
+
+**验证计划**:
+1. 检查 V=-5V 和 V=-150V 时 Potential 分布是否不同
+2. 检查 ElectricField 值是否随电压变化
+3. 如果电场仍不变，需要检查 edge_model 公式
+
+---
+
+## 当前仿真状态
+
+### 🔄 仿真运行中
+
+**启动时间**: 2026-02-17 19:31:16  
+**进程ID**: 65625  
+**当前状态**: 正在运行 L=2.0 μm 的漂移扩散求解  
+**日志文件**: `/workspace/plan4/simulation_run.log`
+
+**最新进展**:
+```
+✓ 网格加载完成（11,108节点，3个接触）
+✓ 势求解收敛（11次迭代，RelError 2.8e-16）
+✓ 漂移扩散求解中（当前 RelError ~2.5%，正在收敛）
+✓ 电场模型已创建
+```
+
+**预计完成时间**:
+- L=2.0 μm: ~15-20分钟（正在运行）
+- 全部5个场板长度: ~1.5-2小时
+
+### 检查进度的命令
+
+```bash
+# 查看实时日志（最后30行）
+tail -30 /Users/lihengzhong/Documents/repo/devsim/workspace/plan4/simulation_run.log
+
+# 查看仿真是否在运行
+ps aux | grep run_dd_optimized | grep -v grep
+
+# 查看结果文件是否生成
+ls -lh /Users/lihengzhong/Documents/repo/devsim/workspace/plan4/data/final/devsim_dd_v2_results_*.json
+
+# 查看当前结果数据
+cat /Users/lihengzhong/Documents/repo/devsim/workspace/plan4/data/final/devsim_dd_v2_results_L2.0.json | python3 -m json.tool
+```
+
+### 关键Git提交
+
+| Commit | 描述 | 时间 |
+|--------|------|------|
+| `50a3f47` | 添加调试输出验证电势和电场 | 最新 |
+| `1996027` | 修复 get_contact_current 参数 | 已完成 |
+| `c57b902` | 修复场板接触偏置设置 | 已完成 |
+| `57a5c1f` | 修复金属区域处理 | 已完成 |
+| `75341f6` | 修复网格加载（文件名+场板区域） | 已完成 |
+| `05ab55a` | 修复电场模型创建 | 已完成 |
+
+---
+
+## 中断后恢复指南
+
+### 在其他会话继续的步骤
+
+1. **激活环境**:
+   ```bash
+   conda activate devsim 2>/dev/null || conda activate base
+   cd /Users/lihengzhong/Documents/repo/devsim/workspace/plan4
+   ```
+
+2. **检查仿真状态**:
+   ```bash
+   # 查看进程是否在运行
+   ps aux | grep run_dd_optimized
+   
+   # 查看最新日志
+   tail -50 simulation_run.log
+   ```
+
+3. **如果仿真已停止，检查结果**:
+   ```bash
+   # 查看生成了哪些结果
+   ls -la data/final/devsim_dd_v2_results_*.json
+   
+   # 查看具体结果
+   python3 -c "
+   import json
+   with open('data/final/devsim_dd_v2_results_L2.0.json') as f:
+       data = json.load(f)
+   print(f'数据点: {data[\"n_points\"]}')
+   print(f'电场: {data[\"max_electric_fields\"]}')
+   print(f'电流: {data[\"currents\"]}')
+   "
+   ```
+
+4. **如果仿真失败，重新启动**:
+   ```bash
+   # 清除旧结果（如果需要）
+   rm -f data/final/devsim_dd_v2_results_L*.json data/final/devsim_all_v2_results.json
+   
+   # 重新启动
+   nohup /opt/miniconda3/bin/python3 run_dd_optimized_v2.py > simulation_run.log 2>&1 &
+   ```
+
+5. **更新进度文档**:
+   - 修改此文件（progress.md）记录新进展
+   - 提交到git: `git add progress.md && git commit -m "更新进度" && git push origin run`
+
+---
+
+## 已完成工作
+
+### ✅ Phase 1: 网格生成
+- [x] 分析原始网格问题（相同MD5哈希）
+- [x] 设计正确的场板几何结构
+- [x] 实现参数化网格生成脚本
+- [x] 生成5个不同场板长度的网格文件
+- [x] 验证网格差异（不同文件大小和MD5）
+- [x] 确认网格包含正确的物理组
+
+### ✅ Phase 2: 仿真脚本修复（共6个问题）
+- [x] 问题#1: 修复电场模型创建（ElectricField edge model）
+- [x] 问题#2: 修复网格文件名（simple → fp）
+- [x] 问题#3: 添加场板区域和接触加载代码
+- [x] 问题#4: 按标准做法处理场板接触偏置
+- [x] 问题#5: 修复 get_contact_current 参数
+- [x] 问题#6: 添加电场调试输出（排查中）
+- [x] 验证网格文件内容差异
+
+### 🔄 Phase 3: 运行仿真
+- [ ] L=2.0 μm - 🔄 正在运行（漂移扩散求解中）
+- [ ] L=4.0 μm - ⏳ 待运行
+- [ ] L=6.0 μm - ⏳ 待运行
+- [ ] L=8.0 μm - ⏳ 待运行
+- [ ] L=10.0 μm - ⏳ 待运行
+
+### ⏳ Phase 4: 数据分析
+- [ ] 提取所有场板长度的峰值电场
+- [ ] 绘制电场分布图
+- [ ] 分析击穿电压与场板长度关系
+- [ ] 验证"电场双峰"效应
+
+### ⏳ Phase 5: 论文更新
+- [ ] 整理所有仿真结果
+- [ ] 生成对比图表
+- [ ] 更新论文数据表格
+- [ ] 撰写结果分析章节
 
 ---
 
