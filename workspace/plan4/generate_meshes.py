@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-场板二极管网格生成脚本
-生成不同场板长度的Gmsh网格
+场板二极管网格生成脚本 - 最终版
+使用三个独立不重叠的区域
 """
 import subprocess
 import os
@@ -19,136 +19,172 @@ def generate_fp_geo(l_fp_um, t_ox_um, filename):
     L_fp_extend = l_fp_um * 1e-4  # 场板超出P+区的长度 (cm)
     T_ox        = t_ox_um * 1e-4  # 绝缘层厚度 (cm)
     T_fp        = 0.5e-4          # 场板厚度: 0.5μm
-    H_air       = 5e-4            # 空气层高度: 5μm
     
     # 计算场板总长度
     L_fp_total = L_pplus + L_fp_extend
     
     # 网格控制参数
-    Mesh_Junction = 0.05e-4    # 结区细密网格: 50nm
-    Mesh_FP_Edge  = 0.05e-4    # 场板边缘细密: 50nm
-    Mesh_Normal   = 0.2e-4     # 正常网格: 200nm
-    Mesh_Coarse   = 1.0e-4     # 粗网格: 1μm
+    lc_fine   = 0.1e-4     # 细密网格: 1μm
+    lc_normal = 0.5e-4     # 正常网格: 5μm
     
-    geo_content = f"""// ============================================================
-// 带场板的高压二极管 - 2D截面
-// 场板长度: {l_fp_um}μm, 绝缘层厚度: {t_ox_um}μm
-// ============================================================
+    geo_content = f"""// 带场板的高压二极管
+// 场板长度: {l_fp_um}μm
 
-// --- 几何参数 (单位: cm) ---
+// 参数 (单位: cm)
 L_device = {L_device};
 L_pplus  = {L_pplus};
 H_n      = {H_n};
 H_pplus  = {H_pplus};
-
-// 场板参数
-L_fp_extend = {L_fp_extend};
+L_fp_total = {L_fp_total};
 T_ox        = {T_ox};
 T_fp        = {T_fp};
-H_air       = {H_air};
 
-// 计算场板总长度
-L_fp_total = L_pplus + L_fp_extend;
+lc1 = {lc_fine};
+lc2 = {lc_normal};
 
-// 网格控制参数
-Mesh_Junction = {Mesh_Junction};
-Mesh_FP_Edge  = {Mesh_FP_Edge};
-Mesh_Normal   = {Mesh_Normal};
-Mesh_Coarse   = {Mesh_Coarse};
+// =============================
+// 点定义
+// =============================
+// P+区: 左下角矩形
+Point(1) = {{0, 0, 0, lc1}};
+Point(2) = {{L_pplus, 0, 0, lc1}};
+Point(3) = {{L_pplus, H_pplus, 0, lc1}};
+Point(4) = {{0, H_pplus, 0, lc1}};
 
-// --- 定义关键点 ---
-// P+区 (阳极)
-Point(1) = {{0, 0, 0, Mesh_Junction}};
-Point(2) = {{L_pplus, 0, 0, Mesh_Junction}};
-Point(3) = {{L_pplus, H_pplus, 0, Mesh_Junction}};
-Point(4) = {{0, H_pplus, 0, Mesh_Junction}};
+// N区右侧: (L_pplus, 0) 到 (L_device, H_n)
+Point(5) = {{L_device, 0, 0, lc2}};
+Point(6) = {{L_device, H_n, 0, lc2}};
+Point(7) = {{L_pplus, H_n, 0, lc2}};
 
-// N区 (漂移区)
-Point(5) = {{L_device, 0, 0, Mesh_Normal}};
-Point(6) = {{L_device, H_n, 0, Mesh_Normal}};
-Point(7) = {{0, H_n, 0, Mesh_Normal}};
+// N区左侧上部: (0, H_pplus) 到 (L_pplus, H_n)
+Point(8) = {{0, H_n, 0, lc2}};
 
-// 绝缘层 (Oxide)
-Point(8) = {{0, H_n + T_ox, 0, Mesh_Normal}};
-Point(9) = {{L_device, H_n + T_ox, 0, Mesh_Normal}};
+// 场板: 位于 (0, H_n+T_ox) 到 (L_fp_total, H_n+T_ox+T_fp)
+Point(9)  = {{0, H_n + T_ox, 0, lc1}};
+Point(10) = {{L_fp_total, H_n + T_ox, 0, lc1}};
+Point(11) = {{L_fp_total, H_n + T_ox + T_fp, 0, lc1}};
+Point(12) = {{0, H_n + T_ox + T_fp, 0, lc1}};
 
-// 场板 (Field Plate)
-Point(10) = {{0, H_n + T_ox, 0, Mesh_FP_Edge}};
-Point(11) = {{L_fp_total, H_n + T_ox, 0, Mesh_FP_Edge}};
-Point(12) = {{L_fp_total, H_n + T_ox + T_fp, 0, Mesh_FP_Edge}};
-Point(13) = {{0, H_n + T_ox + T_fp, 0, Mesh_FP_Edge}};
-
-// 空气层
-Point(14) = {{0, H_n + T_ox + T_fp + H_air, 0, Mesh_Coarse}};
-Point(15) = {{L_device, H_n + T_ox + T_fp + H_air, 0, Mesh_Coarse}};
-
-// --- 定义线 (Line) ---
+// =============================
+// 线定义
+// =============================
 // P+区边界
 Line(1) = {{1, 2}};
 Line(2) = {{2, 3}};
 Line(3) = {{3, 4}};
 Line(4) = {{4, 1}};
 
-// N区边界
+// N区右侧边界 (与P+区共用线2作为左边界)
 Line(5) = {{2, 5}};
 Line(6) = {{5, 6}};
 Line(7) = {{6, 7}};
-Line(8) = {{7, 4}};
-Line(9) = {{3, 6}};
+Line(8) = {{7, 3}};  // 连接到Point 3
 
-// 绝缘层边界
-Line(10) = {{8, 9}};
-Line(11) = {{9, 6}};
-Line(12) = {{7, 8}};
+// N区左侧上部边界 (与P+区共用线3作为下边界的一部分，Point 4到Point 3)
+Line(9) = {{3, 7}};  // 注意与Line 8是同一条线但方向不同
+Line(10) = {{7, 8}};
+Line(11) = {{8, 4}};
 
-// 场板边界
-Line(13) = {{10, 11}};
-Line(14) = {{11, 12}};
-Line(15) = {{12, 13}};
-Line(16) = {{13, 10}};
+// 修正：N区应该分成两个矩形
+// 删除上面的，重新定义
 
-// 空气层边界
-Line(17) = {{13, 14}};
-Line(18) = {{14, 15}};
-Line(19) = {{15, 12}};
-Line(20) = {{15, 9}};
+// N区右部: Point 2 -> 5 -> 6 -> 7 -> 3 -> 2
+// 但3->2是Line 2的反向，这样会有问题
 
-// --- 定义线环和面 ---
-// P+区
-Line Loop(1) = {{1, 2, 3, 4}};
+// 让我重新定义所有点，确保不共用边界线
+"""
+
+    # 使用更简单的方法：不共享边界的独立矩形
+    geo_content = f"""// 带场板的高压二极管 - 独立区域版
+// 场板长度: {l_fp_um}μm
+
+// 参数 (单位: cm)
+L_device = {L_device};
+L_pplus  = {L_pplus};
+H_n      = {H_n};
+H_pplus  = {H_pplus};
+L_fp_total = {L_fp_total};
+T_ox        = {T_ox};
+T_fp        = {T_fp};
+
+lc1 = {lc_fine};
+lc2 = {lc_normal};
+
+// =============================
+// 区域1: P+区 (左下角)
+// =============================
+Point(1) = {{0, 0, 0, lc1}};
+Point(2) = {{L_pplus, 0, 0, lc1}};
+Point(3) = {{L_pplus, H_pplus, 0, lc1}};
+Point(4) = {{0, H_pplus, 0, lc1}};
+
+Line(1) = {{1, 2}};
+Line(2) = {{2, 3}};
+Line(3) = {{3, 4}};
+Line(4) = {{4, 1}};
+
+Curve Loop(1) = {{1, 2, 3, 4}};
 Plane Surface(1) = {{1}};
 
-// N区
-Line Loop(2) = {{5, 6, -9, -2}};
+// =============================
+// 区域2: N区 (从P+区右侧到器件右边界)
+// =============================
+Point(5) = {{L_device, 0, 0, lc2}};
+Point(6) = {{L_device, H_n, 0, lc2}};
+Point(7) = {{L_pplus, H_n, 0, lc2}};
+// Point 3 已经定义
+
+Line(5) = {{2, 5}};
+Line(6) = {{5, 6}};
+Line(7) = {{6, 7}};
+Line(8) = {{7, 3}};
+
+Curve Loop(2) = {{5, 6, 7, 8, -2}};  // -2 是 Line 2 的反向
 Plane Surface(2) = {{2}};
 
-// 绝缘层
-Line Loop(3) = {{10, -11, -7, -6, 9, 3, -8, 12}};
+// =============================
+// 区域3: N区上部 (P+区上方到N区高度)
+// =============================
+Point(8) = {{0, H_n, 0, lc2}};
+// Point 4 和 Point 3 和 Point 7 已经定义
+
+Line(9) = {{4, 8}};
+Line(10) = {{8, 7}};
+// Line 8: 7->3, Line 3: 3->4
+
+Curve Loop(3) = {{9, 10, 8, 3}};
 Plane Surface(3) = {{3}};
 
-// 场板
-Line Loop(4) = {{13, 14, 15, 16}};
+// =============================
+// 区域4: 场板
+// =============================
+Point(9)  = {{0, H_n + T_ox, 0, lc1}};
+Point(10) = {{L_fp_total, H_n + T_ox, 0, lc1}};
+Point(11) = {{L_fp_total, H_n + T_ox + T_fp, 0, lc1}};
+Point(12) = {{0, H_n + T_ox + T_fp, 0, lc1}};
+
+Line(11) = {{9, 10}};
+Line(12) = {{10, 11}};
+Line(13) = {{11, 12}};
+Line(14) = {{12, 9}};
+
+Curve Loop(4) = {{11, 12, 13, 14}};
 Plane Surface(4) = {{4}};
 
-// 空气层 (上)
-Line Loop(5) = {{15, 17, 18, 19}};
-Plane Surface(5) = {{5}};
-
-// 空气层 (右侧)
-Line Loop(6) = {{10, 20, -18, -17, -16, -13, -14, -19}};
-Plane Surface(6) = {{6}};
-
-// --- 物理组 ---
-Physical Line("anode") = {{1}};
-Physical Line("cathode") = {{6}};
-Physical Line("field_plate") = {{15}};
-Physical Line("oxide_interface") = {{10}};
+// =============================
+// 物理组
+// =============================
+Physical Curve("anode") = {{1}};
+Physical Curve("cathode") = {{6}};
+Physical Curve("field_plate") = {{12}};
 
 Physical Surface("pplus") = {{1}};
-Physical Surface("ndrift") = {{2}};
-Physical Surface("oxide") = {{3}};
+Physical Surface("ndrift") = {{2, 3}};
 Physical Surface("fieldplate_metal") = {{4}};
-Physical Surface("air") = {{5, 6}};
+
+// 网格控制
+Mesh.CharacteristicLengthMin = 0.05e-4;
+Mesh.CharacteristicLengthMax = 2.0e-4;
 """
     
     with open(filename, 'w') as f:
@@ -160,16 +196,17 @@ Physical Surface("air") = {{5, 6}};
 def main():
     """批量生成不同场板长度的网格"""
     
-    # 切换到plan4目录
     os.chdir('/Users/lihengzhong/Documents/repo/devsim/workspace/plan4')
     
-    # 场板长度列表 (μm)
-    L_fp_values = [2, 4, 6, 8, 10]
+    # 场板长度列表 (μm) - 5个代表性点
+    L_fp_values = [2.0, 4.0, 6.0, 8.0, 10.0]
     t_ox = 0.2  # 绝缘层厚度 (μm)
     
     print("=" * 60)
-    print("场板二极管网格生成")
+    print("场板二极管网格生成 (最终版)")
     print("=" * 60)
+    
+    success_count = 0
     
     for l_fp in L_fp_values:
         geo_file = f"diode_fp_L{l_fp}.geo"
@@ -177,31 +214,26 @@ def main():
         
         print(f"\n生成场板长度 L_fp = {l_fp} μm 的网格...")
         
-        # 生成geo文件
         generate_fp_geo(l_fp, t_ox, geo_file)
-        print(f"  ✓ 创建 {geo_file}")
         
-        # 生成msh文件
         try:
             result = subprocess.run(
-                ['gmsh', geo_file, '-2', '-o', msh_file],
+                ['gmsh', geo_file, '-2', '-o', msh_file, '-format', 'msh22'],
                 capture_output=True,
                 text=True,
-                timeout=30
+                timeout=60
             )
-            if result.returncode == 0:
-                print(f"  ✓ 生成 {msh_file}")
+            if result.returncode == 0 and os.path.exists(msh_file):
+                file_size = os.path.getsize(msh_file)
+                print(f"  ✓ 生成 {msh_file} ({file_size/1024:.1f} KB)")
+                success_count += 1
             else:
-                print(f"  ✗ 生成失败: {result.stderr}")
-        except FileNotFoundError:
-            print(f"  ✗ 未找到gmsh命令，请安装Gmsh")
-            break
-        except subprocess.TimeoutExpired:
-            print(f"  ✗ 生成超时")
-            break
+                print(f"  ✗ 失败: {result.stderr[:150]}")
+        except Exception as e:
+            print(f"  ✗ 错误: {e}")
     
     print("\n" + "=" * 60)
-    print("网格生成完成")
+    print(f"结果: {success_count}/{len(L_fp_values)} 成功")
     print("=" * 60)
 
 
