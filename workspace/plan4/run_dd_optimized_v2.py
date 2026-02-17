@@ -8,6 +8,10 @@ import os
 import json
 from datetime import datetime
 
+# 切换到脚本所在目录（确保能找到网格文件）
+script_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(script_dir)
+
 sys.path.insert(0, '/Users/lihengzhong/Documents/repo/devsim/.opencode/skills/devsim-examples')
 
 import devsim
