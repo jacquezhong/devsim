@@ -88,15 +88,20 @@ def plot_bv_vs_fp_length(data):
 def plot_iv_curves(data):
     """
     绘制不同场板长度的I-V特性曲线
+    选择代表性的场板长度进行展示，避免图例过于拥挤
     """
     print("\n生成图2: 反向I-V特性曲线")
     
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
     
-    colors = ['blue', 'green', 'orange', 'red', 'purple']
-    markers = ['o', 's', '^', 'D', 'v']
+    # 选择代表性的场板长度（5个）：短、中短、中、中长、长
+    selected_indices = [0, 4, 8, 12, 16]  # 对应 2.0, 4.0, 6.0, 8.0, 10.0 μm
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
     
-    for idx, result in enumerate(data):
+    for i, idx in enumerate(selected_indices):
+        if idx >= len(data):
+            continue
+        result = data[idx]
         L_fp = result['L_fp']
         voltages = np.array(result['voltages'])
         currents = np.array(result['currents'])
@@ -104,23 +109,22 @@ def plot_iv_curves(data):
         if len(voltages) == 0:
             continue
         
-        color = colors[idx % len(colors)]
-        marker = markers[idx % len(markers)]
+        color = colors[i]
         
-        # 线性坐标
+        # 线性坐标 - 只显示曲线，不显示marker避免拥挤
         ax1.plot(np.abs(voltages), np.abs(currents) * 1e6, 
-                color=color, marker=marker, linewidth=2, markersize=6,
-                label=f'$L_{{fp}}$ = {L_fp} μm')
+                color=color, linewidth=2.5,
+                label=f'$L_{{fp}}$ = {L_fp:.1f} μm')
         
         # 对数坐标
         ax2.semilogy(np.abs(voltages), np.abs(currents) * 1e6, 
-                    color=color, marker=marker, linewidth=2, markersize=6,
-                    label=f'$L_{{fp}}$ = {L_fp} μm')
+                    color=color, linewidth=2.5,
+                    label=f'$L_{{fp}}$ = {L_fp:.1f} μm')
     
     ax1.set_xlabel('Reverse Voltage (V)', fontsize=14)
     ax1.set_ylabel('Current (μA)', fontsize=14)
     ax1.grid(True, alpha=0.3)
-    ax1.legend(fontsize=11)
+    ax1.legend(fontsize=11, loc='upper left')
     ax1.tick_params(labelsize=12)
     ax1.text(0.05, 0.95, '(a)', transform=ax1.transAxes, fontsize=14, 
              verticalalignment='top', fontweight='bold')
@@ -128,7 +132,7 @@ def plot_iv_curves(data):
     ax2.set_xlabel('Reverse Voltage (V)', fontsize=14)
     ax2.set_ylabel('Current (μA)', fontsize=14)
     ax2.grid(True, alpha=0.3)
-    ax2.legend(fontsize=11)
+    ax2.legend(fontsize=11, loc='lower right')
     ax2.tick_params(labelsize=12)
     ax2.text(0.05, 0.95, '(b)', transform=ax2.transAxes, fontsize=14, 
              verticalalignment='top', fontweight='bold')
@@ -142,15 +146,20 @@ def plot_iv_curves(data):
 def plot_electric_field(data):
     """
     绘制峰值电场与反向偏压关系
+    选择代表性的场板长度进行展示
     """
     print("\n生成图3: 峰值电场分布")
     
     fig, ax = plt.subplots(figsize=(10, 6))
     
-    colors = ['blue', 'green', 'orange', 'red', 'purple']
-    markers = ['o', 's', '^', 'D', 'v']
+    # 选择代表性的场板长度（5个）
+    selected_indices = [0, 4, 8, 12, 16]  # 对应 2.0, 4.0, 6.0, 8.0, 10.0 μm
+    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
     
-    for idx, result in enumerate(data):
+    for i, idx in enumerate(selected_indices):
+        if idx >= len(data):
+            continue
+        result = data[idx]
         L_fp = result['L_fp']
         voltages = np.array(result['voltages'])
         e_fields = np.array(result['max_electric_fields'])
@@ -158,12 +167,11 @@ def plot_electric_field(data):
         if len(voltages) == 0:
             continue
         
-        color = colors[idx % len(colors)]
-        marker = markers[idx % len(markers)]
+        color = colors[i]
         
         ax.plot(np.abs(voltages), e_fields / 1e5, 
-                color=color, marker=marker, linewidth=2, markersize=6,
-                label=f'$L_{{fp}}$ = {L_fp} μm')
+                color=color, linewidth=2.5,
+                label=f'$L_{{fp}}$ = {L_fp:.1f} μm')
     
     # 添加临界电场线
     ax.axhline(y=3, color='black', linestyle='--', linewidth=2, 
@@ -184,6 +192,7 @@ def plot_electric_field(data):
 def plot_bv_improvement(data):
     """
     绘制击穿电压提升百分比
+    使用柱状图展示17个数据点的提升效果
     """
     print("\n生成图4: 击穿电压提升效果")
     
@@ -205,23 +214,35 @@ def plot_bv_improvement(data):
     BV_base = BV_list[0]  # 基准击穿电压 (最小场板长度)
     improvement = [(BV / BV_base - 1) * 100 for BV in BV_list]
     
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(12, 6))
     
-    bars = ax.bar(L_fp_list, improvement, width=1.2, 
-                   color=['#3498db', '#2ecc71', '#f39c12', '#e74c3c', '#9b59b6'],
-                   edgecolor='black', linewidth=1.5)
+    # 使用渐变色显示17个数据点
+    import matplotlib.cm as cm
+    colors = cm.viridis(np.linspace(0, 1, len(L_fp_list)))
     
-    # 在柱子上添加数值标签
-    for bar, imp in zip(bars, improvement):
-        height = bar.get_height()
-        ax.text(bar.get_x() + bar.get_width()/2., height,
-                f'+{imp:.1f}%',
-                ha='center', va='bottom', fontsize=11, fontweight='bold')
+    bars = ax.bar(L_fp_list, improvement, width=0.35, 
+                   color=colors,
+                   edgecolor='black', linewidth=0.5)
+    
+    # 在关键柱子上添加数值标签（只标注部分避免拥挤）
+    key_indices = [0, 4, 8, 12, 16]  # 2.0, 4.0, 6.0, 8.0, 10.0 μm
+    for idx in key_indices:
+        if idx < len(bars):
+            bar = bars[idx]
+            imp = improvement[idx]
+            height = bar.get_height()
+            ax.text(bar.get_x() + bar.get_width()/2., height + 1,
+                    f'+{imp:.0f}%',
+                    ha='center', va='bottom', fontsize=9, fontweight='bold')
     
     ax.set_xlabel('Field Plate Length (μm)', fontsize=14)
     ax.set_ylabel('Breakdown Voltage Improvement (%)', fontsize=14)
     ax.grid(True, alpha=0.3, axis='y')
-    ax.tick_params(labelsize=12)
+    ax.tick_params(labelsize=11)
+    
+    # 设置x轴刻度
+    ax.set_xticks(L_fp_list)
+    ax.set_xticklabels([f'{x:.1f}' for x in L_fp_list], rotation=45, ha='right')
     
     plt.tight_layout()
     plt.savefig('figures/final/fig4_bv_improvement.png', dpi=300, bbox_inches='tight')
