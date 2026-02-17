@@ -18,6 +18,65 @@ from docx.oxml.ns import qn
 from create_equation import add_formula, add_simple_omml
 
 
+def add_greek_symbol(para, symbol_name):
+    """添加希腊字母符号"""
+    greek_map = {
+        'varepsilon': 'ε',
+        'epsilon': 'ε',
+        'rho': 'ρ',
+        'phi': 'φ',
+        'sigma': 'σ',
+        'delta': 'δ',
+        'alpha': 'α',
+        'beta': 'β',
+        'gamma': 'γ',
+        'lambda': 'λ',
+        'mu': 'μ',
+        'pi': 'π',
+        'theta': 'θ',
+        'omega': 'ω',
+    }
+    char = greek_map.get(symbol_name, symbol_name)
+    run = para.add_run(char)
+    run.font.name = 'Times New Roman'
+    run.font.italic = True
+    return run
+
+
+def add_variable_with_subscript(para, var, subscript=None):
+    """添加带下标的变量，如 C_coupling"""
+    run = para.add_run(var)
+    run.font.name = 'Times New Roman'
+    run.font.italic = True
+    if subscript:
+        run_sub = para.add_run(subscript)
+        run_sub.font.name = 'Times New Roman'
+        run_sub.font.subscript = True
+        run_sub.font.size = Pt(9)
+    return run
+
+
+def insert_figure(doc, image_path, caption):
+    """插入图片和图注"""
+    para = doc.add_paragraph()
+    para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = para.add_run()
+    try:
+        run.add_picture(image_path, width=Inches(5.5))
+    except Exception as e:
+        print(f"警告：无法插入图片 {image_path}: {e}")
+        para.add_run(f"[图片: {caption}]")
+    
+    # 图注
+    caption_para = doc.add_paragraph()
+    caption_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = caption_para.add_run(caption)
+    run.font.name = 'SimSun'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(9)
+    doc.add_paragraph()
+
+
 def set_doc_style(doc):
     """设置文档样式"""
     # 正文样式
@@ -197,7 +256,32 @@ Sakurai和Tamaru在1983年提出了经典的互连线电容解析公式，为后
     add_formula(para, r'\nabla \cdot (\varepsilon \nabla \phi) = -\rho', display_mode=True)
     doc.add_paragraph()
     
-    add_paragraph_text(doc, """其中，$\\varepsilon$为介电常数，$\\phi$为电势，$\\rho$为电荷密度。在静电场条件下，$\\rho=0$，简化为拉普拉斯方程。通过求解电势分布，进而计算导体表面的感应电荷，最终提取电容矩阵。""")
+    para = doc.add_paragraph()
+    para.paragraph_format.first_line_indent = Cm(0.74)
+    run = para.add_run("其中，")
+    run.font.name = 'Times New Roman'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
+    add_greek_symbol(para, 'varepsilon')
+    run = para.add_run("为介电常数，")
+    run.font.name = 'Times New Roman'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
+    add_greek_symbol(para, 'phi')
+    run = para.add_run("为电势，")
+    run.font.name = 'Times New Roman'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
+    add_greek_symbol(para, 'rho')
+    run = para.add_run("为电荷密度。在静电场条件下，")
+    run.font.name = 'Times New Roman'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
+    add_greek_symbol(para, 'rho')
+    run = para.add_run("=0，简化为拉普拉斯方程。通过求解电势分布，进而计算导体表面的感应电荷，最终提取电容矩阵。")
+    run.font.name = 'Times New Roman'
+    run._element.rPr.rFonts.set(qn('w:eastAsia'), 'SimSun')
+    run.font.size = Pt(10.5)
     
     add_section_heading(doc, '2.2 器件结构', level=2)
     
@@ -256,8 +340,9 @@ Sakurai和Tamaru在1983年提出了经典的互连线电容解析公式，为后
     add_paragraph_text(doc, "(2) 当线间距从200nm增加至500nm时，SiO₂介质条件下的耦合电容从2.364 pF/cm降至2.255 pF/cm，降低幅度约4.6%。")
     add_paragraph_text(doc, "(3) 不同介电常数条件下的电容-间距曲线呈现相似的趋势，表明几何参数和材料参数对电容的影响相对独立。")
     
-    # 插入图片引用
-    add_figure_caption(doc, "图1 总电容和耦合电容随线间距变化关系")
+    # 插入图片1
+    insert_figure(doc, '/Users/lihengzhong/Documents/repo/devsim/workspace/plan2/figures/final/fig1_capacitance_vs_spacing.png', 
+                  "图1 总电容和耦合电容随线间距变化关系")
     
     add_section_heading(doc, '3.3 电容-间距关系验证', level=2)
     
@@ -266,8 +351,10 @@ Sakurai和Tamaru在1983年提出了经典的互连线电容解析公式，为后
     
     add_paragraph_text(doc, "由图可知，电容倒数与间距呈现良好的线性关系，验证了理论预测的C ∝ 1/S关系。图中虚线为线性拟合结果，数据点与拟合线的吻合表明仿真结果符合理论预期。不同介电常数条件下的直线斜率不同，反映了介质对电容值的线性调制作用。")
     
-    add_figure_caption(doc, "图2 耦合电容倒数与线间距关系（验证C ∝ 1/S）")
-    
+    # 插入图片2
+    insert_figure(doc, '/Users/lihengzhong/Documents/repo/devsim/workspace/plan2/figures/final/fig2_inverse_capacitance.png',
+                  "图2 耦合电容倒数与线间距关系（验证C ∝ 1/S）")
+
     add_section_heading(doc, '3.4 低k介质性能评估', level=2)
     
     result_text4 = """图3展示了低k介质和空气隙对降低耦合电容的贡献。相对于传统SiO₂介质（εr=3.9）："""
@@ -277,8 +364,10 @@ Sakurai和Tamaru在1983年提出了经典的互连线电容解析公式，为后
     add_paragraph_text(doc, "(2) 空气隙（εr=1.0）可降低耦合电容约74.4%，效果更为显著。")
     add_paragraph_text(doc, "(3) 从电容-介电常数关系来看，电容降低比例与介电常数降低比例近似成正比，符合线性介质理论预期。""")
     
-    add_figure_caption(doc, "图3 低k介质和空气隙对耦合电容的降低效果")
-    
+    # 插入图片3
+    insert_figure(doc, '/Users/lihengzhong/Documents/repo/devsim/workspace/plan2/figures/final/fig3_lowk_improvement.png',
+                  "图3 低k介质和空气隙对耦合电容的降低效果")
+
     add_section_heading(doc, '3.5 与文献对比验证', level=2)
     
     validation_text = """本研究的仿真结果与Sakurai和Tamaru提出的经典解析公式进行了对比验证。对于平行导线结构，解析公式预测的电容-间距关系为："""
