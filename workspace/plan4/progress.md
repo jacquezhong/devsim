@@ -10,9 +10,10 @@
 
 | 阶段 | 状态 | 说明 |
 |------|------|------|
-| 网格生成 | ✅ 已完成 | 已生成5个正确的场板网格文件 |
-| 仿真运行 | ⚠️ 进行中 | L=2.0已完成，L=4.0-10.0运行中 |
-| 数据提取 | ❌ 待开始 | 需修复电场提取错误 |
+| 网格生成 | ✅ 已完成 | 5个网格文件MD5各不相同，场板几何正确 |
+| 仿真脚本修复 | ✅ 已完成 | 修复网格加载（正确文件名+场板区域）和电场模型创建 |
+| 仿真运行 | ⏳ 待开始 | 准备运行所有5个场板长度的仿真 |
+| 数据提取 | ❌ 待开始 | 等待仿真完成 |
 | 结果分析 | ❌ 待开始 | 等待仿真完成 |
 | 论文更新 | ❌ 待开始 | 等待所有数据 |
 
@@ -97,6 +98,58 @@ for region in ["pplus", "ndrift"]:
 
 ---
 
+### 问题 #3: 仿真脚本缺少场板区域加载
+
+**发现时间**: 2026-02-17  
+**严重程度**: 🔴 严重  
+**状态**: ✅ 已修复
+
+**问题描述**:
+网格验证时发现致命错误：
+```
+Contact field_plate references non-existent region name fieldplate_metal.
+```
+
+**根本原因分析**:
+仿真脚本 `run_dd_optimized_v2.py` 存在两个问题：
+
+1. **网格文件名错误**: 使用 `simple_L{L_fp}.msh` 而不是 `fp_L{L_fp}.msh`
+   - 之前生成的是 `fp_L*.msh` 文件
+   - 但脚本尝试加载不存在的 `simple_L*.msh`
+   - 这会导致脚本要么找不到文件，要么加载错误的旧文件
+
+2. **缺少场板区域**: 没有添加 `fieldplate_metal` 区域和 `field_plate` 接触
+   ```python
+   # 缺失的代码：
+   devsim.add_gmsh_region(gmsh_name="fieldplate_metal", mesh="diode_mesh", region="fieldplate_metal", material="metal")
+   devsim.add_gmsh_contact(gmsh_name="field_plate", mesh="diode_mesh", name="field_plate", material="metal", region="fieldplate_metal")
+   ```
+
+**影响**: 
+- 场板结构完全未加载到仿真中
+- 即使网格文件正确，仿真也不包含场板效应
+- 这解释了为什么之前所有仿真结果相同
+
+**解决方案**:
+1. 修改网格文件名为 `fp_L{L_fp}.msh`
+2. 添加场板区域和接触加载代码
+3. 提交并推送修复
+
+**验证结果**:
+网格文件内容确认：
+- ✅ L=2.0 μm: 844 triangles, 1341 lines (fieldplate_metal)
+- ✅ L=4.0 μm: 1086 triangles, 1724 lines (fieldplate_metal)
+- ✅ L=6.0 μm: 1324 triangles, 2101 lines (fieldplate_metal)
+- ✅ L=8.0 μm: 1564 triangles, 2481 lines (fieldplate_metal)
+- ✅ L=10.0 μm: 1804 triangles, 2861 lines (fieldplate_metal)
+
+场板长度越长，网格中的三角形和线数量越多，证明几何确实不同。
+
+**修复文件**:
+- `/workspace/plan4/run_dd_optimized_v2.py`
+
+---
+
 ## 已完成工作
 
 ### ✅ Phase 1: 网格生成
@@ -107,13 +160,12 @@ for region in ["pplus", "ndrift"]:
 - [x] 验证网格差异（不同文件大小和MD5）
 - [x] 确认网格包含正确的物理组
 
-### ⚠️ Phase 2: 漂移扩散仿真
-- [x] L=2.0 μm 初始解收敛成功
-- [x] 使用快速收敛策略（分级掺杂+自适应步长）
-- [ ] L=4.0 μm 仿真 - 电场提取错误
-- [ ] L=6.0 μm 仿真 - 待运行
-- [ ] L=8.0 μm 仿真 - 待运行
-- [ ] L=10.0 μm 仿真 - 待运行
+### ✅ Phase 2: 仿真脚本修复
+- [x] 修复电场模型创建（Problem #2）
+- [x] 修复网格文件名（simple → fp）
+- [x] 添加场板区域加载代码
+- [x] 添加场板接触加载代码
+- [x] 验证网格文件内容差异
 
 ### ⏳ Phase 3: 数据分析（待完成）
 - [ ] 提取所有场板长度的峰值电场

@@ -32,7 +32,7 @@ for L_fp in L_fp_values:
     print(f"仿真场板长度 L_fp = {L_fp} μm")
     print(f"{'='*70}")
     
-    mesh_file = f"simple_L{L_fp}.msh"
+    mesh_file = f"fp_L{L_fp}.msh"
     result_file = f"data/final/devsim_dd_v2_results_L{L_fp}.json"
     
     # 检查是否已有结果
@@ -59,8 +59,10 @@ for L_fp in L_fp_values:
     devsim.create_gmsh_mesh(mesh="diode_mesh", file=mesh_file)
     devsim.add_gmsh_region(gmsh_name="pplus", mesh="diode_mesh", region="pplus", material="Si")
     devsim.add_gmsh_region(gmsh_name="ndrift", mesh="diode_mesh", region="ndrift", material="Si")
+    devsim.add_gmsh_region(gmsh_name="fieldplate_metal", mesh="diode_mesh", region="fieldplate_metal", material="metal")
     devsim.add_gmsh_contact(gmsh_name="anode", mesh="diode_mesh", name="anode", material="metal", region="pplus")
     devsim.add_gmsh_contact(gmsh_name="cathode", mesh="diode_mesh", name="cathode", material="metal", region="ndrift")
+    devsim.add_gmsh_contact(gmsh_name="field_plate", mesh="diode_mesh", name="field_plate", material="metal", region="fieldplate_metal")
     devsim.finalize_mesh(mesh="diode_mesh")
     devsim.create_device(mesh="diode_mesh", device="diode")
     print(f"   ✓ 网格加载完成")
