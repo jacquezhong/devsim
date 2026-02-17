@@ -191,14 +191,19 @@ for L_fp in L_fp_values:
                 if abs(current_v - target_v) < 0.1:
                     # 到达目标电压，提取数据
                     try:
-                        current = devsim.get_contact_current(device="diode", contact="anode")
-                    except:
+                        # 获取电子和空穴电流（总电流）
+                        e_current = devsim.get_contact_current(device="diode", contact="anode", equation="ElectronContinuityEquation")
+                        h_current = devsim.get_contact_current(device="diode", contact="anode", equation="HoleContinuityEquation")
+                        current = e_current + h_current
+                    except Exception as e:
+                        print(f"[WARN] 获取电流失败: {e}")
                         current = 0
                     
                     try:
                         E_field = devsim.get_edge_model_values(device="diode", region="ndrift", name="ElectricField")
                         max_E = max(abs(x) for x in E_field) if E_field else 0
-                    except:
+                    except Exception as e:
+                        print(f"[WARN] 获取电场失败: {e}")
                         max_E = 0
                     
                     results.append({"V": target_v, "I": current, "E": max_E})
@@ -219,7 +224,9 @@ for L_fp in L_fp_values:
             print(f"      ⚠ 未能到达 {target_v}V，记录当前值 {current_v}V")
             # 记录当前已达到的电压
             try:
-                current = devsim.get_contact_current(device="diode", contact="anode")
+                e_current = devsim.get_contact_current(device="diode", contact="anode", equation="ElectronContinuityEquation")
+                h_current = devsim.get_contact_current(device="diode", contact="anode", equation="HoleContinuityEquation")
+                current = e_current + h_current
                 E_field = devsim.get_edge_model_values(device="diode", region="ndrift", name="ElectricField")
                 max_E = max(abs(x) for x in E_field) if E_field else 0
                 results.append({"V": current_v, "I": current, "E": max_E})
