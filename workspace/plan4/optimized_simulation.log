@@ -1,0 +1,272 @@
+Searching DEVSIM_MATH_LIBS="libopenblas.dylib:liblapack.dylib:libblas.dylib"
+Loading "libopenblas.dylib": MISSING DLL
+Loading "liblapack.dylib": ALL BLAS/LAPACK LOADED
+Skipping libblas.dylib
+loading UMFPACK 5.1 as direct solver
+======================================================================
+优化的DEVSIM场板二极管仿真
+解决收敛问题的完整方案
+======================================================================
+开始时间: 2026-02-17 11:37:02
+
+
+======================================================================
+仿真场板长度 L_fp = 2.0 μm
+======================================================================
+1. 加载网格...
+Physical group name anode has 0 Tetrahedra.
+Physical group name anode has 0 Triangles.
+Physical group name anode has 50 Lines.
+Physical group name anode has 51 Points.
+Physical group name cathode has 0 Tetrahedra.
+Physical group name cathode has 0 Triangles.
+Physical group name cathode has 36 Lines.
+Physical group name cathode has 37 Points.
+Physical group name ndrift has 0 Tetrahedra.
+Physical group name ndrift has 8422 Triangles.
+Physical group name ndrift has 12769 Lines.
+Physical group name ndrift has 4348 Points.
+Physical group name pplus has 0 Tetrahedra.
+Physical group name pplus has 2326 Triangles.
+Physical group name pplus has 3559 Lines.
+Physical group name pplus has 1234 Points.
+Device diode has 5582 coordinates with max index 5582
+Region ndrift has 4348 nodes.
+Region pplus has 1234 nodes.
+Contact anode in region pplus with 51 nodes
+Contact cathode in region ndrift with 37 nodes
+   ✓ 区域: ('ndrift', 'pplus'), 接触: ('anode', 'cathode')
+2. 设置物理参数...
+3. 设置渐变掺杂（避免突变结）...
+Replacing Node Model x in region ndrift of material Si
+   ✓ 渐变掺杂设置完成 (4.5um-5.5um渐变区)
+4. 求解初始势分布...
+Replacing Node Model anodenodemodel in region pplus of material Si
+Replacing Node Model anodenodemodel:Potential in region pplus of material Si
+Warning: Replacing Contact Equation with Contact Equation of the same name.
+Contact: anode, Equation: PotentialEquation
+Replacing Node Model cathodenodemodel in region ndrift of material Si
+Replacing Node Model cathodenodemodel:Potential in region ndrift of material Si
+Warning: Replacing Contact Equation with Contact Equation of the same name.
+Contact: cathode, Equation: PotentialEquation
+number of equations 5582
+while evaluating node model x on Device: diode on Region: ndrift
+Cyclic dependency while evaluating NodeModel "x
+while evaluating node model x on Device: diode on Region: ndrift
+Cyclic dependency while evaluating NodeModel "x
+while evaluating model x: expression x evaluates to invalid
+   ✗ 势求解失败: DEVSIM FATAL: while evaluating node model x on Device: diode on Region: ndrift
+Cyclic dependency while evaluating NodeModel "x
+while evaluating model x: expression x evaluates to invalid
+
+
+======================================================================
+仿真场板长度 L_fp = 4.0 μm
+======================================================================
+1. 加载网格...
+Physical group name anode has 0 Tetrahedra.
+Physical group name anode has 0 Triangles.
+Physical group name anode has 50 Lines.
+Physical group name anode has 51 Points.
+Physical group name cathode has 0 Tetrahedra.
+Physical group name cathode has 0 Triangles.
+Physical group name cathode has 36 Lines.
+Physical group name cathode has 37 Points.
+Physical group name ndrift has 0 Tetrahedra.
+Physical group name ndrift has 8422 Triangles.
+Physical group name ndrift has 12769 Lines.
+Physical group name ndrift has 4348 Points.
+Physical group name pplus has 0 Tetrahedra.
+Physical group name pplus has 2326 Triangles.
+Physical group name pplus has 3559 Lines.
+Physical group name pplus has 1234 Points.
+Device diode has 5582 coordinates with max index 5582
+Region ndrift has 4348 nodes.
+Region pplus has 1234 nodes.
+Contact anode in region pplus with 51 nodes
+Contact cathode in region ndrift with 37 nodes
+   ✓ 区域: ('ndrift', 'pplus'), 接触: ('anode', 'cathode')
+2. 设置物理参数...
+3. 设置渐变掺杂（避免突变结）...
+Replacing Node Model x in region ndrift of material Si
+   ✓ 渐变掺杂设置完成 (4.5um-5.5um渐变区)
+4. 求解初始势分布...
+Replacing Node Model anodenodemodel in region pplus of material Si
+Replacing Node Model anodenodemodel:Potential in region pplus of material Si
+Warning: Replacing Contact Equation with Contact Equation of the same name.
+Contact: anode, Equation: PotentialEquation
+Replacing Node Model cathodenodemodel in region ndrift of material Si
+Replacing Node Model cathodenodemodel:Potential in region ndrift of material Si
+Warning: Replacing Contact Equation with Contact Equation of the same name.
+Contact: cathode, Equation: PotentialEquation
+number of equations 5582
+while evaluating node model x on Device: diode on Region: ndrift
+Cyclic dependency while evaluating NodeModel "x
+while evaluating node model x on Device: diode on Region: ndrift
+Cyclic dependency while evaluating NodeModel "x
+while evaluating model x: expression x evaluates to invalid
+   ✗ 势求解失败: DEVSIM FATAL: while evaluating node model x on Device: diode on Region: ndrift
+Cyclic dependency while evaluating NodeModel "x
+while evaluating model x: expression x evaluates to invalid
+
+
+======================================================================
+仿真场板长度 L_fp = 6.0 μm
+======================================================================
+1. 加载网格...
+Physical group name anode has 0 Tetrahedra.
+Physical group name anode has 0 Triangles.
+Physical group name anode has 50 Lines.
+Physical group name anode has 51 Points.
+Physical group name cathode has 0 Tetrahedra.
+Physical group name cathode has 0 Triangles.
+Physical group name cathode has 36 Lines.
+Physical group name cathode has 37 Points.
+Physical group name ndrift has 0 Tetrahedra.
+Physical group name ndrift has 8422 Triangles.
+Physical group name ndrift has 12769 Lines.
+Physical group name ndrift has 4348 Points.
+Physical group name pplus has 0 Tetrahedra.
+Physical group name pplus has 2326 Triangles.
+Physical group name pplus has 3559 Lines.
+Physical group name pplus has 1234 Points.
+Device diode has 5582 coordinates with max index 5582
+Region ndrift has 4348 nodes.
+Region pplus has 1234 nodes.
+Contact anode in region pplus with 51 nodes
+Contact cathode in region ndrift with 37 nodes
+   ✓ 区域: ('ndrift', 'pplus'), 接触: ('anode', 'cathode')
+2. 设置物理参数...
+3. 设置渐变掺杂（避免突变结）...
+Replacing Node Model x in region ndrift of material Si
+   ✓ 渐变掺杂设置完成 (4.5um-5.5um渐变区)
+4. 求解初始势分布...
+Replacing Node Model anodenodemodel in region pplus of material Si
+Replacing Node Model anodenodemodel:Potential in region pplus of material Si
+Warning: Replacing Contact Equation with Contact Equation of the same name.
+Contact: anode, Equation: PotentialEquation
+Replacing Node Model cathodenodemodel in region ndrift of material Si
+Replacing Node Model cathodenodemodel:Potential in region ndrift of material Si
+Warning: Replacing Contact Equation with Contact Equation of the same name.
+Contact: cathode, Equation: PotentialEquation
+number of equations 5582
+while evaluating node model x on Device: diode on Region: ndrift
+Cyclic dependency while evaluating NodeModel "x
+while evaluating node model x on Device: diode on Region: ndrift
+Cyclic dependency while evaluating NodeModel "x
+while evaluating model x: expression x evaluates to invalid
+   ✗ 势求解失败: DEVSIM FATAL: while evaluating node model x on Device: diode on Region: ndrift
+Cyclic dependency while evaluating NodeModel "x
+while evaluating model x: expression x evaluates to invalid
+
+
+======================================================================
+仿真场板长度 L_fp = 8.0 μm
+======================================================================
+1. 加载网格...
+Physical group name anode has 0 Tetrahedra.
+Physical group name anode has 0 Triangles.
+Physical group name anode has 50 Lines.
+Physical group name anode has 51 Points.
+Physical group name cathode has 0 Tetrahedra.
+Physical group name cathode has 0 Triangles.
+Physical group name cathode has 36 Lines.
+Physical group name cathode has 37 Points.
+Physical group name ndrift has 0 Tetrahedra.
+Physical group name ndrift has 8422 Triangles.
+Physical group name ndrift has 12769 Lines.
+Physical group name ndrift has 4348 Points.
+Physical group name pplus has 0 Tetrahedra.
+Physical group name pplus has 2326 Triangles.
+Physical group name pplus has 3559 Lines.
+Physical group name pplus has 1234 Points.
+Device diode has 5582 coordinates with max index 5582
+Region ndrift has 4348 nodes.
+Region pplus has 1234 nodes.
+Contact anode in region pplus with 51 nodes
+Contact cathode in region ndrift with 37 nodes
+   ✓ 区域: ('ndrift', 'pplus'), 接触: ('anode', 'cathode')
+2. 设置物理参数...
+3. 设置渐变掺杂（避免突变结）...
+Replacing Node Model x in region ndrift of material Si
+   ✓ 渐变掺杂设置完成 (4.5um-5.5um渐变区)
+4. 求解初始势分布...
+Replacing Node Model anodenodemodel in region pplus of material Si
+Replacing Node Model anodenodemodel:Potential in region pplus of material Si
+Warning: Replacing Contact Equation with Contact Equation of the same name.
+Contact: anode, Equation: PotentialEquation
+Replacing Node Model cathodenodemodel in region ndrift of material Si
+Replacing Node Model cathodenodemodel:Potential in region ndrift of material Si
+Warning: Replacing Contact Equation with Contact Equation of the same name.
+Contact: cathode, Equation: PotentialEquation
+number of equations 5582
+while evaluating node model x on Device: diode on Region: ndrift
+Cyclic dependency while evaluating NodeModel "x
+while evaluating node model x on Device: diode on Region: ndrift
+Cyclic dependency while evaluating NodeModel "x
+while evaluating model x: expression x evaluates to invalid
+   ✗ 势求解失败: DEVSIM FATAL: while evaluating node model x on Device: diode on Region: ndrift
+Cyclic dependency while evaluating NodeModel "x
+while evaluating model x: expression x evaluates to invalid
+
+
+======================================================================
+仿真场板长度 L_fp = 10.0 μm
+======================================================================
+1. 加载网格...
+Physical group name anode has 0 Tetrahedra.
+Physical group name anode has 0 Triangles.
+Physical group name anode has 50 Lines.
+Physical group name anode has 51 Points.
+Physical group name cathode has 0 Tetrahedra.
+Physical group name cathode has 0 Triangles.
+Physical group name cathode has 36 Lines.
+Physical group name cathode has 37 Points.
+Physical group name ndrift has 0 Tetrahedra.
+Physical group name ndrift has 8422 Triangles.
+Physical group name ndrift has 12769 Lines.
+Physical group name ndrift has 4348 Points.
+Physical group name pplus has 0 Tetrahedra.
+Physical group name pplus has 2326 Triangles.
+Physical group name pplus has 3559 Lines.
+Physical group name pplus has 1234 Points.
+Device diode has 5582 coordinates with max index 5582
+Region ndrift has 4348 nodes.
+Region pplus has 1234 nodes.
+Contact anode in region pplus with 51 nodes
+Contact cathode in region ndrift with 37 nodes
+   ✓ 区域: ('ndrift', 'pplus'), 接触: ('anode', 'cathode')
+2. 设置物理参数...
+3. 设置渐变掺杂（避免突变结）...
+Replacing Node Model x in region ndrift of material Si
+   ✓ 渐变掺杂设置完成 (4.5um-5.5um渐变区)
+4. 求解初始势分布...
+Replacing Node Model anodenodemodel in region pplus of material Si
+Replacing Node Model anodenodemodel:Potential in region pplus of material Si
+Warning: Replacing Contact Equation with Contact Equation of the same name.
+Contact: anode, Equation: PotentialEquation
+Replacing Node Model cathodenodemodel in region ndrift of material Si
+Replacing Node Model cathodenodemodel:Potential in region ndrift of material Si
+Warning: Replacing Contact Equation with Contact Equation of the same name.
+Contact: cathode, Equation: PotentialEquation
+number of equations 5582
+while evaluating node model x on Device: diode on Region: ndrift
+Cyclic dependency while evaluating NodeModel "x
+while evaluating node model x on Device: diode on Region: ndrift
+Cyclic dependency while evaluating NodeModel "x
+while evaluating model x: expression x evaluates to invalid
+   ✗ 势求解失败: DEVSIM FATAL: while evaluating node model x on Device: diode on Region: ndrift
+Cyclic dependency while evaluating NodeModel "x
+while evaluating model x: expression x evaluates to invalid
+
+
+======================================================================
+保存结果...
+✓ 结果已保存: data/final/devsim_optimized_results.json
+
+======================================================================
+仿真完成总结
+======================================================================
+L_fp (μm)    数据点        击穿电压 (V)       
+----------------------------------------------------------------------
+======================================================================

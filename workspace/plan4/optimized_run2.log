@@ -1,0 +1,158 @@
+Searching DEVSIM_MATH_LIBS="libopenblas.dylib:liblapack.dylib:libblas.dylib"
+Loading "libopenblas.dylib": MISSING DLL
+Loading "liblapack.dylib": ALL BLAS/LAPACK LOADED
+Skipping libblas.dylib
+loading UMFPACK 5.1 as direct solver
+======================================================================
+优化的DEVSIM场板二极管仿真
+解决收敛问题的完整方案
+======================================================================
+开始时间: 2026-02-17 11:40:02
+
+
+======================================================================
+仿真场板长度 L_fp = 2.0 μm
+======================================================================
+1. 加载网格...
+Physical group name anode has 0 Tetrahedra.
+Physical group name anode has 0 Triangles.
+Physical group name anode has 50 Lines.
+Physical group name anode has 51 Points.
+Physical group name cathode has 0 Tetrahedra.
+Physical group name cathode has 0 Triangles.
+Physical group name cathode has 36 Lines.
+Physical group name cathode has 37 Points.
+Physical group name ndrift has 0 Tetrahedra.
+Physical group name ndrift has 8422 Triangles.
+Physical group name ndrift has 12769 Lines.
+Physical group name ndrift has 4348 Points.
+Physical group name pplus has 0 Tetrahedra.
+Physical group name pplus has 2326 Triangles.
+Physical group name pplus has 3559 Lines.
+Physical group name pplus has 1234 Points.
+Device diode has 5582 coordinates with max index 5582
+Region ndrift has 4348 nodes.
+Region pplus has 1234 nodes.
+Contact anode in region pplus with 51 nodes
+Contact cathode in region ndrift with 37 nodes
+   ✓ 区域: ('ndrift', 'pplus'), 接触: ('anode', 'cathode')
+2. 设置物理参数...
+3. 设置渐变掺杂（避免突变结）...
+   ✓ 渐变掺杂设置完成 (4.5um-5.5um渐变区)
+4. 求解初始势分布...
+Replacing Node Model anodenodemodel in region pplus of material Si
+Replacing Node Model anodenodemodel:Potential in region pplus of material Si
+Warning: Replacing Contact Equation with Contact Equation of the same name.
+Contact: anode, Equation: PotentialEquation
+Replacing Node Model cathodenodemodel in region ndrift of material Si
+Replacing Node Model cathodenodemodel:Potential in region ndrift of material Si
+Warning: Replacing Contact Equation with Contact Equation of the same name.
+Contact: cathode, Equation: PotentialEquation
+number of equations 5582
+Iteration: 0
+  Device: "diode"	RelError: 2.00000e+00	AbsError: 4.70061e-01
+    Region: "ndrift"	RelError: 1.00000e+00	AbsError: 4.70061e-01
+      Equation: "PotentialEquation"	RelError: 1.00000e+00	AbsError: 4.70061e-01
+    Region: "pplus"	RelError: 1.00000e+00	AbsError: 3.63707e-01
+      Equation: "PotentialEquation"	RelError: 1.00000e+00	AbsError: 3.63707e-01
+Iteration: 1
+  Device: "diode"	RelError: 9.57836e-01	AbsError: 2.14144e-01
+    Region: "ndrift"	RelError: 4.70569e-01	AbsError: 6.77482e-02
+      Equation: "PotentialEquation"	RelError: 4.70569e-01	AbsError: 6.77482e-02
+    Region: "pplus"	RelError: 4.87268e-01	AbsError: 2.14144e-01
+      Equation: "PotentialEquation"	RelError: 4.87268e-01	AbsError: 2.14144e-01
+Iteration: 2
+  Device: "diode"	RelError: 6.00919e-01	AbsError: 7.13364e-02
+    Region: "ndrift"	RelError: 2.86403e-01	AbsError: 4.56094e-02
+      Equation: "PotentialEquation"	RelError: 2.86403e-01	AbsError: 4.56094e-02
+    Region: "pplus"	RelError: 3.14516e-01	AbsError: 7.13364e-02
+      Equation: "PotentialEquation"	RelError: 3.14516e-01	AbsError: 7.13364e-02
+Iteration: 3
+  Device: "diode"	RelError: 4.11825e-01	AbsError: 6.63439e-02
+    Region: "ndrift"	RelError: 1.85516e-01	AbsError: 3.62725e-02
+      Equation: "PotentialEquation"	RelError: 1.85516e-01	AbsError: 3.62725e-02
+    Region: "pplus"	RelError: 2.26308e-01	AbsError: 6.63439e-02
+      Equation: "PotentialEquation"	RelError: 2.26308e-01	AbsError: 6.63439e-02
+Iteration: 4
+  Device: "diode"	RelError: 2.85991e-01	AbsError: 6.06384e-02
+    Region: "ndrift"	RelError: 1.14597e-01	AbsError: 2.58025e-02
+      Equation: "PotentialEquation"	RelError: 1.14597e-01	AbsError: 2.58025e-02
+    Region: "pplus"	RelError: 1.71394e-01	AbsError: 6.06384e-02
+      Equation: "PotentialEquation"	RelError: 1.71394e-01	AbsError: 6.06384e-02
+Iteration: 5
+  Device: "diode"	RelError: 2.17565e-01	AbsError: 5.40285e-02
+    Region: "ndrift"	RelError: 8.50848e-02	AbsError: 2.56577e-02
+      Equation: "PotentialEquation"	RelError: 8.50848e-02	AbsError: 2.56577e-02
+    Region: "pplus"	RelError: 1.32480e-01	AbsError: 5.40285e-02
+      Equation: "PotentialEquation"	RelError: 1.32480e-01	AbsError: 5.40285e-02
+Iteration: 6
+  Device: "diode"	RelError: 1.86946e-01	AbsError: 4.62634e-02
+    Region: "ndrift"	RelError: 8.50635e-02	AbsError: 2.52680e-02
+      Equation: "PotentialEquation"	RelError: 8.50635e-02	AbsError: 2.52680e-02
+    Region: "pplus"	RelError: 1.01882e-01	AbsError: 4.62634e-02
+      Equation: "PotentialEquation"	RelError: 1.01882e-01	AbsError: 4.62634e-02
+Iteration: 7
+  Device: "diode"	RelError: 1.60497e-01	AbsError: 3.70494e-02
+    Region: "ndrift"	RelError: 8.50605e-02	AbsError: 2.42377e-02
+      Equation: "PotentialEquation"	RelError: 8.50605e-02	AbsError: 2.42377e-02
+    Region: "pplus"	RelError: 7.54360e-02	AbsError: 3.70494e-02
+      Equation: "PotentialEquation"	RelError: 7.54360e-02	AbsError: 3.70494e-02
+Iteration: 8
+  Device: "diode"	RelError: 1.32732e-01	AbsError: 2.62025e-02
+    Region: "ndrift"	RelError: 8.20831e-02	AbsError: 2.16549e-02
+      Equation: "PotentialEquation"	RelError: 8.20831e-02	AbsError: 2.16549e-02
+    Region: "pplus"	RelError: 5.06486e-02	AbsError: 2.62025e-02
+      Equation: "PotentialEquation"	RelError: 5.06486e-02	AbsError: 2.62025e-02
+Iteration: 9
+  Device: "diode"	RelError: 1.00317e-01	AbsError: 1.91281e-02
+    Region: "ndrift"	RelError: 6.46616e-02	AbsError: 1.60040e-02
+      Equation: "PotentialEquation"	RelError: 6.46616e-02	AbsError: 1.60040e-02
+    Region: "pplus"	RelError: 3.56557e-02	AbsError: 1.91281e-02
+      Equation: "PotentialEquation"	RelError: 3.56557e-02	AbsError: 1.91281e-02
+Iteration: 10
+  Device: "diode"	RelError: 3.08666e-02	AbsError: 7.40740e-03
+    Region: "ndrift"	RelError: 3.08666e-02	AbsError: 7.40740e-03
+      Equation: "PotentialEquation"	RelError: 3.08666e-02	AbsError: 7.40740e-03
+    Region: "pplus"	RelError: 2.96961e-17	AbsError: 1.59310e-17
+      Equation: "PotentialEquation"	RelError: 2.96961e-17	AbsError: 1.59310e-17
+Iteration: 11
+  Device: "diode"	RelError: 5.18901e-03	AbsError: 1.23808e-03
+    Region: "ndrift"	RelError: 5.18901e-03	AbsError: 1.23808e-03
+      Equation: "PotentialEquation"	RelError: 5.18901e-03	AbsError: 1.23808e-03
+    Region: "pplus"	RelError: 2.96961e-17	AbsError: 1.59310e-17
+      Equation: "PotentialEquation"	RelError: 2.96961e-17	AbsError: 1.59310e-17
+Iteration: 12
+  Device: "diode"	RelError: 1.21078e-04	AbsError: 2.88780e-05
+    Region: "ndrift"	RelError: 1.21078e-04	AbsError: 2.88780e-05
+      Equation: "PotentialEquation"	RelError: 1.21078e-04	AbsError: 2.88780e-05
+    Region: "pplus"	RelError: 2.96961e-17	AbsError: 1.59310e-17
+      Equation: "PotentialEquation"	RelError: 2.96961e-17	AbsError: 1.59310e-17
+Iteration: 13
+  Device: "diode"	RelError: 6.23794e-08	AbsError: 1.48779e-08
+    Region: "ndrift"	RelError: 6.23794e-08	AbsError: 1.48779e-08
+      Equation: "PotentialEquation"	RelError: 6.23794e-08	AbsError: 1.48779e-08
+    Region: "pplus"	RelError: 2.96961e-17	AbsError: 1.59310e-17
+      Equation: "PotentialEquation"	RelError: 2.96961e-17	AbsError: 1.59310e-17
+Iteration: 14
+  Device: "diode"	RelError: 1.60327e-14	AbsError: 3.81630e-15
+    Region: "ndrift"	RelError: 1.60030e-14	AbsError: 3.81630e-15
+      Equation: "PotentialEquation"	RelError: 1.60030e-14	AbsError: 3.81630e-15
+    Region: "pplus"	RelError: 2.96961e-17	AbsError: 1.59310e-17
+      Equation: "PotentialEquation"	RelError: 2.96961e-17	AbsError: 1.59310e-17
+   ✓ 势求解收敛
+5. 添加载流子并求解漂移扩散...
+Warning: Replacing equation with equation of the same name.
+Region: pplus, Equation: PotentialEquation, Variable: Potential
+Warning: Replacing equation with equation of the same name.
+Region: ndrift, Equation: PotentialEquation, Variable: Potential
+Replacing Node Model anodenodeelectrons in region pplus of material Si
+Replacing Node Model anodenodeelectrons:Electrons in region pplus of material Si
+Replacing Node Model anodenodeholes in region pplus of material Si
+Replacing Node Model anodenodeholes:Holes in region pplus of material Si
+Warning: Replacing Contact Equation with Contact Equation of the same name.
+Contact: anode, Equation: ElectronContinuityEquation
+Warning: Replacing Contact Equation with Contact Equation of the same name.
+Contact: anode, Equation: HoleContinuityEquation
+Replacing Node Model cathodenodeelectrons in region ndrift of material Si
+Replacing Node Model cathodenodeelectrons:Electrons in region ndrift of material Si
+Replacing Node Model cathodenodeholes in region ndrift of material Si
