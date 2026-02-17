@@ -116,6 +116,18 @@ for L_fp in L_fp_values:
     devsim.solve(type="dc", absolute_error=1e12, relative_error=1e-6, maximum_iterations=200)
     print("   ✓ 漂移扩散求解收敛")
     
+    # 创建电场模型（用于后续数据提取）
+    print("5.1 创建电场模型...")
+    for region in ["pplus", "ndrift"]:
+        devsim.edge_from_node_model(device="diode", region=region, node_model="Potential")
+        devsim.edge_model(
+            device="diode",
+            region=region,
+            name="ElectricField",
+            equation="(Potential@n0 - Potential@n1)*EdgeInverseLength",
+        )
+    print("   ✓ 电场模型创建完成")
+    
     # 电压扫描 - 自适应步长策略
     print("6. 开始电压扫描（自适应步长）...")
     
