@@ -21,8 +21,10 @@ from devsim.python_packages.simple_physics import SetSiliconParameters, GetConta
 from devsim.python_packages.model_create import CreateSolution
 from devsim.python_packages.simple_physics import (
     CreateSiliconPotentialOnly, CreateSiliconPotentialOnlyContact,
-    CreateSiliconDriftDiffusion, CreateSiliconDriftDiffusionAtContact
+    CreateSiliconDriftDiffusion, CreateSiliconDriftDiffusionAtContact,
+    CreateContinuousInterfaceModel
 )
+from devsim import interface_equation
 
 def create_field_plate_mesh(device_name, L_fp, L_device=50.0, H_n=20.0, H_pplus=2.0, 
                             L_pplus=5.0, t_ox=0.2, t_fp=0.5):
@@ -70,6 +72,12 @@ def create_field_plate_mesh(device_name, L_fp, L_device=50.0, H_n=20.0, H_pplus=
     devsim.add_2d_region(mesh=device_name, material="metal", region="air_right",
                          xl=L_device*scale, xh=L_device*scale+1e-8, yl=0.0, yh=H_n*scale)
     
+    # **关键：创建pplus-ndrift界面，使两个区域电势连续**
+    devsim.add_2d_interface(mesh=device_name, name="pplus_ndrift", 
+                            region0="pplus", region1="ndrift",
+                            xl=L_pplus*scale, xh=L_pplus*scale,
+                            yl=0.0, yh=H_pplus*scale, bloat=1e-10)
+    
     # 定义Contact
     # Anode: pplus底边 (y=0)
     devsim.add_2d_contact(mesh=device_name, name="anode", material="metal", region="pplus",
@@ -92,7 +100,7 @@ def create_field_plate_mesh(device_name, L_fp, L_device=50.0, H_n=20.0, H_pplus=
     print(f"   ✓ 网格创建完成: {L_fp}μm场板")
 
 # 场板长度列表
-L_fp_values = [2.0, 4.0, 6.0, 8.0, 10.0]
+L_fp_values = [2.0, 6.0]  # Reduced to 2 lengths for faster testing
 
 print("="*70)
 print("漂移扩散仿真 - 内置2D网格修正版")
@@ -156,6 +164,12 @@ for L_fp in L_fp_values:
     CreateSiliconPotentialOnlyContact("diode", "pplus", "anode")     # 2. 后anode
     # CreateSiliconPotentialOnlyContact("diode", "fieldplate", "field_plate")  # 3. field_plate暂时禁用
     
+    # **关键：创建pplus-ndrift界面连续条件**
+    print("   创建界面连续条件...")
+    interface_model_name = CreateContinuousInterfaceModel("diode", "pplus_ndrift", "Potential")
+    interface_equation(device="diode", interface="pplus_ndrift", name="PotentialEquation", 
+                       interface_model=interface_model_name, type="continuous")
+    
     devsim.solve(type="dc", absolute_error=1.0, relative_error=1e-10, maximum_iterations=100)
     print("   ✓ 势求解收敛")
     
@@ -168,10 +182,9 @@ for L_fp in L_fp_values:
         devsim.set_node_values(device="diode", region=region, name="Holes", init_from="IntrinsicHoles")
         CreateSiliconDriftDiffusion("diode", region)
     
-    # 创建漂移扩散边界（所有接触）
-    for region in ["pplus", "ndrift"]:
-        CreateSiliconDriftDiffusionAtContact("diode", region, "anode")
-        CreateSiliconDriftDiffusionAtContact("diode", region, "cathode")
+    # 创建漂移扩散边界（只在接触存在的区域创建）
+    CreateSiliconDriftDiffusionAtContact("diode", "pplus", "anode")    # anode只在pplus
+    CreateSiliconDriftDiffusionAtContact("diode", "ndrift", "cathode")  # cathode只在ndrift
     
     # 求解漂移扩散（初始解）
     print("5. 求解漂移扩散初始解...")
@@ -186,6 +199,15 @@ for L_fp in L_fp_values:
         devsim.edge_model(
             device="diode", region=region, name="ElectricField",
             equation="(Potential@n0 - Potential@n1)*EdgeInverseLength",
+        )
+        # 添加导数模型（用于方程求解，也帮助确保模型正确更新）
+        devsim.edge_model(
+            device="diode", region=region, name="ElectricField:Potential@n0",
+            equation="EdgeInverseLength",
+        )
+        devsim.edge_model(
+            device="diode", region=region, name="ElectricField:Potential@n1",
+            equation="-EdgeInverseLength",
         )
     print("   ✓ 电场模型创建完成")
     
@@ -213,6 +235,7 @@ for L_fp in L_fp_values:
             devsim.solve(type="dc", absolute_error=1e12, relative_error=1e-5, maximum_iterations=100)
             
             # **修正2：每次求解后更新电场模型**
+            # 只需更新Potential@n0/n1，ElectricField会自动使用新值
             for region in ["pplus", "ndrift"]:
                 devsim.edge_from_node_model(device="diode", region=region, node_model="Potential")
             
@@ -229,10 +252,22 @@ for L_fp in L_fp_values:
                 current = 0
             
             try:
-                E_field = devsim.get_edge_model_values(device="diode", region="ndrift", 
-                                                      name="ElectricField")
+                # Debug: Check models and values for BOTH regions
+                for region in ["pplus", "ndrift"]:
+                    node_potential = devsim.get_node_model_values(device="diode", region=region, name="Potential")
+                    if node_potential:
+                        print(f"[DEBUG] {region} Node Potential: min={min(node_potential):.4f}, max={max(node_potential):.4f}")
+                
+                # Check contact voltages
+                anode_bias = devsim.get_parameter(device="diode", name=GetContactBiasName("anode"))
+                cathode_bias = devsim.get_parameter(device="diode", name=GetContactBiasName("cathode"))
+                print(f"[DEBUG] Contact biases: anode={anode_bias:.2f}V, cathode={cathode_bias:.2f}V")
+                
+                # Get E-field from ndrift
+                E_field = devsim.get_edge_model_values(device="diode", region="ndrift", name="ElectricField")
                 max_E = max(abs(x) for x in E_field) if E_field else 0
-            except:
+            except Exception as e:
+                print(f"[DEBUG] Error: {e}")
                 max_E = 0
             
             results.append({"V": target_v, "I": current, "E": max_E})
