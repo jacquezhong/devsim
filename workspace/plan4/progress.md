@@ -564,8 +564,52 @@ logging.basicConfig(filename='simulation.log', level=logging.INFO)
 
 ---
 
+## 问题 #7: 场板contact与region关联失败（核心问题）
+
+**发现时间**: 2026-02-17 - 2026-02-18  
+**严重程度**: 🔴 严重  
+**状态**: ✅ 已解决（采用简化方案）
+
+**问题现象**:
+```
+Contact field_plate reference coordinate X not on region ndrift
+Contact field_plate does not reference any nodes on region ndrift
+```
+
+**根本原因**:
+Gmsh中定义的Physical Curve("field_plate")虽然几何上位于N区表面，但其节点与N区Surface的节点不共享，导致DEVSIM无法建立contact与region的关联。
+
+**尝试的解决方案**:
+
+### 方案A：修正Gmsh几何（部分成功但未完全解决）
+1. ✅ 修复Curve Loop重叠问题
+2. ✅ 使用Embed将contact线嵌入N区表面
+3. ✅ 生成9个field_plate line elements
+4. ❌ DEVSIM仍然报错contact不在region上
+
+### 方案B：简化方案（当前采用）✅
+- **设计**: 删除field_plate contact，只用anode和cathode
+- **场板控制**: 通过`node_model`直接设置电势（参考cap2d.py）
+- **网格**: pplus + ndrift + fieldplate_metal（3区域）
+- **Contact**: anode + cathode（2个contact）
+- **状态**: ✅ 仿真正常运行，正在收敛
+- **进程**: PID 79886，已运行2分33秒
+- **收敛性**: RelError从0.34降至0.017（持续下降）
+
+**限制说明**:
+- 场板电势是强制设定，缺少自然电荷耦合
+- 场板边缘电场可能不够物理
+- 但对于研究场板长度效应足够可靠
+
+**下一步**:
+- 继续尝试修复完整方案（带field_plate contact）
+- 或完成简化方案的仿真并分析结果
+
+---
+
 ## 更新历史
 
 **2026-02-17**: 创建进度追踪文档，记录问题#1和问题#2  
 **2026-02-17**: 完成正确的网格生成（5个不同的网格文件）  
 **2026-02-17**: L=2.0 μm初始解收敛成功  
+**2026-02-18**: 发现并解决场板contact关联问题（采用简化方案），仿真运行中  
