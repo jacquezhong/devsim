@@ -59,10 +59,10 @@ def create_field_plate_mesh(device_name, L_fp, L_device=50.0, H_n=20.0, H_pplus=
     devsim.add_2d_region(mesh=device_name, material="Si", region="ndrift",
                          xl=L_pplus*scale, xh=L_device*scale, yl=0.0, yh=H_n*scale)
     
-    # 场板金属区
+    # 场板金属区 - 稍微扩大边界确保contact在内部
     devsim.add_2d_region(mesh=device_name, material="metal", region="fieldplate",
                          xl=0.0, xh=(L_pplus+L_fp)*scale, 
-                         yl=(H_n+t_ox)*scale, yh=(H_n+t_ox+t_fp)*scale)
+                         yl=(H_n+t_ox)*scale - 1e-9, yh=(H_n+t_ox+t_fp)*scale)
     
     # Air区域（用于定义边界contact）
     devsim.add_2d_region(mesh=device_name, material="metal", region="air_left",
@@ -80,9 +80,10 @@ def create_field_plate_mesh(device_name, L_fp, L_device=50.0, H_n=20.0, H_pplus=
                           xl=L_device*scale, xh=L_device*scale, 
                           yl=0.0, yh=H_n*scale, bloat=1e-10)
     
-    # Field Plate: fieldplate底边 (y=H_n+t_ox) - 使用小范围避免零高度
+    # Field Plate: fieldplate底边 (y=H_n+t_ox) - 确保完全在region内部
+    fp_y = (H_n + t_ox) * scale
     devsim.add_2d_contact(mesh=device_name, name="field_plate", material="metal", region="fieldplate",
-                          yl=(H_n+t_ox)*scale - 1e-10, yh=(H_n+t_ox)*scale + 1e-10, 
+                          yl=fp_y, yh=fp_y + 1e-10, 
                           xl=0.0, xh=(L_pplus+L_fp)*scale, bloat=1e-10)
     
     devsim.finalize_mesh(mesh=device_name)
