@@ -64,8 +64,9 @@ def create_field_plate_mesh(device_name, L_fp, L_device=50.0, H_n=20.0, H_pplus=
                          xl=0.0, xh=L_pplus*scale, yl=0.0, yh=H_pplus*scale)
     
     # N区：右侧大矩形（从P+区右边界开始）
+    # 稍微扩大xh以确保cathode contact在region内
     devsim.add_2d_region(mesh=device_name, material="Si", region="ndrift",
-                         xl=L_pplus*scale, xh=L_device*scale, yl=0.0, yh=H_n*scale)
+                         xl=L_pplus*scale, xh=L_device*scale + 1e-9, yl=0.0, yh=H_n*scale)
     
     # 注意：P+区和N区在x=L_pplus处相接，不重叠
     
@@ -77,16 +78,16 @@ def create_field_plate_mesh(device_name, L_fp, L_device=50.0, H_n=20.0, H_pplus=
     # 定义Contact
     # Anode: P+区底部（y=0）
     devsim.add_2d_contact(mesh=device_name, name="anode", material="metal", region="pplus",
-                          yl=0.0, yh=0.0, xl=0.0, xh=L_pplus*scale, bloat=1e-10)
+                          yl=0.0, yh=0.0, xl=0.0, xh=L_pplus*scale, bloat=1e-8)
     
-    # Cathode: N区右侧（x=L_device）
+    # Cathode: N区右侧（x=L_device）- 使用bloat确保contact在region内
     devsim.add_2d_contact(mesh=device_name, name="cathode", material="metal", region="ndrift",
-                          xl=L_device*scale, xh=L_device*scale, yl=0.0, yh=H_n*scale, bloat=1e-10)
+                          xl=L_device*scale, xh=L_device*scale, yl=0.0, yh=H_n*scale, bloat=1e-8)
     
     # Field Plate: 场板金属底部（y=H_n+t_ox）
     devsim.add_2d_contact(mesh=device_name, name="field_plate", material="metal", region="fieldplate",
                           yl=(H_n+t_ox)*scale, yh=(H_n+t_ox)*scale, 
-                          xl=0.0, xh=(L_pplus+L_fp)*scale, bloat=1e-10)
+                          xl=0.0, xh=(L_pplus+L_fp)*scale, bloat=1e-8)
     
     devsim.finalize_mesh(mesh=device_name)
     devsim.create_device(mesh=device_name, device=device_name)
