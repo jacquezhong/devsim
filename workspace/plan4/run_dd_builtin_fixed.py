@@ -28,68 +28,62 @@ def create_field_plate_mesh(device_name, L_fp, L_device=50.0, H_n=20.0, H_pplus=
                             L_pplus=5.0, t_ox=0.2, t_fp=0.5):
     """
     使用DEVSIM内置2D网格创建场板二极管
-    简化几何：矩形场板覆盖部分N区表面
+    使用air区域技巧确保contact正确创建
     """
     scale = 1e-4  # μm to cm
     
     # 创建网格
     devsim.create_2d_mesh(mesh=device_name)
     
-    # Y方向网格线（从下到上）
+    # X方向网格线 - 包含边界air区域
+    devsim.add_2d_mesh_line(mesh=device_name, dir="x", pos=-1e-8, ps=1e-8)  # 左边界air
+    devsim.add_2d_mesh_line(mesh=device_name, dir="x", pos=0.0, ps=0.5*scale)
+    devsim.add_2d_mesh_line(mesh=device_name, dir="x", pos=L_pplus*scale, ps=0.05*scale)
+    devsim.add_2d_mesh_line(mesh=device_name, dir="x", pos=(L_pplus+L_fp)*scale, ps=0.1*scale)
+    devsim.add_2d_mesh_line(mesh=device_name, dir="x", pos=L_device*scale, ps=0.5*scale)
+    devsim.add_2d_mesh_line(mesh=device_name, dir="x", pos=L_device*scale+1e-8, ps=1e-8)  # 右边界air
+    
+    # Y方向网格线
     devsim.add_2d_mesh_line(mesh=device_name, dir="y", pos=0.0, ps=0.5*scale)  # 底部
     devsim.add_2d_mesh_line(mesh=device_name, dir="y", pos=H_pplus*scale, ps=0.05*scale)  # P+区顶部
-    devsim.add_2d_mesh_line(mesh=device_name, dir="y", pos=H_n*scale, ps=0.1*scale)  # N区顶部/氧化层底部
-    devsim.add_2d_mesh_line(mesh=device_name, dir="y", pos=(H_n+t_ox)*scale, ps=0.05*scale)  # 氧化层顶部/场板底部
+    devsim.add_2d_mesh_line(mesh=device_name, dir="y", pos=H_n*scale, ps=0.1*scale)  # N区顶部
+    devsim.add_2d_mesh_line(mesh=device_name, dir="y", pos=(H_n+t_ox)*scale, ps=0.05*scale)  # 氧化层
     devsim.add_2d_mesh_line(mesh=device_name, dir="y", pos=(H_n+t_ox+t_fp)*scale, ps=0.2*scale)  # 场板顶部
     
-    # X方向网格线（从左到右）
-    devsim.add_2d_mesh_line(mesh=device_name, dir="x", pos=0.0, ps=0.5*scale)  # 左边界
-    devsim.add_2d_mesh_line(mesh=device_name, dir="x", pos=L_pplus*scale, ps=0.05*scale)  # P+区右边界
-    devsim.add_2d_mesh_line(mesh=device_name, dir="x", pos=(L_pplus+L_fp)*scale, ps=0.1*scale)  # 场板右边界
-    devsim.add_2d_mesh_line(mesh=device_name, dir="x", pos=L_device*scale, ps=0.5*scale)  # 右边界
-    
-    # 定义区域（注意：区域不能重叠！）
-    # 几何布局（俯视图）：
-    # y=H_n+t_ox+t_fp: [场板金属区 (fieldplate)]
-    # y=H_n+t_ox:      [氧化层界面]
-    # y=H_n:           [N区顶部]
-    # y=H_pplus:       [P+区顶部 = N区的一部分]
-    # y=0:             [底部contact]
-    # 
-    # x方向: 0 ---- L_pplus ---- L_device
-    #        [ P+区 ] [    N区    ]
-    
-    # P+区：左侧小矩形
+    # 定义主区域
+    # P+区
     devsim.add_2d_region(mesh=device_name, material="Si", region="pplus",
                          xl=0.0, xh=L_pplus*scale, yl=0.0, yh=H_pplus*scale)
     
-    # N区：右侧大矩形（从P+区右边界开始）
-    # 稍微扩大xh以确保cathode contact在region内
+    # N区
     devsim.add_2d_region(mesh=device_name, material="Si", region="ndrift",
-                         xl=L_pplus*scale, xh=L_device*scale + 1e-9, yl=0.0, yh=H_n*scale)
+                         xl=L_pplus*scale, xh=L_device*scale, yl=0.0, yh=H_n*scale)
     
-    # 注意：P+区和N区在x=L_pplus处相接，不重叠
-    
-    # 场板金属区（在N区上方）
+    # 场板金属区
     devsim.add_2d_region(mesh=device_name, material="metal", region="fieldplate",
                          xl=0.0, xh=(L_pplus+L_fp)*scale, 
                          yl=(H_n+t_ox)*scale, yh=(H_n+t_ox+t_fp)*scale)
     
+    # Air区域（用于定义边界contact）
+    devsim.add_2d_region(mesh=device_name, material="metal", region="air_left",
+                         xl=-1e-8, xh=0.0, yl=0.0, yh=H_n*scale)
+    devsim.add_2d_region(mesh=device_name, material="metal", region="air_right",
+                         xl=L_device*scale, xh=L_device*scale+1e-8, yl=0.0, yh=H_n*scale)
+    
     # 定义Contact
-    # Anode: P+区底部（y=0）
+    # Anode: pplus底边 (y=0)
     devsim.add_2d_contact(mesh=device_name, name="anode", material="metal", region="pplus",
-                          yl=0.0, yh=0.0, xl=0.0, xh=L_pplus*scale, bloat=1e-8)
+                          yl=0.0, yh=0.0, xl=0.0, xh=L_pplus*scale, bloat=1e-10)
     
-    # Cathode: N区右侧（x=L_device）
-    # 注意：使用xl=xh定义垂直线，bloat会自动扩展
+    # Cathode: ndrift右边 (x=L_device)
     devsim.add_2d_contact(mesh=device_name, name="cathode", material="metal", region="ndrift",
-                          xl=L_device*scale - 1e-10, xh=L_device*scale + 1e-9, 
-                          yl=0.0, yh=H_n*scale, bloat=1e-8)
+                          xl=L_device*scale, xh=L_device*scale, 
+                          yl=0.0, yh=H_n*scale, bloat=1e-10)
     
-    # Field Plate: 场板金属底部（y=H_n+t_ox）
+    # Field Plate: fieldplate底边 (y=H_n+t_ox)
     devsim.add_2d_contact(mesh=device_name, name="field_plate", material="metal", region="fieldplate",
-                          yl=(H_n+t_ox)*scale - 1e-10, yh=(H_n+t_ox)*scale + 1e-9, 
-                          xl=0.0, xh=(L_pplus+L_fp)*scale, bloat=1e-8)
+                          yl=(H_n+t_ox)*scale, yh=(H_n+t_ox)*scale, 
+                          xl=0.0, xh=(L_pplus+L_fp)*scale, bloat=1e-10)
     
     devsim.finalize_mesh(mesh=device_name)
     devsim.create_device(mesh=device_name, device=device_name)
