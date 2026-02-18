@@ -80,9 +80,9 @@ def create_field_plate_mesh(device_name, L_fp, L_device=50.0, H_n=20.0, H_pplus=
                           xl=L_device*scale, xh=L_device*scale, 
                           yl=0.0, yh=H_n*scale, bloat=1e-10)
     
-    # Field Plate: fieldplate底边 (y=H_n+t_ox)
+    # Field Plate: fieldplate底边 (y=H_n+t_ox) - 使用小范围避免零高度
     devsim.add_2d_contact(mesh=device_name, name="field_plate", material="metal", region="fieldplate",
-                          yl=(H_n+t_ox)*scale, yh=(H_n+t_ox)*scale, 
+                          yl=(H_n+t_ox)*scale - 1e-10, yh=(H_n+t_ox)*scale + 1e-10, 
                           xl=0.0, xh=(L_pplus+L_fp)*scale, bloat=1e-10)
     
     devsim.finalize_mesh(mesh=device_name)
