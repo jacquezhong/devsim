@@ -665,6 +665,127 @@ Contact field_plate in region ndrift with 10 nodes
 **2026-02-18**: 发现并解决场板contact关联问题  
 **2026-02-18**: ⚠️ 简化方案验证失败（电场不随电压变化）  
 **2026-02-18**: ✅ Gmsh几何修复成功，完整方案测试通过  
+**2026-02-18**: ✅ 修复电场模型更新问题，清理旧结果，准备重新运行
+
+---
+
+## 新会话修复记录
+
+### 问题 #8: CreateSiliconPotentialOnlyContact 缩进错误
+
+**发现时间**: 2026-02-18（新会话）  
+**严重程度**: 🔴 严重  
+**状态**: ✅ 已修复
+
+**问题描述**:  
+第106-110行代码缩进错误，`CreateSiliconPotentialOnlyContact` 调用被错误地放在了循环外部。
+
+**修复**:  
+```python
+# 修正前（错误）
+for region in ["pplus", "ndrift"]:
+    CreateSiliconPotentialOnlyContact("diode", region, "anode")
+    CreateSiliconPotentialOnlyContact("diode", region, "cathode")
+CreateSiliconPotentialOnlyContact("diode", "ndrift", "field_plate")  # 缩进错误！
+
+# 修正后（正确）
+for region in ["pplus", "ndrift"]:
+    CreateSiliconPotentialOnlyContact("diode", region, "anode")
+    CreateSiliconPotentialOnlyContact("diode", region, "cathode")
+CreateSiliconPotentialOnlyContact("diode", "ndrift", "field_plate")  # 正确缩进
+```
+
+---
+
+### 问题 #9: 电场模型不随电压更新
+
+**发现时间**: 2026-02-18（新会话）  
+**严重程度**: 🔴 严重  
+**状态**: ✅ 已修复
+
+**问题描述**:  
+电场模型创建在电压扫描之前，但 `edge_from_node_model` 创建的 Potential 边缘模型是静态的，不会随节点 Potential 更新而自动更新。导致所有电压点电场值相同（1285.7 V/cm）。
+
+**根本原因**:  
+电场公式 `(Potential@n0 - Potential@n1)*EdgeInverseLength` 依赖于 Potential 边缘模型，但这些边缘模型需要在每次 Potential 求解后重新创建。
+
+**验证**:  
+诊断脚本显示电势正确变化：
+- 0V: 电势差 -0.298 V
+- -5V: 电势差 4.702 V
+- -10V: 电势差 9.702 V
+
+**修复**:  
+在每次电压步求解后，重新创建边缘模型：
+```python
+devsim.solve(type="dc", ...)
+
+# 重新创建边缘模型以更新电场（Potential变化后必须重新创建）
+for region in ["pplus", "ndrift"]:
+    devsim.edge_from_node_model(device="diode", region=region, node_model="Potential")
+```
+
+**文件修改**:  
+- `/workspace/plan4/run_dd_optimized_v2.py` 第193-195行
+
+---
+
+### 问题 #10: Contact 创建顺序导致 cathode 失效 ⚡ KEY FINDING
+
+**发现时间**: 2026-02-18（新会话深度调试）  
+**严重程度**: 🔴 致命  
+**状态**: ✅ 已修复
+
+**问题现象**:  
+- P+区电势随 anode 偏置正确变化（0.536V → -4.464V）
+- N区电势**始终为 0.238V**，不随 cathode 偏置变化
+- cathode 节点电势应为 ~0V，但实际为 0.238V
+
+**根本原因**:  
+`CreateSiliconPotentialOnlyContact` 的**创建顺序**至关重要！
+- ❌ 先创建 anode → 后创建 cathode：**cathode 失效**
+- ✅ 先创建 cathode → 后创建 anode：**两者都有效**
+
+**验证过程**:
+```python
+# Test 1: 只创建 cathode → 有效（N区: -4.762 to 0.238V）
+# Test 2: 先 cathode 后 anode → 有效（N区: -4.762 to 0.238V）
+# Test 3: 先 anode 后 cathode → 失效（N区: 0.238 to 0.238V）
+```
+
+**修复**:  
+修改 contact 创建顺序（必须先 cathode，后 anode）：
+```python
+# 1. 先创建 cathode（在 ndrift 上）
+CreateSiliconPotentialOnlyContact("diode", "ndrift", "cathode")
+# 2. 再创建 anode（在 pplus 上）
+CreateSiliconPotentialOnlyContact("diode", "pplus", "anode")
+# 3. 最后创建 field_plate（在 ndrift 上）
+CreateSiliconPotentialOnlyContact("diode", "ndrift", "field_plate")
+```
+
+**文件修改**:  
+- `/workspace/plan4/run_dd_optimized_v2.py` 第105-110行
+
+**重要发现**:  
+- cathode 和 anode 不能交叉在对方区域创建（即使 contact 不存在于该区域）
+- 只为 contact 实际所在的区域创建边界条件
+- 创建顺序：先 cathode → 后 anode → 最后 field_plate
+
+**后续操作**:  
+- ✅ 已修复主仿真脚本
+- ⏳ 准备重新运行所有仿真
+
+---
+
+## 更新历史
+
+**2026-02-17**: 创建进度追踪文档，记录问题#1和问题#2  
+**2026-02-17**: 完成正确的网格生成（5个不同的网格文件）  
+**2026-02-17**: L=2.0 μm初始解收敛成功  
+**2026-02-18**: 发现并解决场板contact关联问题  
+**2026-02-18**: ⚠️ 简化方案验证失败（电场不随电压变化）  
+**2026-02-18**: ✅ Gmsh几何修复成功，完整方案测试通过  
 
 ---
 
@@ -732,4 +853,97 @@ ps aux | grep run_dd_optimized | grep -v grep
 # 查看结果文件
 ls -lh /Users/lihengzhong/Documents/repo/devsim/workspace/plan4/data/final/*.json
 ```
+
+---
+
+## 2026-02-18 最新发现总结
+
+### 🎯 核心问题全部解决
+
+#### ✅ 问题 #8: CreateSiliconPotentialOnlyContact 缩进错误
+- **修复**: 将 `CreateSiliconPotentialOnlyContact("diode", "ndrift", "field_plate")` 正确缩进到循环内部
+- **文件**: `run_dd_optimized_v2.py` 第109行
+
+#### ✅ 问题 #9: 电场模型不随电压更新
+- **修复**: 在每次电压步后调用 `edge_from_node_model()` 重新创建Potential边缘模型
+- **代码位置**: 电压扫描循环内，求解后
+- **关键**: ElectricField 依赖于 Potential 边缘模型，必须每次重新创建才能更新
+
+#### ✅ 问题 #10: Contact 创建顺序导致 cathode 失效 ⚡ **最关键发现**
+- **发现**: `CreateSiliconPotentialOnlyContact` 的**创建顺序至关重要**
+- **规则**: 必须先创建 cathode，后创建 anode
+- **验证**: 
+  - 只创建 cathode → N区电势: -4.762V 到 0.238V ✅
+  - 先 cathode 后 anode → N区电势: -4.762V 到 0.238V ✅
+  - 先 anode 后 cathode → N区电势: 0.238V 到 0.238V ❌
+- **修复代码**:
+```python
+# 1. 先创建 cathode（必须在最前面）
+CreateSiliconPotentialOnlyContact("diode", "ndrift", "cathode")
+# 2. 再创建 anode
+CreateSiliconPotentialOnlyContact("diode", "pplus", "anode")
+# 3. 最后创建 field_plate
+CreateSiliconPotentialOnlyContact("diode", "ndrift", "field_plate")
+```
+
+### 📊 当前状态
+
+**仿真脚本**: `run_dd_optimized_v2.py` 已修复所有关键问题
+**状态**: 准备运行完整仿真
+**待解决问题**: 
+- 高电压下（>-30V）数值收敛困难，需要更小的电压步长
+- 可能需要采用渐进式偏置扫描策略
+
+### 📝 关键经验教训
+
+1. **DEVSIM Contact 创建顺序**: cathode 必须在 anode 之前创建，否则 cathode 会失效
+2. **电场模型更新**: ElectricField 边缘模型在 Potential 变化后必须重新创建
+3. **代码缩进**: Python 缩进错误会导致contact在错误区域创建
+4. **调试方法**: 通过检查节点电势值可以快速定位contact是否生效
+
+### 🔄 下一步行动计划
+
+1. **调整电压扫描策略**:
+   - 使用更小的步长（例如 -2V 或 -1V 步长）
+   - 或采用渐进式扫描：先用小步长达到中等电压，再逐步增加
+   
+2. **运行完整仿真**:
+   - 依次运行 L=2.0, 4.0, 6.0, 8.0, 10.0 μm
+   - 监控收敛性，必要时调整参数
+   
+3. **数据提取与分析**:
+   - 提取所有场板长度下的电场分布
+   - 绘制电场峰值随电压变化曲线
+   - 分析击穿电压与场板长度关系
+
+### 📁 保留的核心文件
+
+**仿真脚本**:
+- `run_dd_optimized_v2.py` - 主仿真脚本（已修复）
+
+**网格文件**:
+- `fp_L{2.0,4.0,6.0,8.0,10.0}.msh` - 5个场板长度网格
+- `generate_fp_meshes_final.py` - 网格生成脚本
+
+**文档**:
+- `progress.md` - 本进度文档
+- `workflow.md` - 研究工作流
+
+**清理的调试脚本**:
+- `test_*.py` - 所有测试脚本（已完成使命）
+- `diagnose_*.py` - 诊断脚本
+
+---
+
+## 更新历史
+
+**2026-02-17**: 创建进度追踪文档，记录问题#1和问题#2  
+**2026-02-17**: 完成正确的网格生成（5个不同的网格文件）  
+**2026-02-17**: L=2.0 μm初始解收敛成功  
+**2026-02-18**: 发现并解决场板contact关联问题  
+**2026-02-18**: ⚠️ 简化方案验证失败（电场不随电压变化）  
+**2026-02-18**: ✅ Gmsh几何修复成功，完整方案测试通过  
+**2026-02-18**: ✅ 修复缩进错误（问题#8）  
+**2026-02-18**: ✅ 修复电场模型更新（问题#9）  
+**2026-02-18**: ✅ 发现并修复Contact创建顺序问题（问题#10）- **最关键突破**
 

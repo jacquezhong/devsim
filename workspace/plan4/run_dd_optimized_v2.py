@@ -102,12 +102,13 @@ for L_fp in L_fp_values:
     devsim.set_parameter(device="diode", name=GetContactBiasName("cathode"), value=0.0)
     devsim.set_parameter(device="diode", name=GetContactBiasName("field_plate"), value=0.0)
     
-    # 为所有接触创建边界条件
-    for region in ["pplus", "ndrift"]:
-        CreateSiliconPotentialOnlyContact("diode", region, "anode")
-        CreateSiliconPotentialOnlyContact("diode", region, "cathode")
-    # 注意：field_plate contact在N区表面，由simple_physics自动处理
-    # CreateSiliconPotentialOnlyContact会遍历所有接触，包括field_plate
+    # 为所有接触创建边界条件（注意：必须先创建cathode，再创建anode，否则cathode会失效）
+    # 1. 先创建cathode（在ndrift上）
+    CreateSiliconPotentialOnlyContact("diode", "ndrift", "cathode")
+    # 2. 再创建anode（在pplus上）
+    CreateSiliconPotentialOnlyContact("diode", "pplus", "anode")
+    # 3. 最后创建field_plate（在ndrift上）
+    CreateSiliconPotentialOnlyContact("diode", "ndrift", "field_plate")
     
     devsim.solve(type="dc", absolute_error=1.0, relative_error=1e-10, maximum_iterations=100)
     print("   ✓ 势求解收敛")
@@ -180,12 +181,17 @@ for L_fp in L_fp_values:
             
             try:
                 print(f"      尝试 V={next_v}V (步长{step}V)...", end=' ')
-                # 同时设置阳极和场板偏置（场板连接到阳极）
+                # 同时设置阳极、阴极和场板偏置（阴极保持0V，场板连接到阳极）
                 devsim.set_parameter(device="diode", name=GetContactBiasName("anode"), value=next_v)
+                devsim.set_parameter(device="diode", name=GetContactBiasName("cathode"), value=0.0)
                 devsim.set_parameter(device="diode", name=GetContactBiasName("field_plate"), value=next_v)
                 
                 # 使用中等容差快速求解
                 devsim.solve(type="dc", absolute_error=1e13, relative_error=1e-5, maximum_iterations=100)
+                
+                # 重新创建边缘模型以更新电场（Potential变化后必须重新创建）
+                for region in ["pplus", "ndrift"]:
+                    devsim.edge_from_node_model(device="diode", region=region, node_model="Potential")
                 
                 current_v = next_v
                 print("✓")
