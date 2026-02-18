@@ -49,20 +49,25 @@ def create_field_plate_mesh(device_name, L_fp, L_device=50.0, H_n=20.0, H_pplus=
     devsim.add_2d_mesh_line(mesh=device_name, dir="x", pos=L_device*scale, ps=0.5*scale)  # 右边界
     
     # 定义区域（注意：区域不能重叠！）
-    # P+区（左下角）
+    # 几何布局（俯视图）：
+    # y=H_n+t_ox+t_fp: [场板金属区 (fieldplate)]
+    # y=H_n+t_ox:      [氧化层界面]
+    # y=H_n:           [N区顶部]
+    # y=H_pplus:       [P+区顶部 = N区的一部分]
+    # y=0:             [底部contact]
+    # 
+    # x方向: 0 ---- L_pplus ---- L_device
+    #        [ P+区 ] [    N区    ]
+    
+    # P+区：左侧小矩形
     devsim.add_2d_region(mesh=device_name, material="Si", region="pplus",
                          xl=0.0, xh=L_pplus*scale, yl=0.0, yh=H_pplus*scale)
     
-    # N区（整个底部，包括P+区右侧和下方）
-    # N区分为两部分以避免与P+区重叠
-    # 部分1：P+区右侧，从y=0到y=H_n
+    # N区：右侧大矩形（从P+区右边界开始）
     devsim.add_2d_region(mesh=device_name, material="Si", region="ndrift",
                          xl=L_pplus*scale, xh=L_device*scale, yl=0.0, yh=H_n*scale)
-    # 部分2：P+区下方（如果有的话），这里P+区从y=0开始，所以这部分是P+区右侧的延伸
-    # 实际上P+区和N区在x方向相邻，不是在y方向堆叠
-    # 重新定义：P+区是左侧小矩形，N区是右侧大矩形
-    devsim.add_2d_region(mesh=device_name, material="Si", region="ndrift",
-                         xl=0.0, xh=L_device*scale, yl=H_pplus*scale, yh=H_n*scale)
+    
+    # 注意：P+区和N区在x=L_pplus处相接，不重叠
     
     # 场板金属区（在N区上方）
     devsim.add_2d_region(mesh=device_name, material="metal", region="fieldplate",
