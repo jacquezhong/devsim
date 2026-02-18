@@ -147,13 +147,14 @@ for L_fp in L_fp_values:
     # 设置接触偏置
     devsim.set_parameter(device="diode", name=GetContactBiasName("anode"), value=0.0)
     devsim.set_parameter(device="diode", name=GetContactBiasName("cathode"), value=0.0)
-    devsim.set_parameter(device="diode", name=GetContactBiasName("field_plate"), value=0.0)
+    # devsim.set_parameter(device="diode", name=GetContactBiasName("field_plate"), value=0.0)
     
-    # **修正1：Contact顺序 - 先cathode，后anode，最后field_plate**
-    print("   创建Contact边界条件（顺序：cathode → anode → field_plate）...")
+    # **修正1：Contact顺序 - 先cathode，后anode**
+    # 暂时跳过field_plate，先测试基本功能
+    print("   创建Contact边界条件（顺序：cathode → anode）...")
     CreateSiliconPotentialOnlyContact("diode", "ndrift", "cathode")  # 1. 先cathode
     CreateSiliconPotentialOnlyContact("diode", "pplus", "anode")     # 2. 后anode
-    CreateSiliconPotentialOnlyContact("diode", "fieldplate", "field_plate")  # 3. field_plate在金属区
+    # CreateSiliconPotentialOnlyContact("diode", "fieldplate", "field_plate")  # 3. field_plate暂时禁用
     
     devsim.solve(type="dc", absolute_error=1.0, relative_error=1e-10, maximum_iterations=100)
     print("   ✓ 势求解收敛")
