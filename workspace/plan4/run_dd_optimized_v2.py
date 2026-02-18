@@ -182,7 +182,7 @@ for L_fp in L_fp_values:
                 print(f"      尝试 V={next_v}V (步长{step}V)...", end=' ')
                 # 同时设置阳极和场板偏置（场板连接到阳极）
                 devsim.set_parameter(device="diode", name=GetContactBiasName("anode"), value=next_v)
-                devsim.set_parameter(device="diode", name="GetContactBiasName("field_plate")", value=next_v)
+                devsim.set_parameter(device="diode", name=GetContactBiasName("field_plate"), value=next_v)
                 
                 # 使用中等容差快速求解
                 devsim.solve(type="dc", absolute_error=1e13, relative_error=1e-5, maximum_iterations=100)
