@@ -80,13 +80,15 @@ def create_field_plate_mesh(device_name, L_fp, L_device=50.0, H_n=20.0, H_pplus=
     devsim.add_2d_contact(mesh=device_name, name="anode", material="metal", region="pplus",
                           yl=0.0, yh=0.0, xl=0.0, xh=L_pplus*scale, bloat=1e-8)
     
-    # Cathode: N区右侧（x=L_device）- 使用bloat确保contact在region内
+    # Cathode: N区右侧（x=L_device）
+    # 注意：使用xl=xh定义垂直线，bloat会自动扩展
     devsim.add_2d_contact(mesh=device_name, name="cathode", material="metal", region="ndrift",
-                          xl=L_device*scale, xh=L_device*scale, yl=0.0, yh=H_n*scale, bloat=1e-8)
+                          xl=L_device*scale - 1e-10, xh=L_device*scale + 1e-9, 
+                          yl=0.0, yh=H_n*scale, bloat=1e-8)
     
     # Field Plate: 场板金属底部（y=H_n+t_ox）
     devsim.add_2d_contact(mesh=device_name, name="field_plate", material="metal", region="fieldplate",
-                          yl=(H_n+t_ox)*scale, yh=(H_n+t_ox)*scale, 
+                          yl=(H_n+t_ox)*scale - 1e-10, yh=(H_n+t_ox)*scale + 1e-9, 
                           xl=0.0, xh=(L_pplus+L_fp)*scale, bloat=1e-8)
     
     devsim.finalize_mesh(mesh=device_name)
