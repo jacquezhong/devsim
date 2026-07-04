@@ -11,3 +11,5 @@ testing/*.msh
 
 # Ignore generated directories
 linux*/
+
+.opencode

@@ -235,9 +235,18 @@ for L_fp in L_fp_values:
             devsim.solve(type="dc", absolute_error=1e12, relative_error=1e-5, maximum_iterations=100)
             
             # **修正2：每次求解后更新电场模型**
-            # 只需更新Potential@n0/n1，ElectricField会自动使用新值
+            # 必须先更新Potential@n0/n1，然后重新创建ElectricField（强制重新计算）
             for region in ["pplus", "ndrift"]:
                 devsim.edge_from_node_model(device="diode", region=region, node_model="Potential")
+                # 删除旧的ElectricField模型，强制重新创建以更新值
+                try:
+                    devsim.delete_edge_model(device="diode", region=region, name="ElectricField")
+                except:
+                    pass
+                devsim.edge_model(
+                    device="diode", region=region, name="ElectricField",
+                    equation="(Potential@n0 - Potential@n1)*EdgeInverseLength",
+                )
             
             current_v = target_v
             
