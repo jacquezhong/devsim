@@ -1,0 +1,1342 @@
+Searching DEVSIM_MATH_LIBS="libopenblas.dylib:liblapack.dylib:libblas.dylib"
+Loading "libopenblas.dylib": MISSING DLL
+Loading "liblapack.dylib": ALL BLAS/LAPACK LOADED
+Skipping libblas.dylib
+loading UMFPACK 5.1 as direct solver
+p_i
+i_n
+bot
+ (region: SiRegion)
+ (contact: top)
+ (contact: bot)
+number of equations 1695
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.00000e+00	AbsError: 1.63902e-01
+    Region: "SiRegion"	RelError: 1.00000e+00	AbsError: 1.63902e-01
+      Equation: "PotentialEquation"	RelError: 1.00000e+00	AbsError: 1.63902e-01
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 4.97944e-01	AbsError: 1.62430e-01
+    Region: "SiRegion"	RelError: 4.97944e-01	AbsError: 1.62430e-01
+      Equation: "PotentialEquation"	RelError: 4.97944e-01	AbsError: 1.62430e-01
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 2.39824e+01	AbsError: 1.03408e-01
+    Region: "SiRegion"	RelError: 2.39824e+01	AbsError: 1.03408e-01
+      Equation: "PotentialEquation"	RelError: 2.39824e+01	AbsError: 1.03408e-01
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 1.53991e+01	AbsError: 5.73651e-02
+    Region: "SiRegion"	RelError: 1.53991e+01	AbsError: 5.73651e-02
+      Equation: "PotentialEquation"	RelError: 1.53991e+01	AbsError: 5.73651e-02
+Iteration: 4
+  Device: "BenchmarkDiode"	RelError: 5.98642e+00	AbsError: 5.01960e-02
+    Region: "SiRegion"	RelError: 5.98642e+00	AbsError: 5.01960e-02
+      Equation: "PotentialEquation"	RelError: 5.98642e+00	AbsError: 5.01960e-02
+Iteration: 5
+  Device: "BenchmarkDiode"	RelError: 2.30820e+00	AbsError: 4.17220e-02
+    Region: "SiRegion"	RelError: 2.30820e+00	AbsError: 4.17220e-02
+      Equation: "PotentialEquation"	RelError: 2.30820e+00	AbsError: 4.17220e-02
+Iteration: 6
+  Device: "BenchmarkDiode"	RelError: 1.27440e+00	AbsError: 3.16681e-02
+    Region: "SiRegion"	RelError: 1.27440e+00	AbsError: 3.16681e-02
+      Equation: "PotentialEquation"	RelError: 1.27440e+00	AbsError: 3.16681e-02
+Iteration: 7
+  Device: "BenchmarkDiode"	RelError: 3.45009e-01	AbsError: 2.38740e-02
+    Region: "SiRegion"	RelError: 3.45009e-01	AbsError: 2.38740e-02
+      Equation: "PotentialEquation"	RelError: 3.45009e-01	AbsError: 2.38740e-02
+Iteration: 8
+  Device: "BenchmarkDiode"	RelError: 2.46584e-02	AbsError: 1.02888e-02
+    Region: "SiRegion"	RelError: 2.46584e-02	AbsError: 1.02888e-02
+      Equation: "PotentialEquation"	RelError: 2.46584e-02	AbsError: 1.02888e-02
+Iteration: 9
+  Device: "BenchmarkDiode"	RelError: 1.38055e-05	AbsError: 5.76038e-06
+    Region: "SiRegion"	RelError: 1.38055e-05	AbsError: 5.76038e-06
+      Equation: "PotentialEquation"	RelError: 1.38055e-05	AbsError: 5.76038e-06
+Iteration: 10
+  Device: "BenchmarkDiode"	RelError: 1.83872e-10	AbsError: 7.67209e-11
+    Region: "SiRegion"	RelError: 1.83872e-10	AbsError: 7.67209e-11
+      Equation: "PotentialEquation"	RelError: 1.83872e-10	AbsError: 7.67209e-11
+Iteration: 11
+  Device: "BenchmarkDiode"	RelError: 4.22940e-15	AbsError: 3.95529e-17
+    Region: "SiRegion"	RelError: 4.22940e-15	AbsError: 3.95529e-17
+      Equation: "PotentialEquation"	RelError: 4.22940e-15	AbsError: 3.95529e-17
+Warning: Replacing equation with equation of the same name.
+Region: SiRegion, Equation: PotentialEquation, Variable: Potential
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.81124e-13	AbsError: 1.00800e+03
+    Region: "SiRegion"	RelError: 1.81124e-13	AbsError: 1.00800e+03
+      Equation: "ElectronContinuityEquation"	RelError: 1.00400e-14	AbsError: 4.96000e+02
+      Equation: "HoleContinuityEquation"	RelError: 7.70527e-15	AbsError: 5.12000e+02
+      Equation: "PotentialEquation"	RelError: 1.63379e-13	AbsError: 1.33092e-16
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 2.36675e-13	AbsError: 3.87972e+01
+    Region: "SiRegion"	RelError: 2.36675e-13	AbsError: 3.87972e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.12625e-15	AbsError: 2.11253e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.97243e-15	AbsError: 1.76718e+01
+      Equation: "PotentialEquation"	RelError: 2.31577e-13	AbsError: 4.16863e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 7.03528e+01	AbsError: 1.65527e+14
+    Region: "SiRegion"	RelError: 7.03528e+01	AbsError: 1.65527e+14
+      Equation: "ElectronContinuityEquation"	RelError: 6.56267e-01	AbsError: 8.23446e+13
+      Equation: "HoleContinuityEquation"	RelError: 6.56254e-01	AbsError: 8.31824e+13
+      Equation: "PotentialEquation"	RelError: 6.90402e+01	AbsError: 2.78470e-02
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 4.51430e+01	AbsError: 5.70563e+12
+    Region: "SiRegion"	RelError: 4.51430e+01	AbsError: 5.70563e+12
+      Equation: "ElectronContinuityEquation"	RelError: 4.46441e-01	AbsError: 2.89315e+12
+      Equation: "HoleContinuityEquation"	RelError: 5.29451e-01	AbsError: 2.81249e+12
+      Equation: "PotentialEquation"	RelError: 4.41671e+01	AbsError: 2.21530e-02
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 3.52282e-01	AbsError: 7.91824e+10
+    Region: "SiRegion"	RelError: 3.52282e-01	AbsError: 7.91824e+10
+      Equation: "ElectronContinuityEquation"	RelError: 2.28717e-01	AbsError: 1.64536e+10
+      Equation: "HoleContinuityEquation"	RelError: 9.46082e-02	AbsError: 6.27288e+10
+      Equation: "PotentialEquation"	RelError: 2.89571e-02	AbsError: 7.18102e-06
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 6.94390e-05	AbsError: 2.14898e+06
+    Region: "SiRegion"	RelError: 6.94390e-05	AbsError: 2.14898e+06
+      Equation: "ElectronContinuityEquation"	RelError: 4.74645e-05	AbsError: 3.42738e+05
+      Equation: "HoleContinuityEquation"	RelError: 2.16003e-05	AbsError: 1.80624e+06
+      Equation: "PotentialEquation"	RelError: 3.74170e-07	AbsError: 1.07455e-10
+Iteration: 4
+  Device: "BenchmarkDiode"	RelError: 2.57072e-13	AbsError: 6.19053e+01
+    Region: "SiRegion"	RelError: 2.57072e-13	AbsError: 6.19053e+01
+      Equation: "ElectronContinuityEquation"	RelError: 4.66947e-14	AbsError: 3.56983e+01
+      Equation: "HoleContinuityEquation"	RelError: 3.97689e-14	AbsError: 2.62070e+01
+      Equation: "PotentialEquation"	RelError: 1.70608e-13	AbsError: 6.97365e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.34666e+02	AbsError: 1.53996e+14
+    Region: "SiRegion"	RelError: 1.34666e+02	AbsError: 1.53996e+14
+      Equation: "ElectronContinuityEquation"	RelError: 6.58018e-01	AbsError: 7.65771e+13
+      Equation: "HoleContinuityEquation"	RelError: 6.58016e-01	AbsError: 7.74190e+13
+      Equation: "PotentialEquation"	RelError: 1.33350e+02	AbsError: 2.78470e-02
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 4.73148e+01	AbsError: 5.78900e+12
+    Region: "SiRegion"	RelError: 4.73148e+01	AbsError: 5.78900e+12
+      Equation: "ElectronContinuityEquation"	RelError: 4.47625e-01	AbsError: 2.94095e+12
+      Equation: "HoleContinuityEquation"	RelError: 5.31106e-01	AbsError: 2.84805e+12
+      Equation: "PotentialEquation"	RelError: 4.63361e+01	AbsError: 2.21530e-02
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 3.65806e-01	AbsError: 9.27329e+10
+    Region: "SiRegion"	RelError: 3.65806e-01	AbsError: 9.27329e+10
+      Equation: "ElectronContinuityEquation"	RelError: 2.29568e-01	AbsError: 2.13268e+10
+      Equation: "HoleContinuityEquation"	RelError: 9.46352e-02	AbsError: 7.14060e+10
+      Equation: "PotentialEquation"	RelError: 4.16027e-02	AbsError: 9.60942e-06
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 9.46245e-05	AbsError: 3.36612e+06
+    Region: "SiRegion"	RelError: 9.46245e-05	AbsError: 3.36612e+06
+      Equation: "ElectronContinuityEquation"	RelError: 6.40872e-05	AbsError: 5.90309e+05
+      Equation: "HoleContinuityEquation"	RelError: 2.98236e-05	AbsError: 2.77581e+06
+      Equation: "PotentialEquation"	RelError: 7.13629e-07	AbsError: 1.86414e-10
+Iteration: 4
+  Device: "BenchmarkDiode"	RelError: 2.10955e-13	AbsError: 7.06386e+01
+    Region: "SiRegion"	RelError: 2.10955e-13	AbsError: 7.06386e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.28581e-13	AbsError: 2.99949e+01
+      Equation: "HoleContinuityEquation"	RelError: 8.15061e-14	AbsError: 4.06437e+01
+      Equation: "PotentialEquation"	RelError: 8.68296e-16	AbsError: 5.10878e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.17149e+02	AbsError: 1.42290e+14
+    Region: "SiRegion"	RelError: 1.17149e+02	AbsError: 1.42290e+14
+      Equation: "ElectronContinuityEquation"	RelError: 6.58577e-01	AbsError: 7.07232e+13
+      Equation: "HoleContinuityEquation"	RelError: 6.58577e-01	AbsError: 7.15664e+13
+      Equation: "PotentialEquation"	RelError: 1.15832e+02	AbsError: 2.78470e-02
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 7.82391e+01	AbsError: 5.87489e+12
+    Region: "SiRegion"	RelError: 7.82391e+01	AbsError: 5.87489e+12
+      Equation: "ElectronContinuityEquation"	RelError: 4.47954e-01	AbsError: 2.99265e+12
+      Equation: "HoleContinuityEquation"	RelError: 5.31789e-01	AbsError: 2.88223e+12
+      Equation: "PotentialEquation"	RelError: 7.72594e+01	AbsError: 2.21530e-02
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 4.00335e-01	AbsError: 1.11447e+11
+    Region: "SiRegion"	RelError: 4.00335e-01	AbsError: 1.11447e+11
+      Equation: "ElectronContinuityEquation"	RelError: 2.29933e-01	AbsError: 2.87899e+10
+      Equation: "HoleContinuityEquation"	RelError: 9.46606e-02	AbsError: 8.26572e+10
+      Equation: "PotentialEquation"	RelError: 7.57412e-02	AbsError: 1.32580e-05
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 1.33324e-04	AbsError: 5.56742e+06
+    Region: "SiRegion"	RelError: 1.33324e-04	AbsError: 5.56742e+06
+      Equation: "ElectronContinuityEquation"	RelError: 8.88787e-05	AbsError: 1.07272e+06
+      Equation: "HoleContinuityEquation"	RelError: 4.25258e-05	AbsError: 4.49470e+06
+      Equation: "PotentialEquation"	RelError: 1.91981e-06	AbsError: 3.43093e-10
+Iteration: 4
+  Device: "BenchmarkDiode"	RelError: 5.32711e-13	AbsError: 5.71234e+01
+    Region: "SiRegion"	RelError: 5.32711e-13	AbsError: 5.71234e+01
+      Equation: "ElectronContinuityEquation"	RelError: 3.14760e-13	AbsError: 2.90801e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.10276e-13	AbsError: 2.80433e+01
+      Equation: "PotentialEquation"	RelError: 7.67407e-15	AbsError: 3.93768e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.42545e+02	AbsError: 1.30404e+14
+    Region: "SiRegion"	RelError: 1.42545e+02	AbsError: 1.30404e+14
+      Equation: "ElectronContinuityEquation"	RelError: 6.58760e-01	AbsError: 6.47808e+13
+      Equation: "HoleContinuityEquation"	RelError: 6.58759e-01	AbsError: 6.56228e+13
+      Equation: "PotentialEquation"	RelError: 1.41227e+02	AbsError: 2.78470e-02
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 4.16355e+02	AbsError: 5.95826e+12
+    Region: "SiRegion"	RelError: 4.16355e+02	AbsError: 5.95826e+12
+      Equation: "ElectronContinuityEquation"	RelError: 4.47974e-01	AbsError: 3.04708e+12
+      Equation: "HoleContinuityEquation"	RelError: 5.32167e-01	AbsError: 2.91118e+12
+      Equation: "PotentialEquation"	RelError: 4.15375e+02	AbsError: 2.21530e-02
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 1.10372e+00	AbsError: 1.38102e+11
+    Region: "SiRegion"	RelError: 1.10372e+00	AbsError: 1.38102e+11
+      Equation: "ElectronContinuityEquation"	RelError: 2.30159e-01	AbsError: 4.09466e+10
+      Equation: "HoleContinuityEquation"	RelError: 9.46761e-02	AbsError: 9.71552e+10
+      Equation: "PotentialEquation"	RelError: 7.78884e-01	AbsError: 1.88544e-05
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 2.15788e-04	AbsError: 9.73325e+06
+    Region: "SiRegion"	RelError: 2.15788e-04	AbsError: 9.73325e+06
+      Equation: "ElectronContinuityEquation"	RelError: 1.27021e-04	AbsError: 2.05164e+06
+      Equation: "HoleContinuityEquation"	RelError: 6.27569e-05	AbsError: 7.68161e+06
+      Equation: "PotentialEquation"	RelError: 2.60098e-05	AbsError: 6.77853e-10
+Iteration: 4
+  Device: "BenchmarkDiode"	RelError: 3.01865e-12	AbsError: 6.92101e+01
+    Region: "SiRegion"	RelError: 3.01865e-12	AbsError: 6.92101e+01
+      Equation: "ElectronContinuityEquation"	RelError: 8.93525e-13	AbsError: 3.76874e+01
+      Equation: "HoleContinuityEquation"	RelError: 5.62681e-13	AbsError: 3.15228e+01
+      Equation: "PotentialEquation"	RelError: 1.56244e-12	AbsError: 5.42508e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.22998e+02	AbsError: 1.18351e+14
+    Region: "SiRegion"	RelError: 1.22998e+02	AbsError: 1.18351e+14
+      Equation: "ElectronContinuityEquation"	RelError: 6.58810e-01	AbsError: 5.87563e+13
+      Equation: "HoleContinuityEquation"	RelError: 6.58809e-01	AbsError: 5.95946e+13
+      Equation: "PotentialEquation"	RelError: 1.21681e+02	AbsError: 2.78470e-02
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 6.36336e+02	AbsError: 6.02086e+12
+    Region: "SiRegion"	RelError: 6.36336e+02	AbsError: 6.02086e+12
+      Equation: "ElectronContinuityEquation"	RelError: 4.47976e-01	AbsError: 3.09645e+12
+      Equation: "HoleContinuityEquation"	RelError: 5.32372e-01	AbsError: 2.92441e+12
+      Equation: "PotentialEquation"	RelError: 6.35356e+02	AbsError: 2.21530e-02
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 5.86887e-01	AbsError: 2.12031e+11
+    Region: "SiRegion"	RelError: 5.86887e-01	AbsError: 2.12031e+11
+      Equation: "ElectronContinuityEquation"	RelError: 2.30243e-01	AbsError: 7.44858e+10
+      Equation: "HoleContinuityEquation"	RelError: 9.48987e-02	AbsError: 1.37545e+11
+      Equation: "PotentialEquation"	RelError: 2.61746e-01	AbsError: 2.73444e-05
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 2.81559e-04	AbsError: 1.87517e+07
+    Region: "SiRegion"	RelError: 2.81559e-04	AbsError: 1.87517e+07
+      Equation: "ElectronContinuityEquation"	RelError: 1.84653e-04	AbsError: 4.16926e+06
+      Equation: "HoleContinuityEquation"	RelError: 9.50234e-05	AbsError: 1.45825e+07
+      Equation: "PotentialEquation"	RelError: 1.88247e-06	AbsError: 1.47023e-09
+Iteration: 4
+  Device: "BenchmarkDiode"	RelError: 5.27814e-12	AbsError: 6.43643e+01
+    Region: "SiRegion"	RelError: 5.27814e-12	AbsError: 6.43643e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.79743e-12	AbsError: 2.96371e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.67949e-12	AbsError: 3.47272e+01
+      Equation: "PotentialEquation"	RelError: 8.01221e-13	AbsError: 4.22694e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 4.06462e+02	AbsError: 1.06211e+14
+    Region: "SiRegion"	RelError: 4.06462e+02	AbsError: 1.06211e+14
+      Equation: "ElectronContinuityEquation"	RelError: 6.58819e-01	AbsError: 5.26911e+13
+      Equation: "HoleContinuityEquation"	RelError: 6.58817e-01	AbsError: 5.35194e+13
+      Equation: "PotentialEquation"	RelError: 4.05145e+02	AbsError: 2.78470e-02
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 8.50207e+01	AbsError: 5.99587e+12
+    Region: "SiRegion"	RelError: 8.50207e+01	AbsError: 5.99587e+12
+      Equation: "ElectronContinuityEquation"	RelError: 4.47830e-01	AbsError: 3.10794e+12
+      Equation: "HoleContinuityEquation"	RelError: 5.32717e-01	AbsError: 2.88793e+12
+      Equation: "PotentialEquation"	RelError: 8.40401e+01	AbsError: 2.21530e-02
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 3.34884e-01	AbsError: 5.52266e+11
+    Region: "SiRegion"	RelError: 3.34884e-01	AbsError: 5.52266e+11
+      Equation: "ElectronContinuityEquation"	RelError: 2.30499e-01	AbsError: 2.05765e+11
+      Equation: "HoleContinuityEquation"	RelError: 9.47549e-02	AbsError: 3.46501e+11
+      Equation: "PotentialEquation"	RelError: 9.63042e-03	AbsError: 4.22987e-05
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 4.12382e-04	AbsError: 5.27475e+07
+    Region: "SiRegion"	RelError: 4.12382e-04	AbsError: 5.27475e+07
+      Equation: "ElectronContinuityEquation"	RelError: 2.66805e-04	AbsError: 1.62338e+07
+      Equation: "HoleContinuityEquation"	RelError: 1.44777e-04	AbsError: 3.65138e+07
+      Equation: "PotentialEquation"	RelError: 7.99927e-07	AbsError: 4.32074e-09
+Iteration: 4
+  Device: "BenchmarkDiode"	RelError: 1.99887e-11	AbsError: 7.04272e+01
+    Region: "SiRegion"	RelError: 1.99887e-11	AbsError: 7.04272e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.07184e-11	AbsError: 3.14664e+01
+      Equation: "HoleContinuityEquation"	RelError: 9.18049e-12	AbsError: 3.89608e+01
+      Equation: "PotentialEquation"	RelError: 8.98205e-14	AbsError: 8.13389e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 6.83610e+01	AbsError: 9.42888e+13
+    Region: "SiRegion"	RelError: 6.83610e+01	AbsError: 9.42888e+13
+      Equation: "ElectronContinuityEquation"	RelError: 6.58816e-01	AbsError: 4.67380e+13
+      Equation: "HoleContinuityEquation"	RelError: 6.58812e-01	AbsError: 4.75508e+13
+      Equation: "PotentialEquation"	RelError: 6.70433e+01	AbsError: 2.78470e-02
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 3.77090e+01	AbsError: 6.07569e+12
+    Region: "SiRegion"	RelError: 3.77090e+01	AbsError: 6.07569e+12
+      Equation: "ElectronContinuityEquation"	RelError: 4.47812e-01	AbsError: 3.12942e+12
+      Equation: "HoleContinuityEquation"	RelError: 5.32830e-01	AbsError: 2.94627e+12
+      Equation: "PotentialEquation"	RelError: 3.67284e+01	AbsError: 2.21530e-02
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 3.25346e-01	AbsError: 1.43698e+12
+    Region: "SiRegion"	RelError: 3.25346e-01	AbsError: 1.43698e+12
+      Equation: "ElectronContinuityEquation"	RelError: 2.30540e-01	AbsError: 5.71109e+11
+      Equation: "HoleContinuityEquation"	RelError: 9.44116e-02	AbsError: 8.65867e+11
+      Equation: "PotentialEquation"	RelError: 3.94798e-04	AbsError: 7.21337e-05
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 5.51671e-04	AbsError: 5.71806e+08
+    Region: "SiRegion"	RelError: 5.51671e-04	AbsError: 5.71806e+08
+      Equation: "ElectronContinuityEquation"	RelError: 3.42978e-04	AbsError: 2.39310e+08
+      Equation: "HoleContinuityEquation"	RelError: 2.08258e-04	AbsError: 3.32495e+08
+      Equation: "PotentialEquation"	RelError: 4.35506e-07	AbsError: 3.32167e-08
+Iteration: 4
+  Device: "BenchmarkDiode"	RelError: 2.11200e-10	AbsError: 2.30180e+02
+    Region: "SiRegion"	RelError: 2.11200e-10	AbsError: 2.30180e+02
+      Equation: "ElectronContinuityEquation"	RelError: 9.73086e-11	AbsError: 1.11767e+02
+      Equation: "HoleContinuityEquation"	RelError: 1.13600e-10	AbsError: 1.18413e+02
+      Equation: "PotentialEquation"	RelError: 2.91679e-13	AbsError: 8.39013e-15
+Iteration: 5
+  Device: "BenchmarkDiode"	RelError: 6.61733e-14	AbsError: 5.24074e+01
+    Region: "SiRegion"	RelError: 6.61733e-14	AbsError: 5.24074e+01
+      Equation: "ElectronContinuityEquation"	RelError: 4.03730e-15	AbsError: 1.81619e+01
+      Equation: "HoleContinuityEquation"	RelError: 4.34738e-15	AbsError: 3.42455e+01
+      Equation: "PotentialEquation"	RelError: 5.77886e-14	AbsError: 4.28034e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 7.46105e+01	AbsError: 8.38369e+13
+    Region: "SiRegion"	RelError: 7.46105e+01	AbsError: 8.38369e+13
+      Equation: "ElectronContinuityEquation"	RelError: 6.58803e-01	AbsError: 4.15181e+13
+      Equation: "HoleContinuityEquation"	RelError: 6.58798e-01	AbsError: 4.23188e+13
+      Equation: "PotentialEquation"	RelError: 7.32929e+01	AbsError: 2.78470e-02
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 7.03509e+01	AbsError: 1.08233e+13
+    Region: "SiRegion"	RelError: 7.03509e+01	AbsError: 1.08233e+13
+      Equation: "ElectronContinuityEquation"	RelError: 4.47906e-01	AbsError: 5.73560e+12
+      Equation: "HoleContinuityEquation"	RelError: 5.32398e-01	AbsError: 5.08767e+12
+      Equation: "PotentialEquation"	RelError: 6.93706e+01	AbsError: 2.21530e-02
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 3.23087e-01	AbsError: 3.75779e+12
+    Region: "SiRegion"	RelError: 3.23087e-01	AbsError: 3.75779e+12
+      Equation: "ElectronContinuityEquation"	RelError: 2.30237e-01	AbsError: 1.57042e+12
+      Equation: "HoleContinuityEquation"	RelError: 9.21703e-02	AbsError: 2.18737e+12
+      Equation: "PotentialEquation"	RelError: 6.79773e-04	AbsError: 1.44205e-04
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 7.37625e-04	AbsError: 7.23666e+09
+    Region: "SiRegion"	RelError: 7.37625e-04	AbsError: 7.23666e+09
+      Equation: "ElectronContinuityEquation"	RelError: 4.85201e-04	AbsError: 3.38055e+09
+      Equation: "HoleContinuityEquation"	RelError: 2.50661e-04	AbsError: 3.85611e+09
+      Equation: "PotentialEquation"	RelError: 1.76246e-06	AbsError: 3.74478e-07
+Iteration: 4
+  Device: "BenchmarkDiode"	RelError: 4.22413e-09	AbsError: 3.99875e+04
+    Region: "SiRegion"	RelError: 4.22413e-09	AbsError: 3.99875e+04
+      Equation: "ElectronContinuityEquation"	RelError: 2.81761e-09	AbsError: 1.98993e+04
+      Equation: "HoleContinuityEquation"	RelError: 1.39566e-09	AbsError: 2.00881e+04
+      Equation: "PotentialEquation"	RelError: 1.08512e-11	AbsError: 1.75345e-12
+Iteration: 5
+  Device: "BenchmarkDiode"	RelError: 2.54388e-14	AbsError: 6.15874e+01
+    Region: "SiRegion"	RelError: 2.54388e-14	AbsError: 6.15874e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.13294e-15	AbsError: 2.78587e+01
+      Equation: "HoleContinuityEquation"	RelError: 4.03051e-15	AbsError: 3.37287e+01
+      Equation: "PotentialEquation"	RelError: 1.92753e-14	AbsError: 3.64046e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 3.94591e+00	AbsError: 8.02429e+13
+    Region: "SiRegion"	RelError: 3.94591e+00	AbsError: 8.02429e+13
+      Equation: "ElectronContinuityEquation"	RelError: 6.58768e-01	AbsError: 3.97219e+13
+      Equation: "HoleContinuityEquation"	RelError: 6.58759e-01	AbsError: 4.05210e+13
+      Equation: "PotentialEquation"	RelError: 2.62838e+00	AbsError: 2.78470e-02
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 1.65457e+00	AbsError: 2.72792e+13
+    Region: "SiRegion"	RelError: 1.65457e+00	AbsError: 2.72792e+13
+      Equation: "ElectronContinuityEquation"	RelError: 4.48951e-01	AbsError: 1.49380e+13
+      Equation: "HoleContinuityEquation"	RelError: 5.29142e-01	AbsError: 1.23412e+13
+      Equation: "PotentialEquation"	RelError: 6.76474e-01	AbsError: 2.21530e-02
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 3.26022e-01	AbsError: 9.90263e+12
+    Region: "SiRegion"	RelError: 3.26022e-01	AbsError: 9.90263e+12
+      Equation: "ElectronContinuityEquation"	RelError: 2.28000e-01	AbsError: 4.27648e+12
+      Equation: "HoleContinuityEquation"	RelError: 9.65102e-02	AbsError: 5.62615e+12
+      Equation: "PotentialEquation"	RelError: 1.51181e-03	AbsError: 3.53155e-04
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 2.07400e-03	AbsError: 7.61683e+10
+    Region: "SiRegion"	RelError: 2.07400e-03	AbsError: 7.61683e+10
+      Equation: "ElectronContinuityEquation"	RelError: 1.21236e-03	AbsError: 3.76254e+10
+      Equation: "HoleContinuityEquation"	RelError: 8.45443e-04	AbsError: 3.85429e+10
+      Equation: "PotentialEquation"	RelError: 1.62039e-05	AbsError: 3.79375e-06
+Iteration: 4
+  Device: "BenchmarkDiode"	RelError: 1.33911e-07	AbsError: 4.77092e+06
+    Region: "SiRegion"	RelError: 1.33911e-07	AbsError: 4.77092e+06
+      Equation: "ElectronContinuityEquation"	RelError: 7.78430e-08	AbsError: 2.39002e+06
+      Equation: "HoleContinuityEquation"	RelError: 5.50778e-08	AbsError: 2.38090e+06
+      Equation: "PotentialEquation"	RelError: 9.90192e-10	AbsError: 2.31986e-10
+Iteration: 5
+  Device: "BenchmarkDiode"	RelError: 6.70031e-15	AbsError: 5.52039e+01
+    Region: "SiRegion"	RelError: 6.70031e-15	AbsError: 5.52039e+01
+      Equation: "ElectronContinuityEquation"	RelError: 3.40294e-15	AbsError: 2.60744e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.68077e-15	AbsError: 2.91295e+01
+      Equation: "PotentialEquation"	RelError: 6.16602e-16	AbsError: 8.46303e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 5.79837e+01	AbsError: 5.74219e+13
+    Region: "SiRegion"	RelError: 5.79837e+01	AbsError: 5.74219e+13
+      Equation: "ElectronContinuityEquation"	RelError: 2.74041e+01	AbsError: 2.87743e+13
+      Equation: "HoleContinuityEquation"	RelError: 2.73528e+01	AbsError: 2.86475e+13
+      Equation: "PotentialEquation"	RelError: 3.22675e+00	AbsError: 2.50000e-02
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 1.81580e+00	AbsError: 1.35398e+13
+    Region: "SiRegion"	RelError: 1.81580e+00	AbsError: 1.35398e+13
+      Equation: "ElectronContinuityEquation"	RelError: 9.07176e-01	AbsError: 6.77793e+12
+      Equation: "HoleContinuityEquation"	RelError: 9.07014e-01	AbsError: 6.76187e+12
+      Equation: "PotentialEquation"	RelError: 1.60530e-03	AbsError: 2.99668e-04
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 9.02708e-03	AbsError: 1.31749e+11
+    Region: "SiRegion"	RelError: 9.02708e-03	AbsError: 1.31749e+11
+      Equation: "ElectronContinuityEquation"	RelError: 4.50412e-03	AbsError: 6.58406e+10
+      Equation: "HoleContinuityEquation"	RelError: 4.49601e-03	AbsError: 6.59084e+10
+      Equation: "PotentialEquation"	RelError: 2.69605e-05	AbsError: 5.15460e-06
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 9.81658e-07	AbsError: 1.81159e+07
+    Region: "SiRegion"	RelError: 9.81658e-07	AbsError: 1.81159e+07
+      Equation: "ElectronContinuityEquation"	RelError: 4.85683e-07	AbsError: 9.04794e+06
+      Equation: "HoleContinuityEquation"	RelError: 4.92542e-07	AbsError: 9.06793e+06
+      Equation: "PotentialEquation"	RelError: 3.43215e-09	AbsError: 6.63422e-10
+Iteration: 4
+  Device: "BenchmarkDiode"	RelError: 1.70875e-14	AbsError: 6.53737e+01
+    Region: "SiRegion"	RelError: 1.70875e-14	AbsError: 6.53737e+01
+      Equation: "ElectronContinuityEquation"	RelError: 5.41068e-15	AbsError: 2.40022e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.05459e-14	AbsError: 4.13715e+01
+      Equation: "PotentialEquation"	RelError: 1.13087e-15	AbsError: 6.14710e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.26832e+00	AbsError: 2.16291e+13
+    Region: "SiRegion"	RelError: 1.26832e+00	AbsError: 2.16291e+13
+      Equation: "ElectronContinuityEquation"	RelError: 3.25488e-01	AbsError: 1.07135e+13
+      Equation: "HoleContinuityEquation"	RelError: 3.25477e-01	AbsError: 1.09157e+13
+      Equation: "PotentialEquation"	RelError: 6.17353e-01	AbsError: 1.25000e-02
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 1.70016e-01	AbsError: 2.52227e+12
+    Region: "SiRegion"	RelError: 1.70016e-01	AbsError: 2.52227e+12
+      Equation: "ElectronContinuityEquation"	RelError: 8.48897e-02	AbsError: 1.26316e+12
+      Equation: "HoleContinuityEquation"	RelError: 8.48815e-02	AbsError: 1.25911e+12
+      Equation: "PotentialEquation"	RelError: 2.44695e-04	AbsError: 4.81746e-05
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 1.75342e-04	AbsError: 4.33223e+09
+    Region: "SiRegion"	RelError: 1.75342e-04	AbsError: 4.33223e+09
+      Equation: "ElectronContinuityEquation"	RelError: 8.66965e-05	AbsError: 2.16501e+09
+      Equation: "HoleContinuityEquation"	RelError: 8.78191e-05	AbsError: 2.16722e+09
+      Equation: "PotentialEquation"	RelError: 8.26172e-07	AbsError: 1.65562e-07
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 7.62696e-10	AbsError: 1.97480e+04
+    Region: "SiRegion"	RelError: 7.62696e-10	AbsError: 1.97480e+04
+      Equation: "ElectronContinuityEquation"	RelError: 3.76759e-10	AbsError: 9.86253e+03
+      Equation: "HoleContinuityEquation"	RelError: 3.82313e-10	AbsError: 9.88550e+03
+      Equation: "PotentialEquation"	RelError: 3.62402e-12	AbsError: 7.32207e-13
+Iteration: 4
+  Device: "BenchmarkDiode"	RelError: 7.19274e-15	AbsError: 5.58419e+01
+    Region: "SiRegion"	RelError: 7.19274e-15	AbsError: 5.58419e+01
+      Equation: "ElectronContinuityEquation"	RelError: 4.02205e-15	AbsError: 2.56257e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.35231e-15	AbsError: 3.02162e+01
+      Equation: "PotentialEquation"	RelError: 8.18383e-16	AbsError: 6.37626e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.08237e+00	AbsError: 1.17355e+13
+    Region: "SiRegion"	RelError: 1.08237e+00	AbsError: 1.17355e+13
+      Equation: "ElectronContinuityEquation"	RelError: 3.17946e-01	AbsError: 5.81658e+12
+      Equation: "HoleContinuityEquation"	RelError: 3.17921e-01	AbsError: 5.91897e+12
+      Equation: "PotentialEquation"	RelError: 4.46501e-01	AbsError: 6.25000e-03
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 6.85042e-02	AbsError: 7.24144e+11
+    Region: "SiRegion"	RelError: 6.85042e-02	AbsError: 7.24144e+11
+      Equation: "ElectronContinuityEquation"	RelError: 3.42154e-02	AbsError: 3.62582e+11
+      Equation: "HoleContinuityEquation"	RelError: 3.42106e-02	AbsError: 3.61562e+11
+      Equation: "PotentialEquation"	RelError: 7.81318e-05	AbsError: 1.49879e-05
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 1.79684e-05	AbsError: 3.70394e+08
+    Region: "SiRegion"	RelError: 1.79684e-05	AbsError: 3.70394e+08
+      Equation: "ElectronContinuityEquation"	RelError: 8.89232e-06	AbsError: 1.85098e+08
+      Equation: "HoleContinuityEquation"	RelError: 9.00303e-06	AbsError: 1.85296e+08
+      Equation: "PotentialEquation"	RelError: 7.30787e-08	AbsError: 1.43105e-08
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 6.57660e-12	AbsError: 1.43879e+02
+    Region: "SiRegion"	RelError: 6.57660e-12	AbsError: 1.43879e+02
+      Equation: "ElectronContinuityEquation"	RelError: 3.25122e-12	AbsError: 7.18608e+01
+      Equation: "HoleContinuityEquation"	RelError: 3.29844e-12	AbsError: 7.20184e+01
+      Equation: "PotentialEquation"	RelError: 2.69338e-14	AbsError: 5.29981e-15
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 5.61765e-01	AbsError: 5.60915e+12
+    Region: "SiRegion"	RelError: 5.61765e-01	AbsError: 5.60915e+12
+      Equation: "ElectronContinuityEquation"	RelError: 1.37179e-01	AbsError: 2.77916e+12
+      Equation: "HoleContinuityEquation"	RelError: 1.37170e-01	AbsError: 2.83000e+12
+      Equation: "PotentialEquation"	RelError: 2.87416e-01	AbsError: 3.12500e-03
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 1.57875e-02	AbsError: 1.60858e+11
+    Region: "SiRegion"	RelError: 1.57875e-02	AbsError: 1.60858e+11
+      Equation: "ElectronContinuityEquation"	RelError: 7.88603e-03	AbsError: 8.05558e+10
+      Equation: "HoleContinuityEquation"	RelError: 7.88501e-03	AbsError: 8.03022e+10
+      Equation: "PotentialEquation"	RelError: 1.64364e-05	AbsError: 3.11159e-06
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 8.98695e-07	AbsError: 1.71760e+07
+    Region: "SiRegion"	RelError: 8.98695e-07	AbsError: 1.71760e+07
+      Equation: "ElectronContinuityEquation"	RelError: 4.44597e-07	AbsError: 8.58418e+06
+      Equation: "HoleContinuityEquation"	RelError: 4.50691e-07	AbsError: 8.59184e+06
+      Equation: "PotentialEquation"	RelError: 3.40597e-09	AbsError: 6.58650e-10
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 1.80538e-14	AbsError: 5.87376e+01
+    Region: "SiRegion"	RelError: 1.80538e-14	AbsError: 5.87376e+01
+      Equation: "ElectronContinuityEquation"	RelError: 6.96920e-15	AbsError: 2.99645e+01
+      Equation: "HoleContinuityEquation"	RelError: 7.61424e-15	AbsError: 2.87730e+01
+      Equation: "PotentialEquation"	RelError: 3.47034e-15	AbsError: 7.76457e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 2.96200e-01	AbsError: 2.75084e+12
+    Region: "SiRegion"	RelError: 2.96200e-01	AbsError: 2.75084e+12
+      Equation: "ElectronContinuityEquation"	RelError: 6.41891e-02	AbsError: 1.36275e+12
+      Equation: "HoleContinuityEquation"	RelError: 6.41854e-02	AbsError: 1.38809e+12
+      Equation: "PotentialEquation"	RelError: 1.67826e-01	AbsError: 1.56250e-03
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 3.79038e-03	AbsError: 3.79162e+10
+    Region: "SiRegion"	RelError: 3.79038e-03	AbsError: 3.79162e+10
+      Equation: "ElectronContinuityEquation"	RelError: 1.89343e-03	AbsError: 1.89896e+10
+      Equation: "HoleContinuityEquation"	RelError: 1.89320e-03	AbsError: 1.89266e+10
+      Equation: "PotentialEquation"	RelError: 3.74482e-06	AbsError: 7.04630e-07
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 4.99005e-08	AbsError: 9.18262e+05
+    Region: "SiRegion"	RelError: 4.99005e-08	AbsError: 9.18262e+05
+      Equation: "ElectronContinuityEquation"	RelError: 2.46802e-08	AbsError: 4.58952e+05
+      Equation: "HoleContinuityEquation"	RelError: 2.50378e-08	AbsError: 4.59311e+05
+      Equation: "PotentialEquation"	RelError: 1.82552e-10	AbsError: 3.50977e-11
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 8.16109e-15	AbsError: 6.02568e+01
+    Region: "SiRegion"	RelError: 8.16109e-15	AbsError: 6.02568e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.69634e-15	AbsError: 3.26605e+01
+      Equation: "HoleContinuityEquation"	RelError: 5.31372e-15	AbsError: 2.75963e+01
+      Equation: "PotentialEquation"	RelError: 1.15104e-15	AbsError: 6.44559e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.53792e-01	AbsError: 1.36323e+12
+    Region: "SiRegion"	RelError: 1.53792e-01	AbsError: 1.36323e+12
+      Equation: "ElectronContinuityEquation"	RelError: 3.10970e-02	AbsError: 6.75286e+11
+      Equation: "HoleContinuityEquation"	RelError: 3.10953e-02	AbsError: 6.87941e+11
+      Equation: "PotentialEquation"	RelError: 9.15993e-02	AbsError: 7.81250e-04
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 9.28676e-04	AbsError: 9.20495e+09
+    Region: "SiRegion"	RelError: 9.28676e-04	AbsError: 9.20495e+09
+      Equation: "ElectronContinuityEquation"	RelError: 4.63920e-04	AbsError: 4.61032e+09
+      Equation: "HoleContinuityEquation"	RelError: 4.63864e-04	AbsError: 4.59463e+09
+      Equation: "PotentialEquation"	RelError: 8.92101e-07	AbsError: 1.67346e-07
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 2.93390e-09	AbsError: 5.29765e+04
+    Region: "SiRegion"	RelError: 2.93390e-09	AbsError: 5.29765e+04
+      Equation: "ElectronContinuityEquation"	RelError: 1.45085e-09	AbsError: 2.64786e+04
+      Equation: "HoleContinuityEquation"	RelError: 1.47251e-09	AbsError: 2.64979e+04
+      Equation: "PotentialEquation"	RelError: 1.05453e-11	AbsError: 2.02156e-12
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 7.32915e-15	AbsError: 5.05374e+01
+    Region: "SiRegion"	RelError: 7.32915e-15	AbsError: 5.05374e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.54162e-15	AbsError: 2.23740e+01
+      Equation: "HoleContinuityEquation"	RelError: 3.45387e-15	AbsError: 2.81634e+01
+      Equation: "PotentialEquation"	RelError: 1.33366e-15	AbsError: 2.97292e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 7.86183e-02	AbsError: 6.78714e+11
+    Region: "SiRegion"	RelError: 7.86183e-02	AbsError: 6.78714e+11
+      Equation: "ElectronContinuityEquation"	RelError: 1.53106e-02	AbsError: 3.36195e+11
+      Equation: "HoleContinuityEquation"	RelError: 1.53098e-02	AbsError: 3.42519e+11
+      Equation: "PotentialEquation"	RelError: 4.79980e-02	AbsError: 3.90625e-04
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 2.29843e-04	AbsError: 2.26777e+09
+    Region: "SiRegion"	RelError: 2.29843e-04	AbsError: 2.26777e+09
+      Equation: "ElectronContinuityEquation"	RelError: 1.14820e-04	AbsError: 1.13584e+09
+      Equation: "HoleContinuityEquation"	RelError: 1.14806e-04	AbsError: 1.13193e+09
+      Equation: "PotentialEquation"	RelError: 2.17601e-07	AbsError: 4.07562e-08
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 1.77755e-10	AbsError: 3.17938e+03
+    Region: "SiRegion"	RelError: 1.77755e-10	AbsError: 3.17938e+03
+      Equation: "ElectronContinuityEquation"	RelError: 8.78936e-11	AbsError: 1.58911e+03
+      Equation: "HoleContinuityEquation"	RelError: 8.92278e-11	AbsError: 1.59027e+03
+      Equation: "PotentialEquation"	RelError: 6.33230e-13	AbsError: 1.21213e-13
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 7.69559e-15	AbsError: 4.88643e+01
+    Region: "SiRegion"	RelError: 7.69559e-15	AbsError: 4.88643e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.81325e-15	AbsError: 2.56615e+01
+      Equation: "HoleContinuityEquation"	RelError: 3.89773e-15	AbsError: 2.32027e+01
+      Equation: "PotentialEquation"	RelError: 9.84619e-16	AbsError: 4.72660e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 3.84030e-02	AbsError: 3.38650e+11
+    Region: "SiRegion"	RelError: 3.84030e-02	AbsError: 3.38650e+11
+      Equation: "ElectronContinuityEquation"	RelError: 7.48346e-03	AbsError: 1.67745e+11
+      Equation: "HoleContinuityEquation"	RelError: 7.48306e-03	AbsError: 1.70905e+11
+      Equation: "PotentialEquation"	RelError: 2.34365e-02	AbsError: 1.95313e-04
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 5.66013e-05	AbsError: 5.64459e+08
+    Region: "SiRegion"	RelError: 5.66013e-05	AbsError: 5.64459e+08
+      Equation: "ElectronContinuityEquation"	RelError: 2.82754e-05	AbsError: 2.82719e+08
+      Equation: "HoleContinuityEquation"	RelError: 2.82720e-05	AbsError: 2.81741e+08
+      Equation: "PotentialEquation"	RelError: 5.39236e-08	AbsError: 1.01087e-08
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 1.09187e-11	AbsError: 1.96385e+02
+    Region: "SiRegion"	RelError: 1.09187e-11	AbsError: 1.96385e+02
+      Equation: "ElectronContinuityEquation"	RelError: 5.39703e-12	AbsError: 9.81215e+01
+      Equation: "HoleContinuityEquation"	RelError: 5.48259e-12	AbsError: 9.82640e+01
+      Equation: "PotentialEquation"	RelError: 3.90908e-14	AbsError: 7.51216e-15
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.90939e-02	AbsError: 1.69501e+11
+    Region: "SiRegion"	RelError: 1.90939e-02	AbsError: 1.69501e+11
+      Equation: "ElectronContinuityEquation"	RelError: 3.75577e-03	AbsError: 8.39602e+10
+      Equation: "HoleContinuityEquation"	RelError: 3.75558e-03	AbsError: 8.55408e+10
+      Equation: "PotentialEquation"	RelError: 1.15825e-02	AbsError: 9.76563e-05
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 1.41859e-05	AbsError: 1.41632e+08
+    Region: "SiRegion"	RelError: 1.41859e-05	AbsError: 1.41632e+08
+      Equation: "ElectronContinuityEquation"	RelError: 7.08659e-06	AbsError: 7.09383e+07
+      Equation: "HoleContinuityEquation"	RelError: 7.08574e-06	AbsError: 7.06936e+07
+      Equation: "PotentialEquation"	RelError: 1.35649e-08	AbsError: 2.54390e-09
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 6.86492e-13	AbsError: 7.87824e+01
+    Region: "SiRegion"	RelError: 6.86492e-13	AbsError: 7.87824e+01
+      Equation: "ElectronContinuityEquation"	RelError: 3.37752e-13	AbsError: 4.39956e+01
+      Equation: "HoleContinuityEquation"	RelError: 3.44320e-13	AbsError: 3.47869e+01
+      Equation: "PotentialEquation"	RelError: 4.42100e-15	AbsError: 5.27478e-16
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 9.52066e-03	AbsError: 8.47948e+10
+    Region: "SiRegion"	RelError: 9.52066e-03	AbsError: 8.47948e+10
+      Equation: "ElectronContinuityEquation"	RelError: 1.88142e-03	AbsError: 4.20022e+10
+      Equation: "HoleContinuityEquation"	RelError: 1.88132e-03	AbsError: 4.27926e+10
+      Equation: "PotentialEquation"	RelError: 5.75792e-03	AbsError: 4.88281e-05
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 3.55093e-06	AbsError: 3.54728e+07
+    Region: "SiRegion"	RelError: 3.55093e-06	AbsError: 3.54728e+07
+      Equation: "ElectronContinuityEquation"	RelError: 1.77387e-06	AbsError: 1.77670e+07
+      Equation: "HoleContinuityEquation"	RelError: 1.77366e-06	AbsError: 1.77058e+07
+      Equation: "PotentialEquation"	RelError: 3.40173e-09	AbsError: 6.38070e-10
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 4.27763e-14	AbsError: 6.22145e+01
+    Region: "SiRegion"	RelError: 4.27763e-14	AbsError: 6.22145e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.96008e-14	AbsError: 3.58126e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.95605e-14	AbsError: 2.64019e+01
+      Equation: "PotentialEquation"	RelError: 3.61503e-15	AbsError: 1.13037e-16
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 8.15332e-15	AbsError: 3.75404e+01
+    Region: "SiRegion"	RelError: 8.15332e-15	AbsError: 3.75404e+01
+      Equation: "ElectronContinuityEquation"	RelError: 4.22158e-15	AbsError: 1.79365e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.36062e-15	AbsError: 1.96039e+01
+      Equation: "PotentialEquation"	RelError: 1.57112e-15	AbsError: 4.31856e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 8.29284e-15	AbsError: 3.48422e+01
+    Region: "SiRegion"	RelError: 8.29284e-15	AbsError: 3.48422e+01
+      Equation: "ElectronContinuityEquation"	RelError: 4.86794e-15	AbsError: 1.58784e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.46586e-15	AbsError: 1.89639e+01
+      Equation: "PotentialEquation"	RelError: 9.59044e-16	AbsError: 3.90644e-17
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 5.18719e-15	AbsError: 3.65193e+01
+    Region: "SiRegion"	RelError: 5.18719e-15	AbsError: 3.65193e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.43856e-15	AbsError: 1.61416e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.95857e-15	AbsError: 2.03778e+01
+      Equation: "PotentialEquation"	RelError: 7.90063e-16	AbsError: 3.73074e-17
+Charge Relative Error 2.58869e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 6.07286e-15	AbsError: 3.50933e+01
+    Region: "SiRegion"	RelError: 6.07286e-15	AbsError: 3.50933e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.50761e-15	AbsError: 1.82697e+01
+      Equation: "HoleContinuityEquation"	RelError: 4.04439e-15	AbsError: 1.68236e+01
+      Equation: "PotentialEquation"	RelError: 5.20863e-16	AbsError: 4.60614e-17
+Charge Relative Error 2.58869e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 4.59110e-15	AbsError: 4.17512e+01
+    Region: "SiRegion"	RelError: 4.59110e-15	AbsError: 4.17512e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.83703e-15	AbsError: 1.65446e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.17825e-15	AbsError: 2.52066e+01
+      Equation: "PotentialEquation"	RelError: 5.75820e-16	AbsError: 5.68123e-17
+Charge Relative Error 2.58869e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 8.73919e-15	AbsError: 3.22740e+01
+    Region: "SiRegion"	RelError: 8.73919e-15	AbsError: 3.22740e+01
+      Equation: "ElectronContinuityEquation"	RelError: 4.25913e-15	AbsError: 1.21796e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.98126e-15	AbsError: 2.00944e+01
+      Equation: "PotentialEquation"	RelError: 1.49879e-15	AbsError: 6.05487e-17
+Charge Relative Error 2.58869e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 8.91641e-15	AbsError: 3.30383e+01
+    Region: "SiRegion"	RelError: 8.91641e-15	AbsError: 3.30383e+01
+      Equation: "ElectronContinuityEquation"	RelError: 4.00257e-15	AbsError: 1.62523e+01
+      Equation: "HoleContinuityEquation"	RelError: 4.43371e-15	AbsError: 1.67859e+01
+      Equation: "PotentialEquation"	RelError: 4.80135e-16	AbsError: 6.13337e-17
+Charge Relative Error 2.58869e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 7.36092e-15	AbsError: 4.44705e+01
+    Region: "SiRegion"	RelError: 7.36092e-15	AbsError: 4.44705e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.21359e-15	AbsError: 1.92642e+01
+      Equation: "HoleContinuityEquation"	RelError: 5.08953e-15	AbsError: 2.52063e+01
+      Equation: "PotentialEquation"	RelError: 1.05780e-15	AbsError: 7.61343e-17
+Charge Relative Error 2.58869e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 5.00556e-15	AbsError: 3.65200e+01
+    Region: "SiRegion"	RelError: 5.00556e-15	AbsError: 3.65200e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.40290e-15	AbsError: 1.64258e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.15280e-15	AbsError: 2.00942e+01
+      Equation: "PotentialEquation"	RelError: 1.44986e-15	AbsError: 4.96318e-17
+Charge Relative Error 2.58869e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 4.39611e-15	AbsError: 3.74014e+01
+    Region: "SiRegion"	RelError: 4.39611e-15	AbsError: 3.74014e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.19046e-15	AbsError: 1.32981e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.72341e-15	AbsError: 2.41032e+01
+      Equation: "PotentialEquation"	RelError: 4.82249e-16	AbsError: 4.54572e-17
+Charge Relative Error 2.58869e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 5.51421e-15	AbsError: 4.15138e+01
+    Region: "SiRegion"	RelError: 5.51421e-15	AbsError: 4.15138e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.05458e-15	AbsError: 1.63071e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.01544e-15	AbsError: 2.52067e+01
+      Equation: "PotentialEquation"	RelError: 1.44419e-15	AbsError: 4.22563e-17
+Charge Relative Error 2.58869e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 4.83582e-15	AbsError: 3.82567e+01
+    Region: "SiRegion"	RelError: 4.83582e-15	AbsError: 3.82567e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.95320e-15	AbsError: 1.81623e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.19387e-15	AbsError: 2.00944e+01
+      Equation: "PotentialEquation"	RelError: 1.68876e-15	AbsError: 3.90513e-17
+Charge Relative Error 2.58869e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 2.28621e+03	AbsError: 2.61220e+15
+    Region: "SiRegion"	RelError: 2.28621e+03	AbsError: 2.61220e+15
+      Equation: "ElectronContinuityEquation"	RelError: 9.99000e+02	AbsError: 1.21220e+15
+      Equation: "HoleContinuityEquation"	RelError: 9.99000e+02	AbsError: 1.40001e+15
+      Equation: "PotentialEquation"	RelError: 2.88209e+02	AbsError: 1.04279e-01
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 5.31171e+03	AbsError: 3.19505e+15
+    Region: "SiRegion"	RelError: 5.31171e+03	AbsError: 3.19505e+15
+      Equation: "ElectronContinuityEquation"	RelError: 2.45144e+00	AbsError: 1.73598e+15
+      Equation: "HoleContinuityEquation"	RelError: 9.99000e+02	AbsError: 1.45907e+15
+      Equation: "PotentialEquation"	RelError: 4.31026e+03	AbsError: 1.02348e-01
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 1.73176e+05	AbsError: 9.20668e+14
+    Region: "SiRegion"	RelError: 1.73176e+05	AbsError: 9.20668e+14
+      Equation: "ElectronContinuityEquation"	RelError: 9.99000e+02	AbsError: 3.33735e+14
+      Equation: "HoleContinuityEquation"	RelError: 9.99000e+02	AbsError: 5.86932e+14
+      Equation: "PotentialEquation"	RelError: 1.71178e+05	AbsError: 1.00302e-01
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 2.54546e+03	AbsError: 6.64192e+14
+    Region: "SiRegion"	RelError: 2.54546e+03	AbsError: 6.64192e+14
+      Equation: "ElectronContinuityEquation"	RelError: 9.99000e+02	AbsError: 6.03676e+13
+      Equation: "HoleContinuityEquation"	RelError: 9.99000e+02	AbsError: 6.03824e+14
+      Equation: "PotentialEquation"	RelError: 5.47455e+02	AbsError: 9.81263e-02
+Iteration: 4
+  Device: "BenchmarkDiode"	RelError: 2.25781e+03	AbsError: 4.38704e+14
+    Region: "SiRegion"	RelError: 2.25781e+03	AbsError: 4.38704e+14
+      Equation: "ElectronContinuityEquation"	RelError: 9.99000e+02	AbsError: 1.40761e+14
+      Equation: "HoleContinuityEquation"	RelError: 9.99000e+02	AbsError: 2.97943e+14
+      Equation: "PotentialEquation"	RelError: 2.59808e+02	AbsError: 9.58051e-02
+Iteration: 5
+  Device: "BenchmarkDiode"	RelError: 1.05134e+03	AbsError: 3.01697e+14
+    Region: "SiRegion"	RelError: 1.05134e+03	AbsError: 3.01697e+14
+      Equation: "ElectronContinuityEquation"	RelError: 1.27525e+00	AbsError: 1.39519e+13
+      Equation: "HoleContinuityEquation"	RelError: 9.99000e+02	AbsError: 2.87745e+14
+      Equation: "PotentialEquation"	RelError: 5.10616e+01	AbsError: 9.33185e-02
+Iteration: 6
+  Device: "BenchmarkDiode"	RelError: 2.20920e+03	AbsError: 2.88288e+14
+    Region: "SiRegion"	RelError: 2.20920e+03	AbsError: 2.88288e+14
+      Equation: "ElectronContinuityEquation"	RelError: 1.20130e+03	AbsError: 4.56108e+13
+      Equation: "HoleContinuityEquation"	RelError: 9.99000e+02	AbsError: 2.42677e+14
+      Equation: "PotentialEquation"	RelError: 8.89179e+00	AbsError: 9.06429e-02
+Iteration: 7
+  Device: "BenchmarkDiode"	RelError: 1.00377e+03	AbsError: 1.80575e+14
+    Region: "SiRegion"	RelError: 1.00377e+03	AbsError: 1.80575e+14
+      Equation: "ElectronContinuityEquation"	RelError: 9.98768e-01	AbsError: 5.01580e+13
+      Equation: "HoleContinuityEquation"	RelError: 9.99000e+02	AbsError: 1.30417e+14
+      Equation: "PotentialEquation"	RelError: 3.77280e+00	AbsError: 8.77491e-02
+Iteration: 8
+  Device: "BenchmarkDiode"	RelError: 6.35657e+03	AbsError: 1.17131e+14
+    Region: "SiRegion"	RelError: 6.35657e+03	AbsError: 1.17131e+14
+      Equation: "ElectronContinuityEquation"	RelError: 5.35745e+03	AbsError: 9.41678e+11
+      Equation: "HoleContinuityEquation"	RelError: 9.99000e+02	AbsError: 1.16189e+14
+      Equation: "PotentialEquation"	RelError: 1.21156e-01	AbsError: 8.46016e-02
+Iteration: 9
+  Device: "BenchmarkDiode"	RelError: 1.00280e+03	AbsError: 9.72007e+13
+    Region: "SiRegion"	RelError: 1.00280e+03	AbsError: 9.72007e+13
+      Equation: "ElectronContinuityEquation"	RelError: 9.99701e-01	AbsError: 1.05569e+13
+      Equation: "HoleContinuityEquation"	RelError: 9.99000e+02	AbsError: 8.66438e+13
+      Equation: "PotentialEquation"	RelError: 2.80320e+00	AbsError: 8.11554e-02
+Iteration: 10
+  Device: "BenchmarkDiode"	RelError: 5.17101e+03	AbsError: 5.67581e+13
+    Region: "SiRegion"	RelError: 5.17101e+03	AbsError: 5.67581e+13
+      Equation: "ElectronContinuityEquation"	RelError: 3.18535e+03	AbsError: 1.25414e+13
+      Equation: "HoleContinuityEquation"	RelError: 1.98483e+03	AbsError: 4.42167e+13
+      Equation: "PotentialEquation"	RelError: 8.38046e-01	AbsError: 7.73537e-02
+Iteration: 11
+  Device: "BenchmarkDiode"	RelError: 1.00027e+03	AbsError: 2.91346e+13
+    Region: "SiRegion"	RelError: 1.00027e+03	AbsError: 2.91346e+13
+      Equation: "ElectronContinuityEquation"	RelError: 9.99655e-01	AbsError: 3.49673e+12
+      Equation: "HoleContinuityEquation"	RelError: 9.99000e+02	AbsError: 2.56378e+13
+      Equation: "PotentialEquation"	RelError: 2.72487e-01	AbsError: 7.31232e-02
+Iteration: 12
+  Device: "BenchmarkDiode"	RelError: 1.99817e+03	AbsError: 1.93953e+13
+    Region: "SiRegion"	RelError: 1.99817e+03	AbsError: 1.93953e+13
+      Equation: "ElectronContinuityEquation"	RelError: 9.99000e+02	AbsError: 2.64815e+12
+      Equation: "HoleContinuityEquation"	RelError: 9.99000e+02	AbsError: 1.67471e+13
+      Equation: "PotentialEquation"	RelError: 1.71345e-01	AbsError: 6.83679e-02
+Iteration: 13
+  Device: "BenchmarkDiode"	RelError: 6.72785e+00	AbsError: 1.08758e+13
+    Region: "SiRegion"	RelError: 6.72785e+00	AbsError: 1.08758e+13
+      Equation: "ElectronContinuityEquation"	RelError: 9.98857e-01	AbsError: 1.80619e+11
+      Equation: "HoleContinuityEquation"	RelError: 5.67329e+00	AbsError: 1.06952e+13
+      Equation: "PotentialEquation"	RelError: 5.57082e-02	AbsError: 6.29604e-02
+Iteration: 14
+  Device: "BenchmarkDiode"	RelError: 1.00923e+03	AbsError: 6.72149e+12
+    Region: "SiRegion"	RelError: 1.00923e+03	AbsError: 6.72149e+12
+      Equation: "ElectronContinuityEquation"	RelError: 9.99000e+02	AbsError: 4.50032e+11
+      Equation: "HoleContinuityEquation"	RelError: 1.01822e+01	AbsError: 6.27146e+12
+      Equation: "PotentialEquation"	RelError: 4.73289e-02	AbsError: 5.67298e-02
+Iteration: 15
+  Device: "BenchmarkDiode"	RelError: 1.90804e+00	AbsError: 3.68776e+12
+    Region: "SiRegion"	RelError: 1.90804e+00	AbsError: 3.68776e+12
+      Equation: "ElectronContinuityEquation"	RelError: 9.98762e-01	AbsError: 5.52901e+11
+      Equation: "HoleContinuityEquation"	RelError: 8.70052e-01	AbsError: 3.13486e+12
+      Equation: "PotentialEquation"	RelError: 3.92297e-02	AbsError: 4.94491e-02
+Iteration: 16
+  Device: "BenchmarkDiode"	RelError: 6.01502e+00	AbsError: 1.40780e+12
+    Region: "SiRegion"	RelError: 6.01502e+00	AbsError: 1.40780e+12
+      Equation: "ElectronContinuityEquation"	RelError: 5.43891e+00	AbsError: 2.75123e+11
+      Equation: "HoleContinuityEquation"	RelError: 5.45056e-01	AbsError: 1.13267e+12
+      Equation: "PotentialEquation"	RelError: 3.10589e-02	AbsError: 4.08350e-02
+Iteration: 17
+  Device: "BenchmarkDiode"	RelError: 9.13261e-01	AbsError: 3.94558e+11
+    Region: "SiRegion"	RelError: 9.13261e-01	AbsError: 3.94558e+11
+      Equation: "ElectronContinuityEquation"	RelError: 7.48603e-01	AbsError: 6.25766e+10
+      Equation: "HoleContinuityEquation"	RelError: 1.42153e-01	AbsError: 3.31982e+11
+      Equation: "PotentialEquation"	RelError: 2.25055e-02	AbsError: 3.06228e-02
+Iteration: 18
+  Device: "BenchmarkDiode"	RelError: 4.00185e-01	AbsError: 1.10070e+11
+    Region: "SiRegion"	RelError: 4.00185e-01	AbsError: 1.10070e+11
+      Equation: "ElectronContinuityEquation"	RelError: 3.32661e-01	AbsError: 2.47492e+09
+      Equation: "HoleContinuityEquation"	RelError: 4.82969e-02	AbsError: 1.07595e+11
+      Equation: "PotentialEquation"	RelError: 1.92268e-02	AbsError: 2.58648e-02
+Iteration: 19
+  Device: "BenchmarkDiode"	RelError: 7.74170e-02	AbsError: 3.60590e+12
+    Region: "SiRegion"	RelError: 7.74170e-02	AbsError: 3.60590e+12
+      Equation: "ElectronContinuityEquation"	RelError: 6.95719e-02	AbsError: 2.99035e+10
+      Equation: "HoleContinuityEquation"	RelError: 1.49526e-03	AbsError: 3.57600e+12
+      Equation: "PotentialEquation"	RelError: 6.34985e-03	AbsError: 8.99934e-03
+Iteration: 20
+  Device: "BenchmarkDiode"	RelError: 2.07314e-02	AbsError: 3.61475e+12
+    Region: "SiRegion"	RelError: 2.07314e-02	AbsError: 3.61475e+12
+      Equation: "ElectronContinuityEquation"	RelError: 1.82158e-02	AbsError: 2.94168e+10
+      Equation: "HoleContinuityEquation"	RelError: 5.76697e-04	AbsError: 3.58534e+12
+      Equation: "PotentialEquation"	RelError: 1.93896e-03	AbsError: 7.51542e-06
+Iteration: 21
+  Device: "BenchmarkDiode"	RelError: 1.59130e-06	AbsError: 1.07756e+08
+    Region: "SiRegion"	RelError: 1.59130e-06	AbsError: 1.07756e+08
+      Equation: "ElectronContinuityEquation"	RelError: 1.48696e-06	AbsError: 1.06423e+06
+      Equation: "HoleContinuityEquation"	RelError: 3.74669e-08	AbsError: 1.06692e+08
+      Equation: "PotentialEquation"	RelError: 6.68741e-08	AbsError: 2.53784e-10
+Iteration: 22
+  Device: "BenchmarkDiode"	RelError: 3.09997e-14	AbsError: 6.71592e+01
+    Region: "SiRegion"	RelError: 3.09997e-14	AbsError: 6.71592e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.33137e-15	AbsError: 3.11436e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.20923e-15	AbsError: 3.60156e+01
+      Equation: "PotentialEquation"	RelError: 2.84591e-14	AbsError: 1.44846e-16
+Charge Relative Error 9.97545e-01
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 7.33525e+02	AbsError: 2.66060e+13
+    Region: "SiRegion"	RelError: 7.33525e+02	AbsError: 2.66060e+13
+      Equation: "ElectronContinuityEquation"	RelError: 4.29007e+02	AbsError: 6.78388e+12
+      Equation: "HoleContinuityEquation"	RelError: 3.04419e+02	AbsError: 1.98222e+13
+      Equation: "PotentialEquation"	RelError: 9.80463e-02	AbsError: 5.17045e-04
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 2.22962e+00	AbsError: 1.47984e+10
+    Region: "SiRegion"	RelError: 2.22962e+00	AbsError: 1.47984e+10
+      Equation: "ElectronContinuityEquation"	RelError: 1.96605e+00	AbsError: 1.26760e+09
+      Equation: "HoleContinuityEquation"	RelError: 2.63472e-01	AbsError: 1.35308e+10
+      Equation: "PotentialEquation"	RelError: 1.00175e-04	AbsError: 2.37092e-07
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 4.41656e-06	AbsError: 1.06152e+04
+    Region: "SiRegion"	RelError: 4.41656e-06	AbsError: 1.06152e+04
+      Equation: "ElectronContinuityEquation"	RelError: 4.37270e-06	AbsError: 5.87381e+02
+      Equation: "HoleContinuityEquation"	RelError: 4.38259e-08	AbsError: 1.00279e+04
+      Equation: "PotentialEquation"	RelError: 2.98608e-11	AbsError: 1.18366e-13
+Iteration: 3
+  Device: "BenchmarkDiode"	RelError: 8.40524e-15	AbsError: 6.47475e+01
+    Region: "SiRegion"	RelError: 8.40524e-15	AbsError: 6.47475e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.30341e-15	AbsError: 2.09039e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.17887e-15	AbsError: 4.38437e+01
+      Equation: "PotentialEquation"	RelError: 5.92297e-15	AbsError: 1.25314e-16
+Charge Relative Error 1.00000e+00
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 7.47126e+02	AbsError: 1.94259e+11
+    Region: "SiRegion"	RelError: 7.47126e+02	AbsError: 1.94259e+11
+      Equation: "ElectronContinuityEquation"	RelError: 4.95172e+02	AbsError: 1.16515e+10
+      Equation: "HoleContinuityEquation"	RelError: 2.51953e+02	AbsError: 1.82608e+11
+      Equation: "PotentialEquation"	RelError: 8.78668e-04	AbsError: 5.49249e-06
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 1.52587e-02	AbsError: 1.50336e+06
+    Region: "SiRegion"	RelError: 1.52587e-02	AbsError: 1.50336e+06
+      Equation: "ElectronContinuityEquation"	RelError: 1.33176e-02	AbsError: 2.53794e+05
+      Equation: "HoleContinuityEquation"	RelError: 1.94110e-03	AbsError: 1.24957e+06
+      Equation: "PotentialEquation"	RelError: 1.47546e-08	AbsError: 2.76701e-11
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 2.16809e-12	AbsError: 7.73488e+01
+    Region: "SiRegion"	RelError: 2.16809e-12	AbsError: 7.73488e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.07663e-12	AbsError: 3.30731e+01
+      Equation: "HoleContinuityEquation"	RelError: 6.49001e-14	AbsError: 4.42757e+01
+      Equation: "PotentialEquation"	RelError: 2.65585e-14	AbsError: 1.41152e-16
+Charge Relative Error 1.00000e+00
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.86480e+02	AbsError: 1.92137e+09
+    Region: "SiRegion"	RelError: 1.86480e+02	AbsError: 1.92137e+09
+      Equation: "ElectronContinuityEquation"	RelError: 8.07169e+01	AbsError: 1.18700e+08
+      Equation: "HoleContinuityEquation"	RelError: 1.05763e+02	AbsError: 1.80267e+09
+      Equation: "PotentialEquation"	RelError: 1.57563e-05	AbsError: 5.61711e-08
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 5.51174e-05	AbsError: 1.69389e+02
+    Region: "SiRegion"	RelError: 5.51174e-05	AbsError: 1.69389e+02
+      Equation: "ElectronContinuityEquation"	RelError: 4.81735e-05	AbsError: 4.41717e+01
+      Equation: "HoleContinuityEquation"	RelError: 6.94392e-06	AbsError: 1.25217e+02
+      Equation: "PotentialEquation"	RelError: 1.89968e-12	AbsError: 2.98375e-15
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 6.87628e-15	AbsError: 4.09651e+01
+    Region: "SiRegion"	RelError: 6.87628e-15	AbsError: 4.09651e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.51223e-15	AbsError: 2.25518e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.05580e-15	AbsError: 1.84133e+01
+      Equation: "PotentialEquation"	RelError: 2.30824e-15	AbsError: 1.31691e-16
+Charge Relative Error 9.99985e-01
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 9.33903e+00	AbsError: 1.86903e+07
+    Region: "SiRegion"	RelError: 9.33903e+00	AbsError: 1.86903e+07
+      Equation: "ElectronContinuityEquation"	RelError: 7.39502e-01	AbsError: 1.89036e+06
+      Equation: "HoleContinuityEquation"	RelError: 8.59953e+00	AbsError: 1.67999e+07
+      Equation: "PotentialEquation"	RelError: 1.67709e-07	AbsError: 5.08824e-10
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 7.75830e-09	AbsError: 7.48178e+01
+    Region: "SiRegion"	RelError: 7.75830e-09	AbsError: 7.48178e+01
+      Equation: "ElectronContinuityEquation"	RelError: 3.99529e-09	AbsError: 3.58385e+01
+      Equation: "HoleContinuityEquation"	RelError: 3.76300e-09	AbsError: 3.89793e+01
+      Equation: "PotentialEquation"	RelError: 4.95667e-15	AbsError: 1.16200e-16
+Iteration: 2
+  Device: "BenchmarkDiode"	RelError: 5.36207e-15	AbsError: 3.59978e+01
+    Region: "SiRegion"	RelError: 5.36207e-15	AbsError: 3.59978e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.38247e-15	AbsError: 2.14160e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.26594e-15	AbsError: 1.45818e+01
+      Equation: "PotentialEquation"	RelError: 2.71366e-15	AbsError: 1.16736e-16
+Charge Relative Error 9.97743e-01
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 2.43841e-01	AbsError: 1.62557e+05
+    Region: "SiRegion"	RelError: 2.43841e-01	AbsError: 1.62557e+05
+      Equation: "ElectronContinuityEquation"	RelError: 8.18031e-03	AbsError: 1.86700e+04
+      Equation: "HoleContinuityEquation"	RelError: 2.35661e-01	AbsError: 1.43887e+05
+      Equation: "PotentialEquation"	RelError: 1.46099e-09	AbsError: 4.16915e-12
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 1.11758e-12	AbsError: 6.96999e+01
+    Region: "SiRegion"	RelError: 1.11758e-12	AbsError: 6.96999e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.58298e-13	AbsError: 4.25465e+01
+      Equation: "HoleContinuityEquation"	RelError: 8.34468e-13	AbsError: 2.71535e+01
+      Equation: "PotentialEquation"	RelError: 2.48096e-14	AbsError: 1.31639e-16
+Charge Relative Error 6.55882e-01
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 5.63332e-03	AbsError: 1.30208e+03
+    Region: "SiRegion"	RelError: 5.63332e-03	AbsError: 1.30208e+03
+      Equation: "ElectronContinuityEquation"	RelError: 9.64881e-05	AbsError: 1.59210e+02
+      Equation: "HoleContinuityEquation"	RelError: 5.53683e-03	AbsError: 1.14287e+03
+      Equation: "PotentialEquation"	RelError: 1.14887e-11	AbsError: 3.17798e-14
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 6.03698e-15	AbsError: 4.59048e+01
+    Region: "SiRegion"	RelError: 6.03698e-15	AbsError: 4.59048e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.51718e-15	AbsError: 2.58561e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.14198e-15	AbsError: 2.00487e+01
+      Equation: "PotentialEquation"	RelError: 2.37782e-15	AbsError: 1.13275e-16
+Charge Relative Error 3.60917e-03
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.31271e-04	AbsError: 3.15034e+01
+    Region: "SiRegion"	RelError: 1.31271e-04	AbsError: 3.15034e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.14679e-06	AbsError: 1.55835e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.30124e-04	AbsError: 1.59199e+01
+      Equation: "PotentialEquation"	RelError: 8.78320e-14	AbsError: 3.25818e-16
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 9.09825e-15	AbsError: 2.56799e+01
+    Region: "SiRegion"	RelError: 9.09825e-15	AbsError: 2.56799e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.48663e-15	AbsError: 1.77510e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.64767e-15	AbsError: 7.92894e+00
+      Equation: "PotentialEquation"	RelError: 3.96395e-15	AbsError: 1.11022e-16
+Charge Relative Error 2.34112e-05
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 3.07409e-06	AbsError: 2.78885e+01
+    Region: "SiRegion"	RelError: 3.07409e-06	AbsError: 2.78885e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.36450e-08	AbsError: 1.99498e+01
+      Equation: "HoleContinuityEquation"	RelError: 3.06044e-06	AbsError: 7.93865e+00
+      Equation: "PotentialEquation"	RelError: 1.07909e-14	AbsError: 1.11022e-16
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 1.43304e-14	AbsError: 2.16538e+01
+    Region: "SiRegion"	RelError: 1.43304e-14	AbsError: 2.16538e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.65054e-15	AbsError: 1.36588e+01
+      Equation: "HoleContinuityEquation"	RelError: 3.12926e-15	AbsError: 7.99507e+00
+      Equation: "PotentialEquation"	RelError: 9.55055e-15	AbsError: 1.13753e-16
+Charge Relative Error 1.61873e-07
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 7.21533e-08	AbsError: 2.79350e+01
+    Region: "SiRegion"	RelError: 7.21533e-08	AbsError: 2.79350e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.62387e-10	AbsError: 2.00048e+01
+      Equation: "HoleContinuityEquation"	RelError: 7.19909e-08	AbsError: 7.93022e+00
+      Equation: "PotentialEquation"	RelError: 9.47402e-15	AbsError: 1.13888e-16
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 1.96439e-14	AbsError: 2.16769e+01
+    Region: "SiRegion"	RelError: 1.96439e-14	AbsError: 2.16769e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.20992e-15	AbsError: 1.37296e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.35594e-15	AbsError: 7.94728e+00
+      Equation: "PotentialEquation"	RelError: 1.60780e-14	AbsError: 1.13605e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.69546e-09	AbsError: 3.08402e+01
+    Region: "SiRegion"	RelError: 1.69546e-09	AbsError: 3.08402e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.93365e-12	AbsError: 2.28694e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.69350e-09	AbsError: 7.97083e+00
+      Equation: "PotentialEquation"	RelError: 2.39285e-14	AbsError: 1.13553e-16
+Iteration: 1
+  Device: "BenchmarkDiode"	RelError: 2.48522e-14	AbsError: 2.26774e+01
+    Region: "SiRegion"	RelError: 2.48522e-14	AbsError: 2.26774e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.92110e-15	AbsError: 1.47485e+01
+      Equation: "HoleContinuityEquation"	RelError: 3.07891e-15	AbsError: 7.92893e+00
+      Equation: "PotentialEquation"	RelError: 1.88522e-14	AbsError: 1.12582e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 3.98712e-11	AbsError: 2.79325e+01
+    Region: "SiRegion"	RelError: 3.98712e-11	AbsError: 2.79325e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.40420e-14	AbsError: 1.99982e+01
+      Equation: "HoleContinuityEquation"	RelError: 3.98371e-11	AbsError: 7.93436e+00
+      Equation: "PotentialEquation"	RelError: 1.00133e-14	AbsError: 1.12698e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 9.50853e-13	AbsError: 2.16966e+01
+    Region: "SiRegion"	RelError: 9.50853e-13	AbsError: 2.16966e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.15681e-15	AbsError: 1.37530e+01
+      Equation: "HoleContinuityEquation"	RelError: 9.37142e-13	AbsError: 7.94366e+00
+      Equation: "PotentialEquation"	RelError: 1.25543e-14	AbsError: 1.12574e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 3.51797e-14	AbsError: 2.79532e+01
+    Region: "SiRegion"	RelError: 3.51797e-14	AbsError: 2.79532e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.42215e-15	AbsError: 1.99699e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.22109e-14	AbsError: 7.98330e+00
+      Equation: "PotentialEquation"	RelError: 1.15466e-14	AbsError: 1.11886e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.25074e-14	AbsError: 2.15902e+01
+    Region: "SiRegion"	RelError: 1.25074e-14	AbsError: 2.15902e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.27319e-15	AbsError: 1.36613e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.71477e-15	AbsError: 7.92893e+00
+      Equation: "PotentialEquation"	RelError: 8.51944e-15	AbsError: 1.12834e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.64502e-14	AbsError: 2.78892e+01
+    Region: "SiRegion"	RelError: 1.64502e-14	AbsError: 2.78892e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.59259e-15	AbsError: 1.99548e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.73826e-15	AbsError: 7.93441e+00
+      Equation: "PotentialEquation"	RelError: 1.31194e-14	AbsError: 1.11022e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.71292e-14	AbsError: 2.16064e+01
+    Region: "SiRegion"	RelError: 1.71292e-14	AbsError: 2.16064e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.39405e-15	AbsError: 1.36635e+01
+      Equation: "HoleContinuityEquation"	RelError: 9.48347e-16	AbsError: 7.94295e+00
+      Equation: "PotentialEquation"	RelError: 1.47868e-14	AbsError: 1.12310e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.42143e-14	AbsError: 2.79582e+01
+    Region: "SiRegion"	RelError: 1.42143e-14	AbsError: 2.79582e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.83953e-15	AbsError: 1.99743e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.64425e-15	AbsError: 7.98388e+00
+      Equation: "PotentialEquation"	RelError: 1.07305e-14	AbsError: 1.11947e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.47662e-14	AbsError: 2.15915e+01
+    Region: "SiRegion"	RelError: 1.47662e-14	AbsError: 2.15915e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.34662e-15	AbsError: 1.36625e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.92102e-15	AbsError: 7.92893e+00
+      Equation: "PotentialEquation"	RelError: 9.49855e-15	AbsError: 1.12729e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.29777e-14	AbsError: 2.79296e+01
+    Region: "SiRegion"	RelError: 1.29777e-14	AbsError: 2.79296e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.26041e-15	AbsError: 1.99952e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.13012e-15	AbsError: 7.93447e+00
+      Equation: "PotentialEquation"	RelError: 8.58720e-15	AbsError: 1.11022e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.21189e-14	AbsError: 2.19660e+01
+    Region: "SiRegion"	RelError: 1.21189e-14	AbsError: 2.19660e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.36537e-15	AbsError: 1.40226e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.79476e-15	AbsError: 7.94347e+00
+      Equation: "PotentialEquation"	RelError: 8.95875e-15	AbsError: 1.12457e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.53400e-14	AbsError: 2.79363e+01
+    Region: "SiRegion"	RelError: 1.53400e-14	AbsError: 2.79363e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.22126e-15	AbsError: 1.99530e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.41275e-15	AbsError: 7.98338e+00
+      Equation: "PotentialEquation"	RelError: 1.17060e-14	AbsError: 1.11894e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.39632e-14	AbsError: 2.15870e+01
+    Region: "SiRegion"	RelError: 1.39632e-14	AbsError: 2.15870e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.35330e-15	AbsError: 1.36580e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.95523e-15	AbsError: 7.92893e+00
+      Equation: "PotentialEquation"	RelError: 9.65469e-15	AbsError: 1.12849e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.30030e-14	AbsError: 2.79426e+01
+    Region: "SiRegion"	RelError: 1.30030e-14	AbsError: 2.79426e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.57701e-15	AbsError: 2.00079e+01
+      Equation: "HoleContinuityEquation"	RelError: 3.01526e-15	AbsError: 7.93469e+00
+      Equation: "PotentialEquation"	RelError: 8.41076e-15	AbsError: 1.11022e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.75479e-14	AbsError: 2.16728e+01
+    Region: "SiRegion"	RelError: 1.75479e-14	AbsError: 2.16728e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.05124e-15	AbsError: 1.37294e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.24712e-15	AbsError: 7.94339e+00
+      Equation: "PotentialEquation"	RelError: 1.42495e-14	AbsError: 1.12680e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 2.37732e-14	AbsError: 3.11998e+01
+    Region: "SiRegion"	RelError: 2.37732e-14	AbsError: 3.11998e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.20543e-15	AbsError: 2.32171e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.61705e-15	AbsError: 7.98265e+00
+      Equation: "PotentialEquation"	RelError: 2.09507e-14	AbsError: 1.12113e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 2.91294e-14	AbsError: 2.16410e+01
+    Region: "SiRegion"	RelError: 2.91294e-14	AbsError: 2.16410e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.76671e-15	AbsError: 1.37120e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.77285e-15	AbsError: 7.92893e+00
+      Equation: "PotentialEquation"	RelError: 2.45898e-14	AbsError: 1.12718e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 2.54073e-14	AbsError: 2.79027e+01
+    Region: "SiRegion"	RelError: 2.54073e-14	AbsError: 2.79027e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.73152e-15	AbsError: 1.99689e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.80184e-15	AbsError: 7.93379e+00
+      Equation: "PotentialEquation"	RelError: 2.08739e-14	AbsError: 1.13595e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.70808e-14	AbsError: 2.16037e+01
+    Region: "SiRegion"	RelError: 1.70808e-14	AbsError: 2.16037e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.73308e-15	AbsError: 1.36606e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.87958e-15	AbsError: 7.94309e+00
+      Equation: "PotentialEquation"	RelError: 1.34682e-14	AbsError: 1.12101e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.28461e-14	AbsError: 2.79855e+01
+    Region: "SiRegion"	RelError: 1.28461e-14	AbsError: 2.79855e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.56779e-15	AbsError: 2.00018e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.81545e-15	AbsError: 7.98371e+00
+      Equation: "PotentialEquation"	RelError: 9.46284e-15	AbsError: 1.11926e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.24452e-14	AbsError: 2.19078e+01
+    Region: "SiRegion"	RelError: 1.24452e-14	AbsError: 2.19078e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.08541e-15	AbsError: 1.39789e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.74386e-15	AbsError: 7.92893e+00
+      Equation: "PotentialEquation"	RelError: 9.61597e-15	AbsError: 1.12756e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.26514e-14	AbsError: 2.79073e+01
+    Region: "SiRegion"	RelError: 1.26514e-14	AbsError: 2.79073e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.34119e-15	AbsError: 1.99723e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.11748e-15	AbsError: 7.93497e+00
+      Equation: "PotentialEquation"	RelError: 9.19269e-15	AbsError: 1.11022e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.05236e-14	AbsError: 2.16033e+01
+    Region: "SiRegion"	RelError: 1.05236e-14	AbsError: 2.16033e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.41544e-15	AbsError: 1.36606e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.14828e-15	AbsError: 7.94264e+00
+      Equation: "PotentialEquation"	RelError: 6.95993e-15	AbsError: 1.11986e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.32595e-14	AbsError: 2.79415e+01
+    Region: "SiRegion"	RelError: 1.32595e-14	AbsError: 2.79415e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.53343e-15	AbsError: 1.99582e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.07794e-15	AbsError: 7.98333e+00
+      Equation: "PotentialEquation"	RelError: 1.06481e-14	AbsError: 1.11893e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.61328e-14	AbsError: 2.15921e+01
+    Region: "SiRegion"	RelError: 1.61328e-14	AbsError: 2.15921e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.58856e-15	AbsError: 1.36632e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.18898e-15	AbsError: 7.92893e+00
+      Equation: "PotentialEquation"	RelError: 1.33552e-14	AbsError: 1.12785e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.34232e-14	AbsError: 2.79090e+01
+    Region: "SiRegion"	RelError: 1.34232e-14	AbsError: 2.79090e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.01518e-15	AbsError: 1.99746e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.30344e-15	AbsError: 7.93441e+00
+      Equation: "PotentialEquation"	RelError: 1.11046e-14	AbsError: 1.11022e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.42099e-14	AbsError: 2.16059e+01
+    Region: "SiRegion"	RelError: 1.42099e-14	AbsError: 2.16059e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.83039e-15	AbsError: 1.36627e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.73973e-15	AbsError: 7.94323e+00
+      Equation: "PotentialEquation"	RelError: 1.06397e-14	AbsError: 1.12229e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.33609e-14	AbsError: 2.79787e+01
+    Region: "SiRegion"	RelError: 1.33609e-14	AbsError: 2.79787e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.87075e-15	AbsError: 1.99950e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.60885e-15	AbsError: 7.98366e+00
+      Equation: "PotentialEquation"	RelError: 8.88126e-15	AbsError: 1.11921e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.24803e-14	AbsError: 2.19450e+01
+    Region: "SiRegion"	RelError: 1.24803e-14	AbsError: 2.19450e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.17819e-15	AbsError: 1.40161e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.58929e-15	AbsError: 7.92893e+00
+      Equation: "PotentialEquation"	RelError: 8.71284e-15	AbsError: 1.12757e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.44199e-14	AbsError: 2.78876e+01
+    Region: "SiRegion"	RelError: 1.44199e-14	AbsError: 2.78876e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.38415e-15	AbsError: 1.99531e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.32760e-15	AbsError: 7.93456e+00
+      Equation: "PotentialEquation"	RelError: 1.07081e-14	AbsError: 1.11022e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.29177e-14	AbsError: 2.16007e+01
+    Region: "SiRegion"	RelError: 1.29177e-14	AbsError: 2.16007e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.46082e-15	AbsError: 1.36581e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.64969e-15	AbsError: 7.94255e+00
+      Equation: "PotentialEquation"	RelError: 9.80720e-15	AbsError: 1.11912e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.19101e-14	AbsError: 2.79912e+01
+    Region: "SiRegion"	RelError: 1.19101e-14	AbsError: 2.79912e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.57684e-15	AbsError: 2.00077e+01
+      Equation: "HoleContinuityEquation"	RelError: 9.89235e-16	AbsError: 7.98356e+00
+      Equation: "PotentialEquation"	RelError: 9.34401e-15	AbsError: 1.11915e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.78050e-14	AbsError: 2.16584e+01
+    Region: "SiRegion"	RelError: 1.78050e-14	AbsError: 2.16584e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.18022e-15	AbsError: 1.37294e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.39504e-15	AbsError: 7.92893e+00
+      Equation: "PotentialEquation"	RelError: 1.42297e-14	AbsError: 1.12797e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 2.54221e-14	AbsError: 3.11482e+01
+    Region: "SiRegion"	RelError: 2.54221e-14	AbsError: 3.11482e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.21442e-15	AbsError: 2.32148e+01
+      Equation: "HoleContinuityEquation"	RelError: 2.09235e-15	AbsError: 7.93342e+00
+      Equation: "PotentialEquation"	RelError: 2.11153e-14	AbsError: 1.11022e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 2.87290e-14	AbsError: 2.16484e+01
+    Region: "SiRegion"	RelError: 2.87290e-14	AbsError: 2.16484e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.73469e-15	AbsError: 1.37040e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.68051e-15	AbsError: 7.94436e+00
+      Equation: "PotentialEquation"	RelError: 2.43138e-14	AbsError: 1.13174e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 2.31207e-14	AbsError: 2.79519e+01
+    Region: "SiRegion"	RelError: 2.31207e-14	AbsError: 2.79519e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.54541e-15	AbsError: 1.99693e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.41269e-15	AbsError: 7.98262e+00
+      Equation: "PotentialEquation"	RelError: 1.91626e-14	AbsError: 1.11953e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.25601e-14	AbsError: 2.15886e+01
+    Region: "SiRegion"	RelError: 1.25601e-14	AbsError: 2.15886e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.38147e-15	AbsError: 1.36597e+01
+      Equation: "HoleContinuityEquation"	RelError: 9.17113e-16	AbsError: 7.92893e+00
+      Equation: "PotentialEquation"	RelError: 1.02615e-14	AbsError: 1.12886e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.16219e-14	AbsError: 2.79207e+01
+    Region: "SiRegion"	RelError: 1.16219e-14	AbsError: 2.79207e+01
+      Equation: "ElectronContinuityEquation"	RelError: 8.87222e-16	AbsError: 1.99858e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.20322e-15	AbsError: 7.93492e+00
+      Equation: "PotentialEquation"	RelError: 9.53151e-15	AbsError: 1.11022e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.52071e-14	AbsError: 2.16065e+01
+    Region: "SiRegion"	RelError: 1.52071e-14	AbsError: 2.16065e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.84302e-15	AbsError: 1.36635e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.75617e-15	AbsError: 7.94301e+00
+      Equation: "PotentialEquation"	RelError: 1.16079e-14	AbsError: 1.12207e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.73409e-14	AbsError: 2.79175e+01
+    Region: "SiRegion"	RelError: 1.73409e-14	AbsError: 2.79175e+01
+      Equation: "ElectronContinuityEquation"	RelError: 2.01974e-15	AbsError: 1.99340e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.65290e-15	AbsError: 7.98348e+00
+      Equation: "PotentialEquation"	RelError: 1.36683e-14	AbsError: 1.11908e-16
+Charge Relative Error 4.57916e-09
+number of equations 5085
+Iteration: 0
+  Device: "BenchmarkDiode"	RelError: 1.30297e-14	AbsError: 2.15878e+01
+    Region: "SiRegion"	RelError: 1.30297e-14	AbsError: 2.15878e+01
+      Equation: "ElectronContinuityEquation"	RelError: 1.68560e-15	AbsError: 1.36588e+01
+      Equation: "HoleContinuityEquation"	RelError: 1.96197e-15	AbsError: 7.92893e+00
+      Equation: "PotentialEquation"	RelError: 9.38212e-15	AbsError: 1.12845e-16
+Charge Relative Error 4.57916e-09
+recovery_ifixed_tau_1e-06_dt_2e-09_mesh_2e-07: 51 points, Qrr=4.211e-09 C, Irrm=4.206e+00 A, Qstored=6.345e-09 C, converged=True, elapsed=3.24s

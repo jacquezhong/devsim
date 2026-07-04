@@ -1,0 +1,47 @@
+[
+  {
+    "case_id": "recovery_vfixed_tau_1e-06_dt_2e-09_mesh_5e-07",
+    "tau_s": 1e-06,
+    "mesh_density_cm": 5e-07,
+    "I_rrm_A": 452.5240458385409,
+    "Q_rr_C": 4.615429955100813e-07,
+    "t_rr_s": 2e-09,
+    "t_peak_s": 2e-09,
+    "t_end_s": 4e-09,
+    "threshold_fraction": 0.1,
+    "recovery_incomplete": false,
+    "has_reverse_recovery": true,
+    "converged": true,
+    "elapsed_s": 1.2849133300005633
+  },
+  {
+    "case_id": "recovery_vfixed_tau_1e-06_dt_2e-09_mesh_2e-07",
+    "tau_s": 1e-06,
+    "mesh_density_cm": 2e-07,
+    "I_rrm_A": 452.3792528889712,
+    "Q_rr_C": 4.6143014689149357e-07,
+    "t_rr_s": 2e-09,
+    "t_peak_s": 2e-09,
+    "t_end_s": 4e-09,
+    "threshold_fraction": 0.1,
+    "recovery_incomplete": false,
+    "has_reverse_recovery": true,
+    "converged": true,
+    "elapsed_s": 2.4484684899980493
+  },
+  {
+    "case_id": "recovery_vfixed_tau_1e-06_dt_2e-09_mesh_1e-07",
+    "tau_s": 1e-06,
+    "mesh_density_cm": 1e-07,
+    "I_rrm_A": 452.3315427385801,
+    "Q_rr_C": 4.6139351578907225e-07,
+    "t_rr_s": 2e-09,
+    "t_peak_s": 2e-09,
+    "t_end_s": 4e-09,
+    "threshold_fraction": 0.1,
+    "recovery_incomplete": false,
+    "has_reverse_recovery": true,
+    "converged": true,
+    "elapsed_s": 4.4806107219992555
+  }
+]

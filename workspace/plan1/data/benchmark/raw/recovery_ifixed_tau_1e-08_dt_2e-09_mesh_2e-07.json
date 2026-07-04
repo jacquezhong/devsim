@@ -1,0 +1,148 @@
+{
+  "case_id": "recovery_ifixed_tau_1e-08_dt_2e-09_mesh_2e-07",
+  "parameters": {
+    "device_name": "BenchmarkDiode",
+    "region_name": "SiRegion",
+    "mesh_name": "benchmark_mesh",
+    "profile": "pin",
+    "device_length_cm": 0.0003,
+    "junction_position_cm": 5e-05,
+    "p_width_cm": 5e-05,
+    "n_width_cm": 5e-05,
+    "p_doping_cm3": 1e+17,
+    "n_doping_cm3": 1e+17,
+    "i_doping_cm3": 1000000000000.0,
+    "temperature_K": 300,
+    "mesh_density_cm": 2e-07,
+    "taun_s": 1e-08,
+    "taup_s": 1e-08,
+    "initial_condition": "target_current",
+    "v_forward_V": 0.2850585937500001,
+    "forward_current_A": 0.0010009601585018108,
+    "target_current": {
+      "target_current_A": 0.001,
+      "resolved_forward_voltage_V": 0.2850585937500001,
+      "resolved_forward_current_A": 0.0010009601585018108,
+      "target_reached": true,
+      "dc_probe_points": [
+        {
+          "voltage_V": 0.0,
+          "current_A": 0.0,
+          "converged": true
+        },
+        {
+          "voltage_V": 0.05,
+          "current_A": 3.916927893729955e-06,
+          "converged": true
+        },
+        {
+          "voltage_V": 0.1,
+          "current_A": 1.4719624960479564e-05,
+          "converged": true
+        },
+        {
+          "voltage_V": 0.15000000000000002,
+          "current_A": 4.658504441792977e-05,
+          "converged": true
+        },
+        {
+          "voltage_V": 0.2,
+          "current_A": 0.0001433064323800855,
+          "converged": true
+        },
+        {
+          "voltage_V": 0.25,
+          "current_A": 0.00044513818810726217,
+          "converged": true
+        },
+        {
+          "voltage_V": 0.30000000000000004,
+          "current_A": 0.0014212545695647771,
+          "converged": true
+        }
+      ],
+      "dc_refine_points": [
+        {
+          "voltage_V": 0.275,
+          "current_A": 0.0007919992778799323,
+          "converged": true
+        },
+        {
+          "voltage_V": 0.28750000000000003,
+          "current_A": 0.001059728707480104,
+          "converged": true
+        },
+        {
+          "voltage_V": 0.28125,
+          "current_A": 0.0009158800747264814,
+          "converged": true
+        },
+        {
+          "voltage_V": 0.28437500000000004,
+          "current_A": 0.0009851124237581336,
+          "converged": true
+        },
+        {
+          "voltage_V": 0.28593750000000007,
+          "current_A": 0.001021721497205358,
+          "converged": true
+        },
+        {
+          "voltage_V": 0.28515625000000006,
+          "current_A": 0.0010032456179913298,
+          "converged": true
+        },
+        {
+          "voltage_V": 0.284765625,
+          "current_A": 0.0009941366774611049,
+          "converged": true
+        },
+        {
+          "voltage_V": 0.28496093750000007,
+          "current_A": 0.000998680056047582,
+          "converged": true
+        },
+        {
+          "voltage_V": 0.2850585937500001,
+          "current_A": 0.0010009601585018108,
+          "converged": true
+        }
+      ]
+    },
+    "v_reverse_V": -1.0,
+    "forward_settle_steps": 10,
+    "time_step_s": 2e-09,
+    "reverse_time_s": 1e-07
+  },
+  "waveform": {
+    "format": "npz",
+    "file": "data/benchmark/waveforms/recovery_ifixed_tau_1e-08_dt_2e-09_mesh_2e-07.npz",
+    "points": 51,
+    "time_start_s": 2e-09,
+    "time_end_s": 1.02e-07,
+    "current_min_A": -3.4927801107377,
+    "current_max_A": -9.556833050178715e-06
+  },
+  "metrics": {
+    "I_rrm_A": 3.4927801107377,
+    "Q_rr_C": 3.4945694631331566e-09,
+    "t_rr_s": 2e-09,
+    "t_peak_s": 2e-09,
+    "t_end_s": 4e-09,
+    "threshold_fraction": 0.1,
+    "recovery_incomplete": false,
+    "has_reverse_recovery": true
+  },
+  "stored_charge": {
+    "stored_electron_charge_C": 1.7389993811027242e-09,
+    "stored_hole_charge_C": 1.7389992279143941e-09,
+    "stored_mobile_charge_C": 3.4779986090171183e-09,
+    "node_count": 1695
+  },
+  "solver": {
+    "converged": true,
+    "failed_at_s": null,
+    "elapsed_s": 2.915384305000771
+  },
+  "current_sign_convention": "positive_forward_negative_reverse"
+}

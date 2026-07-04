@@ -1,0 +1,39 @@
+{
+  "device": {
+    "device_name": "BenchmarkDiode",
+    "region_name": "SiRegion",
+    "mesh_name": "benchmark_mesh",
+    "profile": "pin",
+    "device_length_cm": 3e-4,
+    "junction_position_cm": 5e-5,
+    "p_width_cm": 5e-5,
+    "n_width_cm": 5e-5,
+    "p_doping_cm3": 1e17,
+    "n_doping_cm3": 1e17,
+    "i_doping_cm3": 1e12,
+    "temperature_K": 300,
+    "mesh_density_cm": 2e-7
+  },
+  "dc": {
+    "start_voltage_V": 0.0,
+    "stop_voltage_V": 1.0,
+    "step_voltage_V": 0.05,
+    "target_current_A": 1e-3
+  },
+  "transient": {
+    "forward_voltage_V": 0.8,
+    "reverse_voltage_V": -1.0,
+    "forward_settle_steps": 10,
+    "time_step_s": 2e-9,
+    "reverse_time_s": 1e-7,
+    "recovery_threshold_fraction": 0.1
+  },
+  "storage": {
+    "waveform_format": "npz"
+  },
+  "sweeps": {
+    "lifetimes_s": [1e-8, 1e-7, 1e-6, 1e-5],
+    "time_steps_s": [5e-9, 2e-9, 1e-9],
+    "mesh_densities_cm": [5e-7, 2e-7, 1e-7]
+  }
+}

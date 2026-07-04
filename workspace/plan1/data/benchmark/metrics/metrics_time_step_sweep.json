@@ -1,0 +1,47 @@
+[
+  {
+    "case_id": "recovery_vfixed_tau_1e-06_dt_5e-09_mesh_2e-07",
+    "tau_s": 1e-06,
+    "time_step_s": 5e-09,
+    "I_rrm_A": 183.24695481503738,
+    "Q_rr_C": 4.61204041716954e-07,
+    "t_rr_s": 5e-09,
+    "t_peak_s": 5e-09,
+    "t_end_s": 1e-08,
+    "threshold_fraction": 0.1,
+    "recovery_incomplete": false,
+    "has_reverse_recovery": true,
+    "converged": true,
+    "elapsed_s": 1.5330280779999157
+  },
+  {
+    "case_id": "recovery_vfixed_tau_1e-06_dt_2e-09_mesh_2e-07",
+    "tau_s": 1e-06,
+    "time_step_s": 2e-09,
+    "I_rrm_A": 452.3792528889712,
+    "Q_rr_C": 4.6143014689149357e-07,
+    "t_rr_s": 2e-09,
+    "t_peak_s": 2e-09,
+    "t_end_s": 4e-09,
+    "threshold_fraction": 0.1,
+    "recovery_incomplete": false,
+    "has_reverse_recovery": true,
+    "converged": true,
+    "elapsed_s": 2.4172085919999518
+  },
+  {
+    "case_id": "recovery_vfixed_tau_1e-06_dt_1e-09_mesh_2e-07",
+    "tau_s": 1e-06,
+    "time_step_s": 1e-09,
+    "I_rrm_A": 872.2770351194331,
+    "Q_rr_C": 4.6124474806735154e-07,
+    "t_rr_s": 1e-09,
+    "t_peak_s": 1e-09,
+    "t_end_s": 2e-09,
+    "threshold_fraction": 0.1,
+    "recovery_incomplete": false,
+    "has_reverse_recovery": true,
+    "converged": true,
+    "elapsed_s": 3.8846114660009334
+  }
+]

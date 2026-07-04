@@ -1,321 +1,411 @@
-# 研究方案一：高压功率二极管的反向恢复特性与软度因子优化
+# 研究方案一：基于开源 DEVSIM 的二极管反向恢复可复现仿真基准
 
-**方案来源**: workspace/方案v2.md  
-**评估来源**: workspace/方案评估.md  
-**可行性评级**: ✅ **完全可行 (100%)**
-
-**执行原则**: 
-- ✅ 使用 `devsim` conda环境（优先）或 `base` 环境
-- ✅ 通过 `devsim-examples` skill 调用现有能力
-- ❌ 禁止自主开发物理模型或求解器代码
+**当前定位**: 从“高压功率二极管优化”调整为“开放、透明、可复现的反向恢复仿真与指标提取基准”  
+**综述依据**: `workspace/plan1/review.md`  
+**核心目标**: 建立一个低成本 1D PN/PIN 二极管 benchmark，公开器件定义、网格、偏置流程、瞬态波形和 `Q_rr/I_rrm/t_rr` 指标提取脚本。  
 
 ---
 
-## 0. 环境准备
+## 0. 研究立场
 
-### 0.1 激活Conda环境
+本研究不声称 DEVSIM 可替代 Synopsys Sentaurus、Silvaco 等商业 TCAD，也不以“发现新的反向恢复物理机制”为目标。商业 TCAD 在模型库、复杂结构、工艺校准和工业预测能力方面更强；本研究的价值在于补充一个开源、可检查、可复跑的基准流程。
+
+更准确的研究贡献是：
+
+- 给出一个标准化 1D 硅 PN/PIN 二极管反向恢复测试问题。
+- 公开 DEVSIM 实现、输入参数、网格设置、求解流程和指标提取代码。
+- 提供 reference waveforms 和 reference metrics。
+- 通过寿命扫描、时间步长收敛和网格收敛展示该 benchmark 的稳定性和边界。
+- 将旧版公式估算结果降级为“解析趋势参考”，新结论以 DEVSIM DC/transient 直接提取结果为准。
+
+---
+
+## 1. 环境准备
+
+### 1.1 Conda 环境
 
 ```bash
-# 优先尝试激活名为"devsim"的conda环境，如果不存在则使用base
 conda activate devsim 2>/dev/null || conda activate base
-
-# 验证环境
 python3 -c "import devsim; print(f'DEVSIM {devsim.__version__} is ready')"
 ```
 
-### 0.2 安装依赖（首次）
+如缺少依赖：
 
 ```bash
-pip install numpy matplotlib
+pip install devsim numpy matplotlib
+```
+
+### 1.2 计划使用的本地能力
+
+- `devsim`
+- `devsim.python_packages.simple_physics`
+- `.opencode/skills/devsim-examples/diode/diode_1d.py`
+- `.opencode/skills/devsim-examples/diode/tran_diode.py`
+
+注意：现有 `tran_diode.py` 示例需要扩展，因为它目前主要保存时间点和电路节点状态，不足以直接形成 `Q_rr/I_rrm/t_rr` benchmark。新脚本应在每个瞬态时间点显式保存接触电流或电路电流。
+
+---
+
+## 2. 现有资产复用策略
+
+### 2.1 可以继续使用
+
+| 文件/目录 | 用途 |
+|---|---|
+| `review.md` | 文献综述和 benchmark 立意依据 |
+| `draft_modified.md` | 旧论文素材库，后续需重写主线 |
+| `generate_docx.py` / `generate_docx_semantic*.py` | 后续文档生成逻辑可复用 |
+| `generate_paper_figures*.py` | 图表风格、字体和结构图逻辑可复用 |
+| `figures/final/fig1_structure.png` | 可作为初版结构示意图，后续需按 benchmark 参数更新 |
+
+### 2.2 只能作为解析/探索性参考
+
+| 文件 | 限制 |
+|---|---|
+| `data/final/lifetime_results.json` | `Q_rr/R_on` 主要来自解析或经验估算，不可作为 benchmark reference |
+| `data/final/doping_results.json` | `BV/R_on` 主要来自简化公式，不可作为 TCAD 直接结果 |
+| `data/final/final_scientific_report.json` | 可作为旧版结论记录，但新研究中需明确标注为旧探索结果 |
+
+### 2.3 建议新增目录
+
+```text
+workspace/plan1/
+  benchmark/
+    config.json
+    run_dc_benchmark.py
+    run_reverse_recovery_benchmark.py
+    extract_metrics.py
+    generate_benchmark_figures.py
+  data/benchmark/
+    raw/
+    metrics/
+    reference/
+  figures/benchmark/
+  benchmark_README.md
 ```
 
 ---
 
-## 1. 学术背景与研究目的
+## 3. Benchmark 问题定义
 
-在功率电子电路中，快恢复二极管（FRD）的开关损耗和电压振荡直接影响系统效率。学术研究通常关注如何平衡开启压降 $V_f$ 与反向恢复电流峰值 $I_{rrm}$。本研究旨在通过调整基区浓度与载流子寿命，寻找最优的"软恢复"特性。
+### 3.1 基准器件
 
-**研究价值**: 功率电子器件的核心问题，IEEE TPEL等期刊经典主题
+优先采用 1D 硅 PN 或 PIN 二极管。初始阶段建议 PN 结构，确保计算代价低、收敛稳定；若瞬态结果过弱，再扩展到 PIN 结构以增强存储电荷效应。
 
----
+建议初始参数：
 
-## 2. 技术可行性评估
+| 参数 | 建议值 | 说明 |
+|---|---:|---|
+| 器件长度 | `1e-4 cm` | 1 μm，低成本；如需更强存储效应可扩展到 10 μm |
+| 结位置 | `0.5e-4 cm` | 居中 |
+| P 区掺杂 | `1e16 cm^-3` | 基准值 |
+| N 区掺杂 | `1e16 cm^-3` 或 `1e17 cm^-3` | 先用对称/近对称掺杂保证稳定 |
+| 温度 | `300 K` | 基准温度 |
+| 寿命 | `1e-8` 到 `1e-5 s` | 主扫描变量 |
+| 结区网格 | `1e-7, 5e-8, 1e-8 cm` | 用于网格收敛 |
 
-### 能力匹配度分析 ✅
+说明：旧方案中的 `1e19 cm^-3` 高掺杂和 `100 μm` 高压设定更偏“功率器件叙事”，但会提高收敛难度，也不利于先建立 benchmark。新方案先追求标准化、可复现和低成本。
 
-| 需求 | 现有能力 | 匹配状态 | 说明 |
-|------|---------|---------|------|
-| DC IV特性 | `diode_1d_dc_iv` | ✅ 直接可用 | 标准1D二极管能力 |
-| 瞬态仿真 | `diode_1d_transient` | ✅ 直接可用 | 支持时间域仿真 |
-| 载流子寿命调整 | `tau_n`, `tau_p` 参数 | ✅ 支持 | 通过set_parameter |
-| 掺杂浓度调整 | `p_doping`, `n_doping` 参数 | ✅ 支持 | 标准参数 |
-| 反向偏压 | `V_bias` 参数 | ✅ 支持 | 负值即可 |
+### 3.2 偏置流程
 
-**结论**: 完全匹配！无需任何自定义开发。
+反向恢复 benchmark 必须明确偏置历史。建议采用三段流程：
 
-### 缺失环节
-- **无** - 所有功能都可通过现有能力实现
+1. **平衡态**：0 V 求解 DC。
+2. **正向预偏置**：施加 `V_fwd = +0.8 V`，保持若干时间步或求解到准稳态。
+3. **反向阶跃**：切换到 `V_rev = -1 V` 或 `-2 V`，记录瞬态电流波形。
 
----
-
-## 3. 调用能力 ID 与步骤编排
-
-### Step 1：直流特性校准
-- **能力 ID**: `diode_1d_dc_iv`
-- **目的**: 确定不同掺杂梯度下二极管的开启电压和正向导通电阻
-- **Python调用**:
-```python
-from devsim_examples import diode_1d_dc_iv
-
-dc_result = diode_1d_dc_iv(
-    p_doping=1e16,        # 对应图像6-7范围
-    n_doping=1e19,        # 对应衬底浓度
-    length=1e-2,          # 100μm，高压需求
-    V_stop=2.0,           # 正向偏压到2V
-    V_step=0.05           # 步长0.05V
-)
-```
-
-### Step 2：瞬态开关仿真
-- **能力 ID**: `diode_1d_transient`
-- **目的**: 模拟从正向导通切换到反向截止的动态过程，提取反向恢复电流波形
-- **Python调用**:
-```python
-from devsim_examples import diode_1d_transient
-
-tran_result = diode_1d_transient(
-    p_doping=1e16,
-    n_doping=1e19,
-    length=1e-2,
-    V_bias=-400.0,        # 反向400V
-    T_stop=1e-6,          # 1微秒
-    time_step=1e-9,       # 1纳秒步长
-    tau_n=1e-6,           # 寿命可调 1e-8 ~ 1e-4
-    tau_p=1e-6
-)
-```
+后续可加入目标电流模式：先通过 DC I-V 找到达到 `I_target` 的 `V_fwd`，再以该正向电流作为统一初始条件。这比固定 `V_fwd` 更适合跨寿命比较，但实现稍复杂，可作为第二阶段。
 
 ---
 
-## 4. 参数设置指南
+## 4. 实验系列
 
-### 结构参数
-- **Length**: 设置为 100μm（1e-2 cm），对应高压耐压需求
+### Level 0: DC 基准
 
-### 物理参数
-通过 `set_parameter` 修改：
-- **载流子寿命** `tau_n` 和 `tau_p`: 范围设为 $10^{-8}$ 至 $10^{-4}$ s
-- **Doping_N（漂移区浓度）**: 设置范围为 $10^{14}$ 至 $10^{17}$ cm⁻³
+**目的**: 验证基本漂移-扩散器件设置，提供导通损耗参考。
 
-### 扫描设置
-- `diode_1d_dc_iv`: 设置 V_stop = 2.0 V，步长 0.05 V
-- `diode_1d_transient`: 设置 T_stop = $1 \times 10^{-6}$ s，设置反向偏压 V_bias = -400 V
+输入：
 
----
+- 固定器件结构与寿命。
+- 扫描 `V = 0 -> 1.0 V`，步长 `0.02` 或 `0.05 V`。
 
-## 5. 实施步骤与时间表
+输出：
 
-### Phase 1: 基准验证（1天）
-```python
-# 运行默认参数验证
-from devsim_examples import diode_1d_dc_iv, diode_1d_transient
+- `dc_iv.csv/json`
+- `voltage_V`
+- `contact_current_A`
+- `converged`
+- `V_F @ I_target`
+- `R_diff = dV/dI`
 
-dc_result = diode_1d_dc_iv(
-    p_doping=1e16,
-    n_doping=1e19,
-    length=1e-2,
-    V_stop=2.0
-)
+注意：现有 `diode_1d.py` 返回 `bias_points`，但未保存电流数组。新 benchmark 脚本必须直接调用 DEVSIM 接触电流接口或解析输出，保存真实电流值。
 
-tran_result = diode_1d_transient(
-    p_doping=1e16,
-    n_doping=1e19,
-    V_bias=-400.0,
-    T_stop=1e-6
-)
+### Level 1: 单点反向恢复基准
 
-# 验证输出包含电流、电压、电荷分布
-print(f"DC电流: {dc_result['current']}")
-print(f"瞬态波形点数: {len(tran_result['time'])}")
-```
+**目的**: 建立一个最小可复现 transient case。
 
-### Phase 2: 参数扫描（3-5天）
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+基准参数：
 
-# 扫描tau_n/tau_p: 1e-8 → 1e-4 (5-7个点)
-lifetimes = [1e-8, 1e-7, 1e-6, 1e-5, 1e-4]
-results_trr = []
-results_softness = []
+- `tau_n = tau_p = 1e-6 s`
+- `V_fwd = +0.8 V`
+- `V_rev = -1 V`
+- `dt = 1e-9` 或根据收敛情况调整
+- `t_stop = 1e-6 s`
 
-for tau in lifetimes:
-    result = diode_1d_transient(
-        p_doping=1e16,
-        n_doping=1e19,
-        tau_n=tau,
-        tau_p=tau,
-        V_bias=-400.0,
-        T_stop=1e-6
-    )
-    
-    # 提取反向恢复时间 trr
-    trr = extract_trr(result['time'], result['current'])
-    results_trr.append(trr)
-    
-    # 计算软度因子
-    softness = calculate_softness_factor(result)
-    results_softness.append(softness)
+输出：
 
-# 保存结果
-np.savez('sweep_lifetime.npz', 
-         lifetimes=lifetimes, 
-         trr=results_trr, 
-         softness=results_softness)
-```
+- 原始瞬态波形 `time_s, current_A, voltage_V`
+- `I_rrm`: 最大反向恢复电流
+- `t_peak`: 反向峰值时间
+- `t_rr`: 恢复时间，阈值定义为反向峰值的 10%
+- `Q_rr`: 反向电流积分，积分区间必须在脚本中固定
+- 收敛状态和失败时间点
 
-### Phase 3: 数据分析（2天）
-```python
-# 1. 绘制 Qrr vs 寿命 曲线
-plt.figure(figsize=(10, 6))
-plt.semilogx(lifetimes, results_trr, 'bo-', linewidth=2)
-plt.xlabel('Carrier Lifetime (s)', fontsize=12)
-plt.ylabel('Reverse Recovery Time (s)', fontsize=12)
-plt.title('Qrr vs Lifetime', fontsize=14)
-plt.grid(True)
-plt.savefig('qrr_vs_lifetime.png', dpi=300)
+### Level 2: 寿命扫描基准
 
-# 2. 绘制 软度因子 vs 掺杂浓度 曲线
-# 3. 建立 Pareto前沿（开启压降 vs 反向恢复）
-doping_concentrations = [1e14, 1e15, 1e16, 1e17]
-forward_voltages = []
-qrr_values = []
+**目的**: 展示寿命控制对反向恢复波形和导通损耗的趋势性影响。
 
-for Nd in doping_concentrations:
-    dc_result = diode_1d_dc_iv(p_doping=Nd, n_doping=1e19, V_stop=2.0)
-    tran_result = diode_1d_transient(p_doping=Nd, n_doping=1e19, V_bias=-400.0)
-    
-    Vf = extract_forward_voltage(dc_result)
-    Qrr = extract_qrr(tran_result)
-    
-    forward_voltages.append(Vf)
-    qrr_values.append(Qrr)
-
-# Pareto前沿图
-plt.figure(figsize=(10, 6))
-plt.plot(qrr_values, forward_voltages, 'ro-', linewidth=2, markersize=8)
-plt.xlabel('Reverse Recovery Charge Qrr (C)', fontsize=12)
-plt.ylabel('Forward Voltage Vf (V)', fontsize=12)
-plt.title('Pareto Front: Trade-off between Vf and Qrr', fontsize=14)
-plt.grid(True)
-plt.savefig('pareto_front.png', dpi=300)
-```
-
----
-
-## 6. 结果分析与结论
-
-### 分析方法
-- 绘制 $I_{rr}(t)$ 曲线
-- 计算反向恢复电荷 $Q_{rr} = \int_{t_1}^{t_2} I_{rr} dt$
-- 计算软度因子 $S = t_f / t_r$（下降沿时间与上升沿时间之比）
-
-### 预期结论
-- 发现特定的掺杂梯度能有效抑制反向恢复时的电压尖峰（Voltage Spike）
-- 建立 $\tau_n$ 与 $Q_{rr}$ 的帕累托最优边界（Pareto Front）
-
-### 学术产出建议
-- **目标期刊**: IEEE Transactions on Power Electronics (TPEL)
-- **目标会议**: ISPSD (International Symposium on Power Semiconductor Devices)
-- **创新点**: 系统性的参数优化 + 软度因子与寿命的定量关系
-
----
-
-## 7. 关键数据提取函数
+寿命点：
 
 ```python
-def extract_trr(time, current, threshold=0.1):
-    """
-    提取反向恢复时间
-    time: 时间数组
-    current: 电流数组
-    threshold: 恢复判据（电流降至峰值10%）
-    """
-    peak_idx = np.argmin(current)  # 最大反向电流
-    peak_current = current[peak_idx]
-    
-    # 找到电流恢复到threshold的时间点
-    recovery_idx = peak_idx
-    while recovery_idx < len(current) and current[recovery_idx] < threshold * peak_current:
-        recovery_idx += 1
-    
-    return time[recovery_idx] - time[0]
+lifetimes = [1e-8, 1e-7, 1e-6, 1e-5]
+```
 
-def calculate_softness_factor(result):
-    """
-    计算软度因子 S = tf / tr
-    tr: 上升时间 (0→峰值)
-    tf: 下降时间 (峰值→10%峰值)
-    """
-    time = result['time']
-    current = result['current']
-    
-    peak_idx = np.argmin(current)
-    peak_current = current[peak_idx]
-    
-    # 上升时间
-    tr = time[peak_idx] - time[0]
-    
-    # 下降时间（到10%峰值）
-    recovery_idx = peak_idx
-    while recovery_idx < len(current) and current[recovery_idx] < 0.1 * peak_current:
-        recovery_idx += 1
-    tf = time[recovery_idx] - time[peak_idx]
-    
-    return tf / tr if tr > 0 else 0
+每个寿命点执行：
 
-def extract_qrr(result):
-    """提取反向恢复电荷"""
-    time = result['time']
-    current = result['current']
-    
-    # 积分反向电流
-    qrr = np.trapz(np.abs(current), time)
-    return qrr
+- DC I-V
+- 正向预偏置 transient 或准稳态
+- 反向阶跃 transient
+- 指标提取
 
-def extract_forward_voltage(dc_result, target_current=100):
-    """
-    提取指定电流下的正向压降
-    target_current: 目标电流密度 (A/cm²)
-    """
-    voltage = dc_result['voltage']
-    current = dc_result['current']
-    
-    # 插值找到目标电流对应的电压
-    idx = np.argmin(np.abs(current - target_current))
-    return voltage[idx]
+主图：
+
+- `I(t)` 反向恢复波形叠加图
+- `Q_rr vs tau`
+- `I_rrm vs tau`
+- `t_rr vs tau`
+- `V_F @ I_target vs Q_rr` 权衡图
+
+说明：这一层是论文主体实验。它不应再使用旧的 `Q_rr = tau * J_F` 公式生成结果，而应从瞬态电流波形积分得到。
+
+### Level 3: 数值可复现性基准
+
+**目的**: 让实验具备 benchmark 特征，而不是普通案例。
+
+#### 4.4.1 时间步长收敛
+
+固定结构和寿命，测试：
+
+```python
+time_steps = [5e-9, 2e-9, 1e-9]
+```
+
+比较：
+
+- `Q_rr` 相对变化
+- `I_rrm` 相对变化
+- `t_rr` 相对变化
+- 运行时间
+- 收敛失败点
+
+#### 4.4.2 网格收敛
+
+固定时间步长和寿命，测试：
+
+```python
+mesh_densities = [1e-7, 5e-8, 1e-8]
+```
+
+比较同上。
+
+### Level 4: 可选扩展
+
+在 Level 0-3 稳定后再考虑：
+
+- 反向电压扫描：`V_rev = -1, -2, -5 V`
+- 温度扫描：`300, 350, 400 K`
+- PIN 结构版本
+- 简单外部电路或电流源切换
+- 与解析模型 `Q_s ~ I_F * tau` 的趋势对比
+
+这些扩展不是第一阶段必要条件，避免计算复杂度过早失控。
+
+---
+
+## 5. 指标定义
+
+### 5.1 电流符号约定
+
+必须在 `extract_metrics.py` 中固定电流方向。建议统一为：
+
+- 正向导通电流为正。
+- 反向恢复电流为负。
+
+若 DEVSIM 接触电流符号相反，应在数据保存阶段转换，并记录 `current_sign_convention`。
+
+### 5.2 `I_rrm`
+
+```python
+I_rrm = abs(min(current_after_reverse_step))
+```
+
+### 5.3 `Q_rr`
+
+建议定义为：
+
+```python
+Q_rr = integral(abs(I_reverse), t_start, t_end)
+```
+
+其中：
+
+- `t_start`: 反向阶跃发生时刻。
+- `t_end`: 电流恢复到 `0.1 * I_rrm` 且之后保持接近稳态的第一个时间点。
+
+若波形没有清晰恢复，记录 `t_end = t_stop` 并标注 `recovery_incomplete = true`。
+
+### 5.4 `t_rr`
+
+```python
+t_rr = t_end - t_start
+```
+
+恢复阈值默认取 `10% I_rrm`，并在结果 JSON 中记录。
+
+### 5.5 `V_F @ I_target`
+
+从 DC I-V 曲线插值得到。若电流未达到目标值，记录为 `null` 并标注 `target_not_reached = true`。
+
+---
+
+## 6. 数据格式
+
+### 6.1 原始波形
+
+`data/benchmark/raw/recovery_vfixed_tau_1e-06_dt_2e-09_mesh_2e-07.json`
+
+```json
+{
+  "case_id": "recovery_vfixed_tau_1e-06_dt_2e-09_mesh_2e-07",
+  "parameters": {
+    "initial_condition": "fixed_voltage",
+    "device_length_cm": 3e-4,
+    "junction_position_cm": 5e-5,
+    "p_doping_cm3": 1e17,
+    "n_doping_cm3": 1e17,
+    "taun_s": 1e-6,
+    "taup_s": 1e-6,
+    "temperature_K": 300,
+    "v_forward_V": 0.8,
+    "forward_current_A": 378.6,
+    "v_reverse_V": -1.0,
+    "time_step_s": 2e-9
+  },
+  "waveform": {
+    "format": "npz",
+    "file": "data/benchmark/waveforms/recovery_vfixed_tau_1e-06_dt_2e-09_mesh_2e-07.npz",
+    "points": 51
+  },
+  "stored_charge": {
+    "stored_mobile_charge_C": 1.87e-6
+  },
+  "solver": {
+    "converged": true,
+    "failed_at_s": null
+  }
+}
+```
+
+### 6.2 指标结果
+
+`data/benchmark/metrics/metrics_lifetime_sweep.json`
+
+```json
+[
+  {
+    "case_id": "recovery_ifixed_tau_1e-06_dt_2e-09_mesh_2e-07",
+    "tau_s": 1e-6,
+    "target_current_A": 1e-3,
+    "v_forward_V": 0.426,
+    "forward_current_A": 1.000e-3,
+    "I_rrm_A": 0.0,
+    "Q_rr_C": 0.0,
+    "t_rr_s": 0.0,
+    "stored_mobile_charge_C": 0.0,
+    "converged": true,
+    "recovery_incomplete": false
+  }
+]
 ```
 
 ---
 
-## 8. 风险与对策
+## 7. 实施顺序
 
-| 风险 | 概率 | 影响 | 对策 |
-|------|------|------|------|
-| 高压仿真不收敛 | 中 | 高 | 逐步增加反向偏压，使用前一解作为初始猜测 |
-| 参数扫描时间过长 | 低 | 中 | 并行化参数扫描，使用Joblib或MPI |
-| 数据噪声大 | 低 | 中 | 增加仿真精度，多次采样平均 |
+### Phase 1: 最小可行 benchmark
+
+1. 创建 `benchmark/config.json`。
+2. 创建 `benchmark/extract_metrics.py`。
+3. 创建 `benchmark/run_dc_benchmark.py`，确保能保存真实 DC 电流。
+4. 创建 `benchmark/run_reverse_recovery_benchmark.py`，确保能保存 transient 电流波形。
+5. 运行单个 `tau=1e-6` case。
+6. 生成最小图：DC I-V、单点反向恢复波形。
+
+### Phase 2: 寿命扫描
+
+1. 跑 `tau = 1e-8, 1e-7, 1e-6, 1e-5`。
+2. 保存所有 raw waveforms。
+3. 提取并保存 metrics。
+4. 生成寿命扫描图。
+
+### Phase 3: 可复现性测试
+
+1. 时间步长收敛。
+2. 网格收敛。
+3. 生成误差表和收敛图。
+4. 写 `benchmark_README.md`，说明如何复跑、如何比较误差。
+
+### Phase 4: 文稿重写
+
+1. 根据 `review.md` 和 benchmark 结果重写论文题目、摘要和方法。
+2. 删除或降级旧文稿中“高压优化”“击穿电压精确预测”“软度因子优化”的强表述。
+3. 明确局限：1D、硅、简化寿命模型、无真实工艺校准、无完整外部电路。
 
 ---
 
-## 9. 参考文献
+## 8. 预期产出
 
-1. B. J. Baliga, "Fundamentals of Power Semiconductor Devices", Springer, 2008.
-2. A. Q. Huang, "Power Semiconductor Devices for Hybrid, Electric, and Fuel Cell Vehicles", Proceedings of the IEEE, 2014.
-3. DEVSIM TCAD Manual: diode_1d_transient capability.
+### 8.1 工程产物
 
----
+- `benchmark/` 可运行脚本。
+- `data/benchmark/raw/` 原始波形。
+- `data/benchmark/metrics/` 指标数据。
+- `data/benchmark/reference/` 推荐 reference 结果。
+- `figures/benchmark/` 图表。
+- `benchmark_README.md`。
 
-**创建时间**: 2026-02-14  
-**版本**: v1.0  
-**状态**: 立即可执行
+### 8.2 论文/报告题目建议
+
+中文：
+
+> 基于开源 DEVSIM 的硅 PN 二极管反向恢复可复现仿真基准与寿命权衡分析
+
+英文：
+
+> An Open DEVSIM Benchmark for Reproducible Reverse-Recovery Simulation and Lifetime Trade-off Analysis in Silicon PN Diodes
+
+### 8.3 核心结论边界
+
+可以说：
+
+- 本研究建立了一个开放、透明、低成本的 1D 反向恢复 benchmark。
+- 寿命扫描结果展示了存储电荷与恢复指标之间的趋势性关系。
+- 时间步长和网格收敛测试说明 benchmark 结果的数值稳定性边界。
+- 该 benchmark 可作为商业 TCAD 研究的透明补充，而非替代。
+
+不能说：
+
+- DEVSIM 结果可精确预测真实商业快恢复二极管。
+- 本研究解决了高压功率二极管优化问题。
+- 本研究优于商业 TCAD。
+- 在没有真实外部电路和实验校准的情况下精确预测 EMI、击穿或工业 `Q_rr`。
