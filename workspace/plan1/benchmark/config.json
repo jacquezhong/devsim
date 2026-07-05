@@ -12,7 +12,8 @@
     "n_doping_cm3": 1e17,
     "i_doping_cm3": 1e12,
     "temperature_K": 300,
-    "mesh_density_cm": 2e-7
+    "mesh_density_cm": 2e-7,
+    "reference_area_cm2": 1.0
   },
   "dc": {
     "start_voltage_V": 0.0,
@@ -33,6 +34,7 @@
   },
   "sweeps": {
     "lifetimes_s": [1e-8, 1e-7, 1e-6, 1e-5],
+    "target_currents_A": [1e-4, 1e-3, 1e-2],
     "time_steps_s": [5e-9, 2e-9, 1e-9],
     "mesh_densities_cm": [5e-7, 2e-7, 1e-7]
   }

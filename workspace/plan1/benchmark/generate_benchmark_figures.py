@@ -60,6 +60,15 @@ def load_waveform(data: dict) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     )
 
 
+def reference_area(data: dict) -> float:
+    return float(
+        data.get("normalized", {}).get(
+            "reference_area_cm2",
+            data.get("parameters", {}).get("reference_area_cm2", 1.0),
+        )
+    )
+
+
 def default_case(data: dict) -> bool:
     params = data.get("parameters", {})
     return (
@@ -96,13 +105,17 @@ def plot_publication_dc() -> None:
     data = load_json(path)
     voltage = np.asarray([p["voltage_V"] for p in data["points"]], dtype=float)
     current = np.asarray([p["current_A"] for p in data["points"]], dtype=float)
+    area = float(data["metrics"].get("reference_area_cm2", 1.0))
+    current_density = current / area
     mask = current > 0.0
     voltage = voltage[mask]
-    current = current[mask]
+    current_density = current_density[mask]
 
     fig, ax = plt.subplots(figsize=(3.35, 2.55))
-    ax.semilogy(voltage, current, marker="o", color="tab:blue")
-    target = data["metrics"]["target_current_A"]
+    ax.semilogy(voltage, current_density, marker="o", color="tab:blue")
+    target = data["metrics"].get(
+        "target_current_density_A_cm2", data["metrics"]["target_current_A"] / area
+    )
     vf = data["metrics"]["Vf_at_target_A"]
     ax.axhline(target, color="0.35", linestyle="--", linewidth=1.0)
     if vf is not None:
@@ -110,7 +123,7 @@ def plot_publication_dc() -> None:
         ax.text(
             0.08,
             2e2,
-            f"$V_F$={vf:.3f} V\n$I_F$={target:.0e} A",
+            f"$V_F$={vf:.3f} V\n$J_F$={target:.0e} A/cm$^2$",
             fontsize=7.5,
             va="center",
             bbox={
@@ -122,9 +135,9 @@ def plot_publication_dc() -> None:
             },
         )
     ax.set_xlabel("Forward voltage (V)")
-    ax.set_ylabel("Contact current (A)")
+    ax.set_ylabel("Current density (A/cm$^2$)")
     ax.set_xlim(0.0, 1.0)
-    ax.set_ylim(1e-8, max(current) * 2.0)
+    ax.set_ylim(1e-8, max(current_density) * 2.0)
     ax.yaxis.set_major_formatter(SCI)
     ax.grid(True, which="both", color="0.86", linewidth=0.6)
     fig.tight_layout()
@@ -180,15 +193,42 @@ def plot_publication_recovery_waveforms() -> None:
 
     fig, axes = plt.subplots(1, 2, figsize=(6.9, 2.7), sharex=True)
     specs = [
-        (axes[0], fixed_voltage, "Fixed-voltage initialization"),
-        (axes[1], target_current, "Target-current initialization"),
+        (axes[0], fixed_voltage, "(a) Fixed-voltage initialization"),
+        (axes[1], target_current, "(b) Target-current initialization"),
     ]
-    for ax, rows, title in specs:
+    for ax, rows, panel_label in specs:
         for tau, time_s, current in rows:
             time_ns = time_s * 1e9
-            reverse_current = np.clip(-current, 1e-12, None)
-            ax.semilogy(time_ns, reverse_current, marker="o", label=f"{tau:.0e} s")
-        ax.set_title(title, fontsize=9)
+            area = reference_area(load_json(
+                PLAN_DIR
+                / "data/benchmark/raw"
+                / (
+                    f"recovery_{'ifixed' if ax is axes[1] else 'vfixed'}"
+                    f"_tau_{tau:.0e}_dt_2e-09_mesh_2e-07.json"
+                )
+            ))
+            reverse_current_density = np.clip(-current / area, 1e-12, None)
+            ax.semilogy(
+                time_ns,
+                reverse_current_density,
+                marker="o",
+                label=f"{tau:.0e} s",
+            )
+        ax.text(
+            0.03,
+            0.95,
+            panel_label,
+            transform=ax.transAxes,
+            fontsize=8.5,
+            va="top",
+            bbox={
+                "boxstyle": "round,pad=0.2",
+                "facecolor": "white",
+                "edgecolor": "0.80",
+                "linewidth": 0.5,
+                "alpha": 0.92,
+            },
+        )
         ax.set_xlabel("Time after reverse step (ns)")
         ax.set_xlim(0.0, 10.0)
         ax.yaxis.set_major_formatter(SCI)
@@ -201,7 +241,7 @@ def plot_publication_recovery_waveforms() -> None:
             bbox_to_anchor=(1.02, 0.5),
             borderaxespad=0.0,
         )
-    axes[0].set_ylabel("Reverse current magnitude (A)")
+    axes[0].set_ylabel("Reverse current density (A/cm$^2$)")
     fig.tight_layout(w_pad=4.2)
     save_figure(fig, "fig_pub_recovery_waveforms")
 
@@ -264,13 +304,28 @@ def plot_publication_lifetime_summary() -> None:
     fig, axes = plt.subplots(1, 2, figsize=(6.9, 2.75))
     for metrics, label, color in loaded:
         tau = np.asarray([m["tau_s"] for m in metrics], dtype=float)
-        qrr = np.asarray([m["Q_rr_C"] for m in metrics], dtype=float)
-        stored = np.asarray([m["stored_mobile_charge_C"] for m in metrics], dtype=float)
+        qrr = np.asarray(
+            [
+                m.get("Q_rr_density_C_cm2", m["Q_rr_C"] / m.get("reference_area_cm2", 1.0))
+                for m in metrics
+            ],
+            dtype=float,
+        )
+        stored = np.asarray(
+            [
+                m.get(
+                    "stored_mobile_charge_density_C_cm2",
+                    m["stored_mobile_charge_C"] / m.get("reference_area_cm2", 1.0),
+                )
+                for m in metrics
+            ],
+            dtype=float,
+        )
         axes[0].loglog(tau, qrr, marker="o", color=color, label=label)
         axes[1].loglog(tau, stored, marker="o", color=color, label=label)
 
-    axes[0].set_ylabel("$Q_{rr}$ (C)")
-    axes[1].set_ylabel("Stored mobile charge (C)")
+    axes[0].set_ylabel("$Q_{rr}/A$ (C/cm$^2$)")
+    axes[1].set_ylabel("Stored mobile charge/A (C/cm$^2$)")
     for ax in axes:
         ax.set_xlabel("Carrier lifetime (s)")
         ax.xaxis.set_major_formatter(SCI)
@@ -301,8 +356,26 @@ def plot_convergence() -> None:
             continue
         data = load_json(path)
         x = np.asarray([row[key] for row in data], dtype=float)
-        qrr = np.asarray([row["Q_rr_C"] for row in data], dtype=float)
-        irrm = np.asarray([row["I_rrm_A"] for row in data], dtype=float)
+        qrr = np.asarray(
+            [
+                row.get(
+                    "Q_rr_density_C_cm2",
+                    row["Q_rr_C"] / row.get("reference_area_cm2", 1.0),
+                )
+                for row in data
+            ],
+            dtype=float,
+        )
+        irrm = np.asarray(
+            [
+                row.get(
+                    "I_rrm_density_A_cm2",
+                    row["I_rrm_A"] / row.get("reference_area_cm2", 1.0),
+                )
+                for row in data
+            ],
+            dtype=float,
+        )
         order = np.argsort(x)
         x = x[order]
         qrr = qrr[order]
@@ -329,7 +402,7 @@ def plot_convergence() -> None:
 def plot_publication_convergence() -> None:
     specs = [
         (
-            PLAN_DIR / "data/benchmark/metrics/metrics_time_step_sweep.json",
+            PLAN_DIR / "data/benchmark/metrics/metrics_time_step_sweep_target_current.json",
             "time_step_s",
             "Time step (s)",
             "fig_pub_time_step_convergence",
@@ -342,6 +415,8 @@ def plot_publication_convergence() -> None:
         ),
     ]
     for path, key, xlabel, stem in specs:
+        if key == "time_step_s" and not path.exists():
+            path = PLAN_DIR / "data/benchmark/metrics/metrics_time_step_sweep.json"
         if not path.exists():
             continue
         data = load_json(path)
@@ -361,8 +436,8 @@ def plot_publication_convergence() -> None:
         fig, axes = plt.subplots(1, 2, figsize=(6.9, 2.65), sharex=True)
         axes[0].plot(x, qrr_rel, marker="o", color="tab:blue")
         axes[1].plot(x, irrm_rel, marker="o", color="tab:red")
-        axes[0].set_ylabel("$Q_{rr}$ relative change (%)")
-        axes[1].set_ylabel("$I_{rrm}$ relative change (%)")
+        axes[0].set_ylabel("$Q_{rr}/A$ relative change (%)")
+        axes[1].set_ylabel("$J_{rrm}$ relative change (%)")
         for ax in axes:
             ax.set_xlabel(xlabel)
             ax.set_xticks(x)
@@ -371,6 +446,60 @@ def plot_publication_convergence() -> None:
             ax.grid(True, which="both", color="0.86", linewidth=0.6)
         fig.tight_layout()
         save_figure(fig, stem)
+
+
+def plot_publication_forward_current_sweep() -> None:
+    path = PLAN_DIR / "data/benchmark/metrics/metrics_forward_current_sweep.json"
+    if not path.exists():
+        return
+    data = load_json(path)
+    current_density = np.asarray(
+        [
+            row.get(
+                "forward_current_density_A_cm2",
+                row["forward_current_A"] / row.get("reference_area_cm2", 1.0),
+            )
+            for row in data
+        ],
+        dtype=float,
+    )
+    qrr_density = np.asarray(
+        [
+            row.get(
+                "Q_rr_density_C_cm2",
+                row["Q_rr_C"] / row.get("reference_area_cm2", 1.0),
+            )
+            for row in data
+        ],
+        dtype=float,
+    )
+    stored_density = np.asarray(
+        [
+            row.get(
+                "stored_mobile_charge_density_C_cm2",
+                row["stored_mobile_charge_C"] / row.get("reference_area_cm2", 1.0),
+            )
+            for row in data
+        ],
+        dtype=float,
+    )
+    order = np.argsort(current_density)
+    current_density = current_density[order]
+    qrr_density = qrr_density[order]
+    stored_density = stored_density[order]
+
+    fig, axes = plt.subplots(1, 2, figsize=(6.9, 2.75), sharex=True)
+    axes[0].loglog(current_density, qrr_density, marker="o", color="tab:blue")
+    axes[1].loglog(current_density, stored_density, marker="o", color="tab:green")
+    axes[0].set_ylabel("$Q_{rr}/A$ (C/cm$^2$)")
+    axes[1].set_ylabel("Stored mobile charge/A (C/cm$^2$)")
+    for ax in axes:
+        ax.set_xlabel("$J_F$ (A/cm$^2$)")
+        ax.xaxis.set_major_formatter(SCI)
+        ax.yaxis.set_major_formatter(SCI)
+        ax.grid(True, which="both", color="0.86", linewidth=0.6)
+    fig.tight_layout()
+    save_figure(fig, "fig_pub_forward_current_sweep")
 
 
 def main() -> None:
@@ -392,6 +521,7 @@ def main() -> None:
     plot_publication_dc()
     plot_publication_recovery_waveforms()
     plot_publication_lifetime_summary()
+    plot_publication_forward_current_sweep()
     plot_publication_convergence()
     print("Publication benchmark figures generated in figures/benchmark")
 

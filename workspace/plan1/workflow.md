@@ -3,6 +3,7 @@
 **当前定位**: 从“高压功率二极管优化”调整为“开放、透明、可复现的反向恢复仿真与指标提取基准”  
 **综述依据**: `workspace/plan1/review.md`  
 **核心目标**: 建立一个低成本 1D PN/PIN 二极管 benchmark，公开器件定义、网格、偏置流程、瞬态波形和 `Q_rr/I_rrm/t_rr` 指标提取脚本。  
+**当前补强**: 已加入参考面积归一化、目标正向电流密度扫描和正式论文稿修订。  
 
 ---
 
@@ -15,7 +16,7 @@
 - 给出一个标准化 1D 硅 PN/PIN 二极管反向恢复测试问题。
 - 公开 DEVSIM 实现、输入参数、网格设置、求解流程和指标提取代码。
 - 提供 reference waveforms 和 reference metrics。
-- 通过寿命扫描、时间步长收敛和网格收敛展示该 benchmark 的稳定性和边界。
+- 通过寿命扫描、目标正向电流密度扫描、时间步长收敛和网格收敛展示该 benchmark 的稳定性和边界。
 - 将旧版公式估算结果降级为“解析趋势参考”，新结论以 DEVSIM DC/transient 直接提取结果为准。
 
 ---
@@ -53,7 +54,11 @@ pip install devsim numpy matplotlib
 | 文件/目录 | 用途 |
 |---|---|
 | `review.md` | 文献综述和 benchmark 立意依据 |
-| `draft_modified.md` | 旧论文素材库，后续需重写主线 |
+| `draft_modified.md` | 旧论文素材库，不再作为本文主线 |
+| `paper_draft_open_benchmark.md` | 新研究主线的 Markdown 初稿 |
+| `基于开源DEVSIM的二极管反向恢复可复现仿真基准.docx` | 依据新稿生成的 Word 初稿 |
+| `paper_formal_open_benchmark.md` | 面向中文期刊风格重写的正式论文 Markdown 稿 |
+| `基于开源DEVSIM的硅PIN二极管反向恢复可复现仿真基准研究.docx` | 正式论文 Word 初稿 |
 | `generate_docx.py` / `generate_docx_semantic*.py` | 后续文档生成逻辑可复用 |
 | `generate_paper_figures*.py` | 图表风格、字体和结构图逻辑可复用 |
 | `figures/final/fig1_structure.png` | 可作为初版结构示意图，后续需按 benchmark 参数更新 |
@@ -114,7 +119,7 @@ workspace/plan1/
 2. **正向预偏置**：施加 `V_fwd = +0.8 V`，保持若干时间步或求解到准稳态。
 3. **反向阶跃**：切换到 `V_rev = -1 V` 或 `-2 V`，记录瞬态电流波形。
 
-后续可加入目标电流模式：先通过 DC I-V 找到达到 `I_target` 的 `V_fwd`，再以该正向电流作为统一初始条件。这比固定 `V_fwd` 更适合跨寿命比较，但实现稍复杂，可作为第二阶段。
+已实现目标电流模式：先通过 DC I-V 找到达到 `I_target` 的 `V_fwd`，再以该正向电流作为统一初始条件。该模式已用于寿命扫描、时间步长扫描和目标正向电流扫描。当前 benchmark 设置参考面积 `A = 1 cm^2`，主要论文结果报告为 `J = I/A`、`Q_rr/A` 和 `Q_stored/A`。
 
 ---
 
@@ -187,6 +192,17 @@ lifetimes = [1e-8, 1e-7, 1e-6, 1e-5]
 - `V_F @ I_target vs Q_rr` 权衡图
 
 说明：这一层是论文主体实验。它不应再使用旧的 `Q_rr = tau * J_F` 公式生成结果，而应从瞬态电流波形积分得到。
+
+### Level 2b: 目标正向电流密度扫描基准
+
+**目的**: 验证 benchmark 不只适用于单一工作点，并检查正向注入强度对恢复面电荷的影响。
+
+当前已完成：
+
+- 固定 `tau = 1e-6 s`。
+- 固定 `dt = 2e-9 s` 和默认网格。
+- 扫描 `I_target = 1e-4, 1e-3, 1e-2 A`；在参考面积 `1 cm^2` 下等价于 `J_F = 1e-4, 1e-3, 1e-2 A/cm^2`。
+- 输出 `metrics_forward_current_sweep.json` 和 `fig_pub_forward_current_sweep.png/pdf`。
 
 ### Level 3: 数值可复现性基准
 
@@ -362,14 +378,17 @@ t_rr = t_end - t_start
 
 1. 时间步长收敛。
 2. 网格收敛。
-3. 生成误差表和收敛图。
-4. 写 `benchmark_README.md`，说明如何复跑、如何比较误差。
+3. 目标正向电流密度扫描。
+4. 生成误差表和收敛图。
+5. 写 `benchmark_README.md`，说明如何复跑、如何比较误差。
 
 ### Phase 4: 文稿重写
 
-1. 根据 `review.md` 和 benchmark 结果重写论文题目、摘要和方法。
-2. 删除或降级旧文稿中“高压优化”“击穿电压精确预测”“软度因子优化”的强表述。
-3. 明确局限：1D、硅、简化寿命模型、无真实工艺校准、无完整外部电路。
+1. 已根据 `review.md` 和 benchmark 结果形成报告型新稿 `paper_draft_open_benchmark.md`。
+2. 已另写面向中文期刊风格的正式论文稿 `paper_formal_open_benchmark.md`。
+3. 已生成独立 Word 初稿 `基于开源DEVSIM的硅PIN二极管反向恢复可复现仿真基准研究.docx`，旧稿 `draft_modified.md` 未纳入新文档。
+4. 已按审稿风险补充参考面积归一化、目标正向电流密度扫描和可复现性文献论证。
+5. 正式投稿前仍需继续核查参考文献、按目标期刊模板调整格式，并补充外部电路或跨工具对比等后续实验。
 
 ---
 

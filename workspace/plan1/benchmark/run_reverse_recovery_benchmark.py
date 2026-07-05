@@ -106,6 +106,29 @@ def waveform_payload(case_id: str, times: list[float], voltages: list[float], cu
     }
 
 
+def normalized_quantities(
+    config: dict,
+    metrics: dict,
+    stored_charge: dict,
+    forward_current_a: float,
+    target_current_a: float | None = None,
+) -> dict:
+    area = float(config["device"].get("reference_area_cm2", 1.0))
+    return {
+        "reference_area_cm2": area,
+        "forward_current_density_A_cm2": float(forward_current_a) / area,
+        "target_current_density_A_cm2": float(target_current_a) / area
+        if target_current_a is not None
+        else None,
+        "I_rrm_density_A_cm2": float(metrics["I_rrm_A"]) / area,
+        "Q_rr_density_C_cm2": float(metrics["Q_rr_C"]) / area,
+        "stored_mobile_charge_density_C_cm2": float(
+            stored_charge["stored_mobile_charge_C"]
+        )
+        / area,
+    }
+
+
 def run_recovery(
     tau_s: float,
     time_step_s: float | None = None,
@@ -180,12 +203,29 @@ def run_recovery(
     )
 
     init_label = "ifixed" if initial_condition == "target_current" else "vfixed"
+    target_label = ""
+    default_target = float(config["dc"]["target_current_A"])
+    if (
+        initial_condition == "target_current"
+        and target_current_a is not None
+        and not np.isclose(float(target_current_a), default_target)
+    ):
+        target_label = f"_I_{float(target_current_a):.0e}"
     case_id = (
-        f"recovery_{init_label}_tau_{tau_s:.0e}_dt_"
+        f"recovery_{init_label}{target_label}_tau_{tau_s:.0e}_dt_"
         f"{transient['time_step_s']:.0e}_mesh_"
         f"{config['device']['mesh_density_cm']:.0e}"
     )
     waveform = waveform_payload(case_id, times, voltages, currents)
+    normalized = normalized_quantities(
+        config,
+        metrics,
+        stored_charge,
+        forward_current,
+        target_current_a
+        if initial_condition == "target_current"
+        else None,
+    )
     result = {
         "case_id": case_id,
         "parameters": {
@@ -201,6 +241,7 @@ def run_recovery(
         },
         "waveform": waveform,
         "metrics": metrics,
+        "normalized": normalized,
         "stored_charge": stored_charge,
         "solver": {
             "converged": converged,
@@ -225,6 +266,7 @@ def run_lifetime_sweep() -> list[dict]:
                 "case_id": result["case_id"],
                 "tau_s": float(tau),
                 **result["metrics"],
+                **result["normalized"],
                 **result["stored_charge"],
                 "converged": result["solver"]["converged"],
                 "elapsed_s": result["solver"]["elapsed_s"],
@@ -257,6 +299,7 @@ def run_lifetime_sweep_target_current(target_current_a: float | None = None) -> 
                 "v_forward_V": result["parameters"]["v_forward_V"],
                 "forward_current_A": result["parameters"]["forward_current_A"],
                 **result["metrics"],
+                **result["normalized"],
                 **result["stored_charge"],
                 "converged": result["solver"]["converged"],
                 "elapsed_s": result["solver"]["elapsed_s"],
@@ -276,17 +319,35 @@ def run_lifetime_sweep_target_current(target_current_a: float | None = None) -> 
     return results
 
 
-def run_time_step_sweep(tau_s: float) -> list[dict]:
+def run_time_step_sweep(
+    tau_s: float,
+    initial_condition: str = "fixed_voltage",
+    target_current_a: float | None = None,
+) -> list[dict]:
     config = load_config()
+    target = target_current_a or config["dc"]["target_current_A"]
     results = []
     for dt in config["sweeps"]["time_steps_s"]:
-        result = run_recovery(float(tau_s), time_step_s=float(dt))
+        result = run_recovery(
+            float(tau_s),
+            time_step_s=float(dt),
+            initial_condition=initial_condition,
+            target_current_a=float(target),
+        )
         results.append(
             {
                 "case_id": result["case_id"],
                 "tau_s": float(tau_s),
                 "time_step_s": float(dt),
+                "initial_condition": initial_condition,
+                "target_current_A": float(target)
+                if initial_condition == "target_current"
+                else None,
+                "v_forward_V": result["parameters"]["v_forward_V"],
+                "forward_current_A": result["parameters"]["forward_current_A"],
                 **result["metrics"],
+                **result["normalized"],
+                **result["stored_charge"],
                 "converged": result["solver"]["converged"],
                 "elapsed_s": result["solver"]["elapsed_s"],
             }
@@ -294,9 +355,50 @@ def run_time_step_sweep(tau_s: float) -> list[dict]:
         print(
             f"{result['case_id']}: Qrr={result['metrics']['Q_rr_C']:.3e} C, "
             f"Irrm={result['metrics']['I_rrm_A']:.3e} A, "
+            f"Qstored={result['stored_charge']['stored_mobile_charge_C']:.3e} C, "
             f"elapsed={result['solver']['elapsed_s']:.2f}s"
         )
-    write_json(Path("data/benchmark/metrics/metrics_time_step_sweep.json"), results)
+    suffix = "_target_current" if initial_condition == "target_current" else ""
+    write_json(
+        Path(f"data/benchmark/metrics/metrics_time_step_sweep{suffix}.json"),
+        results,
+    )
+    return results
+
+
+def run_forward_current_sweep(tau_s: float) -> list[dict]:
+    config = load_config()
+    results = []
+    for target in config["sweeps"]["target_currents_A"]:
+        result = run_recovery(
+            float(tau_s),
+            initial_condition="target_current",
+            target_current_a=float(target),
+        )
+        results.append(
+            {
+                "case_id": result["case_id"],
+                "tau_s": float(tau_s),
+                "target_current_A": float(target),
+                "v_forward_V": result["parameters"]["v_forward_V"],
+                "forward_current_A": result["parameters"]["forward_current_A"],
+                **result["metrics"],
+                **result["normalized"],
+                **result["stored_charge"],
+                "converged": result["solver"]["converged"],
+                "elapsed_s": result["solver"]["elapsed_s"],
+            }
+        )
+        print(
+            f"{result['case_id']}: If={result['parameters']['forward_current_A']:.3e} A, "
+            f"Qrr/A={result['normalized']['Q_rr_density_C_cm2']:.3e} C/cm^2, "
+            f"Irrm/A={result['normalized']['I_rrm_density_A_cm2']:.3e} A/cm^2, "
+            f"elapsed={result['solver']['elapsed_s']:.2f}s"
+        )
+    write_json(
+        Path("data/benchmark/metrics/metrics_forward_current_sweep.json"),
+        results,
+    )
     return results
 
 
@@ -311,6 +413,7 @@ def run_mesh_sweep(tau_s: float) -> list[dict]:
                 "tau_s": float(tau_s),
                 "mesh_density_cm": float(mesh),
                 **result["metrics"],
+                **result["normalized"],
                 "converged": result["solver"]["converged"],
                 "elapsed_s": result["solver"]["elapsed_s"],
             }
@@ -331,7 +434,15 @@ def main() -> None:
     parser.add_argument("--mesh", type=float)
     parser.add_argument(
         "--sweep",
-        choices=["single", "lifetime", "lifetime-target-current", "time", "mesh"],
+        choices=[
+            "single",
+            "lifetime",
+            "lifetime-target-current",
+            "time",
+            "time-target-current",
+            "forward-current",
+            "mesh",
+        ],
         default="single",
     )
     parser.add_argument(
@@ -350,6 +461,16 @@ def main() -> None:
         return
     if args.sweep == "time":
         run_time_step_sweep(args.tau)
+        return
+    if args.sweep == "time-target-current":
+        run_time_step_sweep(
+            args.tau,
+            initial_condition="target_current",
+            target_current_a=args.target_current,
+        )
+        return
+    if args.sweep == "forward-current":
+        run_forward_current_sweep(args.tau)
         return
     if args.sweep == "mesh":
         run_mesh_sweep(args.tau)

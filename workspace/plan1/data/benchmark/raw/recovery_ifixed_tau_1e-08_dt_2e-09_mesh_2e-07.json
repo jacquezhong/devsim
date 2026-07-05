@@ -14,6 +14,7 @@
     "i_doping_cm3": 1000000000000.0,
     "temperature_K": 300,
     "mesh_density_cm": 2e-07,
+    "reference_area_cm2": 1.0,
     "taun_s": 1e-08,
     "taup_s": 1e-08,
     "initial_condition": "target_current",
@@ -133,6 +134,14 @@
     "recovery_incomplete": false,
     "has_reverse_recovery": true
   },
+  "normalized": {
+    "reference_area_cm2": 1.0,
+    "forward_current_density_A_cm2": 0.0010009601585018108,
+    "target_current_density_A_cm2": 0.001,
+    "I_rrm_density_A_cm2": 3.4927801107377,
+    "Q_rr_density_C_cm2": 3.4945694631331566e-09,
+    "stored_mobile_charge_density_C_cm2": 3.4779986090171183e-09
+  },
   "stored_charge": {
     "stored_electron_charge_C": 1.7389993811027242e-09,
     "stored_hole_charge_C": 1.7389992279143941e-09,
@@ -142,7 +151,7 @@
   "solver": {
     "converged": true,
     "failed_at_s": null,
-    "elapsed_s": 2.915384305000771
+    "elapsed_s": 3.025085977000117
   },
   "current_sign_convention": "positive_forward_negative_reverse"
 }

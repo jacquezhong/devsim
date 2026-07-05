@@ -33,6 +33,7 @@ metadata, metrics, solver status, and a pointer to the waveform file.
 - `run_reverse_recovery_benchmark.py`
   - Added `--initial-condition target_current`.
   - Added `--sweep lifetime-target-current`.
+  - Added `--sweep time-target-current`.
   - Added coarse DC scan plus bisection to resolve `V_F` for a target current.
   - Added `stored_charge` metrics to output JSON.
   - Moved transient waveform arrays to compressed `npz`.
@@ -62,6 +63,10 @@ PYTHONPYCACHEPREFIX=/tmp/devsim_pycache /opt/miniconda3/bin/python3 \
 PYTHONPYCACHEPREFIX=/tmp/devsim_pycache /opt/miniconda3/bin/python3 \
   workspace/plan1/benchmark/run_reverse_recovery_benchmark.py \
   --sweep time --tau 1e-6
+
+PYTHONPYCACHEPREFIX=/tmp/devsim_pycache /opt/miniconda3/bin/python3 \
+  workspace/plan1/benchmark/run_reverse_recovery_benchmark.py \
+  --sweep time-target-current --tau 1e-6
 
 PYTHONPYCACHEPREFIX=/tmp/devsim_pycache /opt/miniconda3/bin/python3 \
   workspace/plan1/benchmark/run_reverse_recovery_benchmark.py \
@@ -99,6 +104,14 @@ Time-step sweep at `tau = 1e-6`, fixed voltage:
 | 2e-9 | 4.614e-7 | 4.524e2 | 2e-9 |
 | 1e-9 | 4.612e-7 | 8.723e2 | 1e-9 |
 
+Time-step sweep at `tau = 1e-6`, target current:
+
+| dt (s) | resolved IF (A) | Qrr (C) | Irrm (A) | stored mobile charge (C) |
+|---:|---:|---:|---:|---:|
+| 5e-9 | 1.000e-3 | 4.211e-9 | 1.684 | 6.345e-9 |
+| 2e-9 | 1.000e-3 | 4.211e-9 | 4.206 | 6.345e-9 |
+| 1e-9 | 1.000e-3 | 4.211e-9 | 8.401 | 6.345e-9 |
+
 Mesh sweep at `tau = 1e-6`, fixed voltage:
 
 | mesh density (cm) | Qrr (C) | Irrm (A) | elapsed (s) |
@@ -117,19 +130,75 @@ Mesh sweep at `tau = 1e-6`, fixed voltage:
 - The fixed-voltage protocol creates a much larger injected state at `0.8 V`;
   it is useful as a numerical stress case, but less clean as a lifetime
   comparison.
-- `Qrr` is robust in the fixed-voltage time-step sweep, while `Irrm` is strongly
-  time-step dependent. This is expected for an ideal voltage step with a very
-  narrow current pulse.
+- `Qrr` is robust in both fixed-voltage and target-current time-step sweeps,
+  while `Irrm` is strongly time-step dependent. This is expected for an ideal
+  voltage step with a very narrow current pulse.
 - Mesh convergence is good for the tested PIN geometry.
 
 ### Storage
 
 After this run:
 
-- `data/benchmark/raw`: about 184 KB.
-- `data/benchmark/waveforms`: about 48 KB.
+- `data/benchmark/raw`: about 72 KB.
+- `data/benchmark/waveforms`: about 60 KB.
 - `data/benchmark/metrics`: about 16 KB.
-- `data/benchmark`: about 2.8 MB including old exploratory logs.
+- `data/benchmark`: about 1.2 MB after removing old exploratory logs.
 
 The compressed `npz` files are smaller and cleaner than embedding all waveform
 arrays directly in JSON.
+
+## 2026-07-05 review-driven benchmark strengthening
+
+### Motivation
+
+This update addresses three review-level concerns:
+
+- Avoid interpreting DEVSIM 1D contact current as a physical device rating.
+- Expand the benchmark beyond a single target-current operating point.
+- Strengthen the manuscript's reproducibility argument and formal paper format.
+
+### Code and data updates
+
+- Added `reference_area_cm2 = 1.0` to `benchmark/config.json`.
+- Added normalized quantities to reverse-recovery outputs:
+  - `forward_current_density_A_cm2`
+  - `I_rrm_density_A_cm2`
+  - `Q_rr_density_C_cm2`
+  - `stored_mobile_charge_density_C_cm2`
+- Added `current_density_A_cm2` to DC I-V points.
+- Added `--sweep forward-current` with target currents:
+  - `1e-4 A`
+  - `1e-3 A`
+  - `1e-2 A`
+- Added publication figure:
+  - `fig_pub_forward_current_sweep.png/pdf`
+
+### New target-forward-current sweep
+
+At `tau = 1e-6 s`, `dt = 2e-9 s`, `V_R = -1 V`, and reference area
+`A = 1 cm^2`:
+
+| target JF (A/cm2) | resolved VF (V) | resolved JF (A/cm2) | Qrr/A (C/cm2) | Irrm/A (A/cm2) | stored charge/A (C/cm2) |
+|---:|---:|---:|---:|---:|---:|
+| 1e-4 | 0.3555 | 1.000e-4 | 3.772e-9 | 3.770 | 4.589e-9 |
+| 1e-3 | 0.4257 | 1.000e-3 | 4.211e-9 | 4.206 | 6.345e-9 |
+| 1e-2 | 0.4908 | 9.990e-3 | 5.365e-9 | 5.347 | 1.096e-8 |
+
+### Updated storage
+
+After the strengthening run:
+
+- `data/benchmark`: about 1.4 MB.
+- `data/benchmark/raw`: about 100 KB.
+- `data/benchmark/waveforms`: about 64 KB.
+- `figures/benchmark`: about 932 KB.
+- benchmark scripts and config: about 53 KB.
+
+### Manuscript updates
+
+- Updated `paper_formal_open_benchmark.md` with area-normalized metrics.
+- Added a target-forward-current-density sweep section and table.
+- Added reproducible computational science references.
+- Regenerated
+  `基于开源DEVSIM的硅PIN二极管反向恢复可复现仿真基准研究.docx`
+  with 4 tables and 6 figures.

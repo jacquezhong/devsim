@@ -30,6 +30,7 @@ def run_dc(tau_s: float, output: Path | None = None) -> dict:
     ensure_dirs()
     config = load_config()
     dc = config["dc"]
+    area_cm2 = float(config["device"].get("reference_area_cm2", 1.0))
     setup_device(config, tau_s=tau_s)
 
     voltages = np.arange(
@@ -50,6 +51,7 @@ def run_dc(tau_s: float, output: Path | None = None) -> dict:
             {
                 "voltage_V": float(voltage),
                 "current_A": current,
+                "current_density_A_cm2": current / area_cm2,
                 "converged": ok,
             }
         )
@@ -64,6 +66,9 @@ def run_dc(tau_s: float, output: Path | None = None) -> dict:
         [p["current_A"] for p in points],
         dc["target_current_A"],
     )
+    metrics["reference_area_cm2"] = area_cm2
+    metrics["target_current_density_A_cm2"] = dc["target_current_A"] / area_cm2
+    metrics["max_current_density_A_cm2"] = metrics["max_current_A"] / area_cm2
 
     result = {
         "case_id": f"dc_tau_{tau_s:.0e}",
